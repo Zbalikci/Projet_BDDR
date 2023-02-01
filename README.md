@@ -1,3 +1,3 @@
-### M1 Data Science - Projet BDDR
+# M1 Data Science - Projet BDDR
 
-# Binôme Zeynep BALIKCI et Mariama MBAYE
+#### Binôme Zeynep BALIKCI et Mariama MBAYE
