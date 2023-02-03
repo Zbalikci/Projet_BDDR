@@ -16,7 +16,7 @@ nb_pages              smallint
 theme                 varchar(50)      
 
 
-Nettoyage : Attention au doublon:
+Nettoyage : Attention au doublon: /n
 id     title
 1      "abc"
 2      "abc"
