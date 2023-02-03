@@ -18,8 +18,11 @@ UML :
 
 
 Nettoyage : Attention au doublon:
+
 id     title
+
 1      "abc"
+
 2      "abc"
 
 
