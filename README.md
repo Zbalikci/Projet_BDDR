@@ -6,7 +6,7 @@
 Modélisation : Conceptuel ----> Logique
 UML :
 
-         ARTICLE:     
+ARTICLE:     
 --------------------------------------------------- 
 |                      |(psql)                  |
 |article_id            |serial                  |pk
