@@ -52,6 +52,7 @@ Sujet_Article - Article n:1
      sujet_id           serial           pk
      article_id         serial           pk
      
+Tableau croisé pour Sujet-arcticle : 1 artcile peut avoir plusieurs sujet, plusieurs article traite d'un sujet.
 
               ARTICLE:                          
                            (psql)                 
