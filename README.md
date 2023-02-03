@@ -60,7 +60,7 @@ Tableau croisé pour Sujet-arcticle : 1 artcile peut avoir plusieurs sujet, plus
      title                 varchar(50)  (ou text) 
      etc...
 
-
+Autre groupe redondant : les auteurs, donc il faut créer un autre entité : auteur qui est relié a des articles : 1:n
 
 
 https://www.postgresql.org/download/windows/
