@@ -8,18 +8,18 @@ UML :
 
               ARTICLE:          
 
-                        (psql)                 
-article_id            serial                  pk
+                           (psql)                 
+     article_id            serial                  pk
 
-title                 varchar(50)  (ou text)  
+     title                 varchar(50)  (ou text)  
 
-author                                       
+     author                                       
 
-publication_date      date                    
+     publication_date      date                    
 
-nb_pages              smallint                
+     nb_pages              smallint                
 
-theme                 varchar(50)             
+     theme                 varchar(50)             
 
 
 Nettoyage : Attention au doublon:
