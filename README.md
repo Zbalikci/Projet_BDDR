@@ -10,15 +10,10 @@ UML :
 
                            (psql)                 
      article_id            serial                  pk
-
      title                 varchar(50)  (ou text)  
-
      author                                       
-
      publication_date      date                    
-
      nb_pages              smallint                
-
      theme                 varchar(50)             
 
 
