@@ -59,12 +59,30 @@ Table journal {
 }
 
 
+Table theme {
+  id_theme int [pk]
+  name varchar
+  
+}
+
+Table sujet {
+  id_sujet int [pk]
+  id_theme int
+  name text
+  indexes {
+    id_theme [pk]
+  }
+}
+
+
+
 Ref : affiliation.id_affiliation < author.id_affiliation
 Ref : article.id_study > studytype.id_study
 Ref : article.id_journal > journal.id_journal
 Ref : author.id_author < article_author.id_author
 Ref : article.id_article < article_author.id_article
 Ref : article.id_article < sujet_article.id_article
-
+Ref : theme.id_theme < sujet.id_theme
+Ref : sujet.id_sujet < sujet_article.id_sujet
 
 
