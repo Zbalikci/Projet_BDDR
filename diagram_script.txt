@@ -1,0 +1,70 @@
+Table author {
+  id_author int [pk]
+  first_name varchar
+  middle_name varchar
+  last_name int 
+  suffix varchar
+  id_affiliation int
+  email varchar
+  
+  indexes{
+    id_affiliation [pk]
+  }
+
+}
+
+Table affiliation {
+  id_affiliation int [pk]
+  name varchar
+  type varchar
+  
+}
+
+Table article {
+  id_article int [pk]
+  title varchar
+  publication_date datetime
+  abstract text
+  studylink text
+  id_study int
+  id_journal int
+  indexes {
+    (id_study,id_journal) [pk]
+  }
+}
+
+Table studytype {
+  id_study int [pk]
+  name varchar
+}
+
+Table sujet_article {
+  id_sujet int
+  id_article int 
+  indexes { (id_article,id_sujet) [pk] }
+}
+
+Table article_author {
+  id_article int 
+  id_author int
+  indexes {
+    (id_article,id_author)  [pk]
+  }
+  
+}
+
+Table journal {
+  id_journal int [pk]
+  name varchar
+}
+
+
+Ref : affiliation.id_affiliation < author.id_affiliation
+Ref : article.id_study > studytype.id_study
+Ref : article.id_journal > journal.id_journal
+Ref : author.id_author < article_author.id_author
+Ref : article.id_article < article_author.id_article
+Ref : article.id_article < sujet_article.id_article
+
+
+
