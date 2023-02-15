@@ -1,4 +1,6 @@
 # Création des tables
+# NB : J'ai renommé certains mots en anglais parce qu'on a mélangé anglais et français vu qu'on est partie pour utiliser l'anglais. 
+# J'ai aussi fait les clés étrangères mais j'ai un doute pour la suite, tu me diras ce que t'en pense mais le programme marche.
 
 -- ==================================================================
 -- COVID-19 database for PostgreSQL
