@@ -1,0 +1,153 @@
+# Création des tables
+
+-- ==================================================================
+-- COVID-19 database for PostgreSQL
+-- ==================================================================
+
+
+-- ------------------------------------------------------------------
+-- TABLES
+-- ------------------------------------------------------------------
+
+-- ------------------------------------------------------------------
+-- Affiliation ------------------------------------------------------
+
+DROP TABLE IF EXISTS Affiliation CASCADE;
+CREATE TABLE Affiliation 
+  ( 
+     id_affiliation   INT PRIMARY KEY NOT NULL, 
+     affiliation_name VARCHAR  NOT NULL, 
+     affiliation_type VARCHAR not NULL 
+     
+  ); 
+-- ------------------------------------------------------------------
+
+
+
+-- ------------------------------------------------------------------
+-- Author 
+DROP TABLE IF EXISTS Author CASCADE;
+CREATE TABLE Author 
+  ( 
+     id_author   SERIAL PRIMARY KEY NOT NULL, 
+     first_name VARCHAR  NOT NULL, 
+     middle_name VARCHAR not NULL, 
+     last_name VARCHAR not NULL,
+     suffix VARCHAR not NULL,
+     id_affiliation INT not NULL, --fk--
+     email VARCHAR not NULL,
+     FOREIGN KEY(id_affiliation) REFERENCES Affiliation(id_affiliation)
+  ); 
+-- ------------------------------------------------------------------
+
+
+
+
+-- ------------------------------------------------------------------
+-- Article-----------------------------------------------------------
+
+DROP TABLE IF EXISTS Article CASCADE;
+CREATE TABLE Article 
+  ( 
+     id_article   INT PRIMARY KEY NOT NULL, 
+     title VARCHAR  NOT NULL, 
+     publication_date TIMESTAMP not NULL,
+     abstract TEXT not NULL,
+     studylink TEXT not NULL,
+     id_study INT not NULL, --fk--
+     id_newspaper INT NOT NULL,--fk--
+     FOREIGN KEY(id_study) REFERENCES studytype (id_study),
+     FOREIGN KEY(id_newspaper) REFERENCES Newspaper(id_newspaper)
+     
+  ); 
+-- -------------------------------------------------------------------
+
+
+
+
+-- -------------------------------------------------------------------
+-- Studytype ---------------------------------------------------------
+DROP TABLE IF EXISTS Studytype CASCADE;
+CREATE TABLE Studytype 
+  ( 
+     id_study   INT PRIMARY KEY NOT NULL, 
+     study_name VARCHAR  NOT NULL
+     
+  ); 
+-- --------------------------------------------------------------------  
+
+
+
+----------------------------------------------------------------------
+-- Subject_article ---------------------------------------------------
+DROP TABLE IF EXISTS Subject_article;
+CREATE TABLE Subject_article
+  ( 
+     id_subject   INT NOT NULL, --fk--
+     id_article INT not NULL, --fk--
+     FOREIGN KEY(id_subject) REFERENCES Subject (id_subject),
+     FOREIGN KEY(id_article) REFERENCES Article(id_article)
+     
+  ); 
+----------------------------------------------------------------------- 
+  
+
+
+
+-----------------------------------------------------------------------
+-- Article_author------------------------------------------------------
+DROP TABLE IF EXISTS Article_author;
+CREATE TABLE Article_author
+  ( 
+    id_article  INT not NULL, --fk--
+    id_author   INT NOT NULL, --fk--
+    FOREIGN KEY(id_author) REFERENCES Author (id_author),
+    FOREIGN KEY(id_article) REFERENCES Article(id_article)
+     
+  ); 
+-----------------------------------------------------------------------
+
+
+
+  
+-----------------------------------------------------------------------
+-- Newspaper ----------------------------------------------------------
+DROP TABLE IF EXISTS Newspaper CASCADE;
+CREATE TABLE Newspaper
+  ( 
+    id_newspaper  INT PRIMARY key not NULL, 
+    newspaper_name VARCHAR NOT NULL
+     
+  ); 
+------------------------------------------------------------------------
+
+
+
+
+
+------------------------------------------------------------------------
+-- Theme ---------------------------------------------------------------
+DROP TABLE IF EXISTS Theme CASCADE;
+CREATE TABLE Theme
+  ( 
+    id_theme  INT PRIMARY key not NULL, 
+    theme_name VARCHAR NOT NULL
+     
+  ); 
+------------------------------------------------------------------------
+
+
+
+
+
+-------------------------------------------------------------------------
+-- Subject --------------------------------------------------------------
+DROP TABLE IF EXISTS Subject CASCADE;
+CREATE TABLE Subject
+  ( 
+    id_subject  INT PRIMARY key not NULL,
+    id_theme  INT not NULL, --fk--
+    theme_name TEXT NOT NULL,
+    FOREIGN KEY(id_theme) REFERENCES Theme (id_theme)
+  );
+-------------------------------------------------------------------------  
