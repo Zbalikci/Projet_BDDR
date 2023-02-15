@@ -1,7 +1,3 @@
-# Création des tables
-# NB : J'ai renommé certains mots en anglais parce qu'on a mélangé anglais et français vu qu'on est partie pour utiliser l'anglais. 
-# J'ai aussi fait les clés étrangères mais j'ai un doute pour la suite, tu me diras ce que t'en pense mais le programme marche.
-
 -- ==================================================================
 -- COVID-19 database for PostgreSQL
 -- ==================================================================
@@ -17,9 +13,9 @@
 DROP TABLE IF EXISTS Affiliation CASCADE;
 CREATE TABLE Affiliation 
   ( 
-     id_affiliation   INT PRIMARY KEY NOT NULL, 
-     affiliation_name VARCHAR  NOT NULL, 
-     affiliation_type VARCHAR not NULL 
+     id_affiliation    INT PRIMARY KEY NOT NULL,   #plutôt SERIAL que INT je pense
+     affiliation_name  VARCHAR NOT NULL, 
+     affiliation_type  VARCHAR NOT NULL 
      
   ); 
 -- ------------------------------------------------------------------
@@ -27,17 +23,18 @@ CREATE TABLE Affiliation
 
 
 -- ------------------------------------------------------------------
--- Author 
+-- Author -----------------------------------------------------------
+
 DROP TABLE IF EXISTS Author CASCADE;
 CREATE TABLE Author 
   ( 
-     id_author   SERIAL PRIMARY KEY NOT NULL, 
-     first_name VARCHAR  NOT NULL, 
-     middle_name VARCHAR not NULL, 
-     last_name VARCHAR not NULL,
-     suffix VARCHAR not NULL,
-     id_affiliation INT not NULL, --fk--
-     email VARCHAR not NULL,
+     id_author       SERIAL PRIMARY KEY NOT NULL, 
+     first_name      VARCHAR NOT NULL, 
+     middle_name     VARCHAR NOT NULL, 
+     last_name       VARCHAR NOT NULL,
+     suffix VARCHAR  NOT NULL,
+     id_affiliation  INT NOT NULL, --fk--
+     email VARCHAR   NOT NULL,
      FOREIGN KEY(id_affiliation) REFERENCES Affiliation(id_affiliation)
   ); 
 -- ------------------------------------------------------------------
@@ -51,14 +48,14 @@ CREATE TABLE Author
 DROP TABLE IF EXISTS Article CASCADE;
 CREATE TABLE Article 
   ( 
-     id_article   INT PRIMARY KEY NOT NULL, 
-     title VARCHAR  NOT NULL, 
-     publication_date TIMESTAMP not NULL,
-     abstract TEXT not NULL,
-     studylink TEXT not NULL,
-     id_study INT not NULL, --fk--
-     id_newspaper INT NOT NULL,--fk--
-     FOREIGN KEY(id_study) REFERENCES studytype (id_study),
+     id_article          INT PRIMARY KEY NOT NULL,      #pareil plutôt SERIAL que INT je pense (pour tous les primary key ici c'est des SERIAL je pense)
+     title VARCHAR       NOT NULL, 
+     publication_date    TIMESTAMP NOT NULL,
+     abstract            TEXT NOT NULL,
+     studylink           TEXT NOT NULL,
+     id_study            INT NOT NULL, --fk--
+     id_newspaper        INT NOT NULL, --fk--
+     FOREIGN KEY(id_study) REFERENCES Studytype(id_study),
      FOREIGN KEY(id_newspaper) REFERENCES Newspaper(id_newspaper)
      
   ); 
@@ -69,11 +66,12 @@ CREATE TABLE Article
 
 -- -------------------------------------------------------------------
 -- Studytype ---------------------------------------------------------
+
 DROP TABLE IF EXISTS Studytype CASCADE;
 CREATE TABLE Studytype 
   ( 
-     id_study   INT PRIMARY KEY NOT NULL, 
-     study_name VARCHAR  NOT NULL
+     id_study     INT PRIMARY KEY NOT NULL,       #pareil plutôt SERIAL que INT je pense
+     study_name   VARCHAR NOT NULL
      
   ); 
 -- --------------------------------------------------------------------  
@@ -82,12 +80,13 @@ CREATE TABLE Studytype
 
 ----------------------------------------------------------------------
 -- Subject_article ---------------------------------------------------
+
 DROP TABLE IF EXISTS Subject_article;
 CREATE TABLE Subject_article
   ( 
-     id_subject   INT NOT NULL, --fk--
-     id_article INT not NULL, --fk--
-     FOREIGN KEY(id_subject) REFERENCES Subject (id_subject),
+     id_subject      INT NOT NULL, --fk--
+     id_article      INT NOT NULL, --fk--
+     FOREIGN KEY(id_subject) REFERENCES Subject(id_subject),
      FOREIGN KEY(id_article) REFERENCES Article(id_article)
      
   ); 
@@ -98,12 +97,13 @@ CREATE TABLE Subject_article
 
 -----------------------------------------------------------------------
 -- Article_author------------------------------------------------------
+
 DROP TABLE IF EXISTS Article_author;
 CREATE TABLE Article_author
   ( 
-    id_article  INT not NULL, --fk--
-    id_author   INT NOT NULL, --fk--
-    FOREIGN KEY(id_author) REFERENCES Author (id_author),
+    id_article    INT NOT NULL, --fk--
+    id_author     INT NOT NULL, --fk--
+    FOREIGN KEY(id_author) REFERENCES Author(id_author),
     FOREIGN KEY(id_article) REFERENCES Article(id_article)
      
   ); 
@@ -114,11 +114,12 @@ CREATE TABLE Article_author
   
 -----------------------------------------------------------------------
 -- Newspaper ----------------------------------------------------------
+
 DROP TABLE IF EXISTS Newspaper CASCADE;
 CREATE TABLE Newspaper
   ( 
-    id_newspaper  INT PRIMARY key not NULL, 
-    newspaper_name VARCHAR NOT NULL
+    id_newspaper     INT PRIMARY KEY NOT NULL, 
+    newspaper_name   VARCHAR NOT NULL
      
   ); 
 ------------------------------------------------------------------------
@@ -129,11 +130,12 @@ CREATE TABLE Newspaper
 
 ------------------------------------------------------------------------
 -- Theme ---------------------------------------------------------------
+
 DROP TABLE IF EXISTS Theme CASCADE;
 CREATE TABLE Theme
   ( 
-    id_theme  INT PRIMARY key not NULL, 
-    theme_name VARCHAR NOT NULL
+    id_theme     INT PRIMARY KEY NOT NULL, 
+    theme_name   VARCHAR NOT NULL
      
   ); 
 ------------------------------------------------------------------------
@@ -144,12 +146,13 @@ CREATE TABLE Theme
 
 -------------------------------------------------------------------------
 -- Subject --------------------------------------------------------------
+
 DROP TABLE IF EXISTS Subject CASCADE;
 CREATE TABLE Subject
   ( 
-    id_subject  INT PRIMARY key not NULL,
-    id_theme  INT not NULL, --fk--
-    theme_name TEXT NOT NULL,
-    FOREIGN KEY(id_theme) REFERENCES Theme (id_theme)
+    id_subject    INT PRIMARY KEY NOT NULL,
+    id_theme      INT NOT NULL, --fk--
+    theme_name    TEXT NOT NULL,
+    FOREIGN KEY(id_theme) REFERENCES Theme(id_theme)
   );
 -------------------------------------------------------------------------  
