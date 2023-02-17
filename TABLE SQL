@@ -10,10 +10,10 @@
 -- ------------------------------------------------------------------
 -- Affiliation ------------------------------------------------------
 
-DROP TABLE IF EXISTS Affiliation CASCADE;
+DROP TABLE IF EXISTS Affiliation;
 CREATE TABLE Affiliation 
   ( 
-     id_affiliation    INT PRIMARY KEY NOT NULL,   #plutôt SERIAL que INT je pense
+     id_affiliation    INT PRIMARY KEY NOT NULL,   --plutôt SERIAL que INT je pense
      affiliation_name  VARCHAR NOT NULL, 
      affiliation_type  VARCHAR NOT NULL 
      
@@ -25,7 +25,7 @@ CREATE TABLE Affiliation
 -- ------------------------------------------------------------------
 -- Author -----------------------------------------------------------
 
-DROP TABLE IF EXISTS Author CASCADE;
+DROP TABLE IF EXISTS Author ;
 CREATE TABLE Author 
   ( 
      id_author       SERIAL PRIMARY KEY NOT NULL, 
@@ -45,10 +45,10 @@ CREATE TABLE Author
 -- ------------------------------------------------------------------
 -- Article-----------------------------------------------------------
 
-DROP TABLE IF EXISTS Article CASCADE;
+DROP TABLE IF EXISTS Article ;
 CREATE TABLE Article 
   ( 
-     id_article          INT PRIMARY KEY NOT NULL,      #pareil plutôt SERIAL que INT je pense (pour tous les primary key ici c'est des SERIAL je pense)
+     id_article          INT PRIMARY KEY NOT NULL,      --pareil plutôt SERIAL que INT je pense (pour tous les primary key ici c'est des SERIAL je pense)
      title VARCHAR       NOT NULL, 
      publication_date    TIMESTAMP NOT NULL,
      abstract            TEXT NOT NULL,
@@ -67,10 +67,10 @@ CREATE TABLE Article
 -- -------------------------------------------------------------------
 -- Studytype ---------------------------------------------------------
 
-DROP TABLE IF EXISTS Studytype CASCADE;
+DROP TABLE IF EXISTS Studytype ;
 CREATE TABLE Studytype 
   ( 
-     id_study     INT PRIMARY KEY NOT NULL,       #pareil plutôt SERIAL que INT je pense
+     id_study     INT PRIMARY KEY NOT NULL,       ---pareil plutôt SERIAL que INT je pense
      study_name   VARCHAR NOT NULL
      
   ); 
@@ -115,7 +115,7 @@ CREATE TABLE Article_author
 -----------------------------------------------------------------------
 -- Newspaper ----------------------------------------------------------
 
-DROP TABLE IF EXISTS Newspaper CASCADE;
+DROP TABLE IF EXISTS Newspaper ;
 CREATE TABLE Newspaper
   ( 
     id_newspaper     INT PRIMARY KEY NOT NULL, 
@@ -131,7 +131,7 @@ CREATE TABLE Newspaper
 ------------------------------------------------------------------------
 -- Theme ---------------------------------------------------------------
 
-DROP TABLE IF EXISTS Theme CASCADE;
+DROP TABLE IF EXISTS Theme;
 CREATE TABLE Theme
   ( 
     id_theme     INT PRIMARY KEY NOT NULL, 
@@ -147,7 +147,7 @@ CREATE TABLE Theme
 -------------------------------------------------------------------------
 -- Subject --------------------------------------------------------------
 
-DROP TABLE IF EXISTS Subject CASCADE;
+DROP TABLE IF EXISTS Subject ;
 CREATE TABLE Subject
   ( 
     id_subject    INT PRIMARY KEY NOT NULL,
