@@ -8,4 +8,4 @@ https://www.postgresql.org/download/windows/
 
 Le schéma (schema.pdf) a été crée sur le site : https://dbdiagram.io/d   grâce au script dans le fichier : diagram_script.txt
 
-Vérifier si chaque auteur a un seul affiliation.
+Vérifier si chaque auteur a une seul affiliation.
