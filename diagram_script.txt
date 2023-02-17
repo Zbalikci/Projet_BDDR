@@ -2,7 +2,7 @@ Table author {
   id_author int [pk]
   first_name varchar
   middle_name varchar
-  last_name int 
+  last_name varchar 
   suffix varchar
   id_affiliation int
   email varchar
