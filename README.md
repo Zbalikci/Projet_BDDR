@@ -7,8 +7,6 @@ Le sujet se trouve dans 1_Sujet.pdf
 
 Lien utile : 
 
-https://www.postgresql.org/download/windows/
-
 https://www.sqlalchemy.org/
 
 Le schéma (schema.pdf) a été crée sur le site : https://dbdiagram.io/d   grâce au script dans le fichier : diagram_script.txt
