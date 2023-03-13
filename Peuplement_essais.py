@@ -34,4 +34,18 @@ df=pd.read_csv("/users/2023/ds1/share/CORD-19/metadata.csv")
 for i in range(100):
 	print(f'title = {df["title"][i]}, abstract = {df["abstract"][i]}, url = {df["url"][i]} , publication_date= {df["publish_time"][i]}, journal = {df["journal"][i]}, authors = {df["authors"][i]}\n')
 
+	
+	
+
+import json
+
+# Ouvrir le fichier JSON
+with open('/users/2023/ds1/share/CORD-19/document_parses/pdf_json/0000b6da665726420ab8ac9246d526f2f44d5943.json', 'r') as f:
+    data = json.load(f)
+
+# Accéder aux données dans le fichier JSON
+valeur = data['metadata']['authors'][0]['affiliation']['institution']
+# Afficher les données extraites
+print(valeur)
+print(type(valeur))
 
