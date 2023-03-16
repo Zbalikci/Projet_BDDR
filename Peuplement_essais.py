@@ -89,15 +89,45 @@ except Exception as e:
 #for i in range(100):
 #	print(f'title = {df["title"][i]}, abstract = {df["abstract"][i]}, url = {df["url"][i]} , publication_date= {df["publish_time"][i]}, journal = {df["journal"][i]}, authors = {df["authors"][i]}\n')
 
-# Ouvrir le fichier JSON
-with open('/users/2023/ds1/share/CORD-19/document_parses/pdf_json/0000b6da665726420ab8ac9246d526f2f44d5943.json', 'r') as f:
-    data = json.load(f)
+chemin1 = "D:/archive/document_parses/pdf_json"
+chemin2 = "D:/archive/document_parses/pmc_json"
 
-# Accéder aux données dans le fichier JSON
-valeur = data['metadata']['authors'][0]['affiliation']['institution']
-# Afficher les données extraites
-print(valeur)
-print(type(valeur))
+elements = os.listdir(chemin1)
+
+
+for element in elements[:10] :
+
+    # Ouvrir le fichier JSON
+    with open(f'{chemin1}/{element}', 'r') as f:
+        data = json.load(f)
+    # Accéder aux données dans le fichier JSON
+    if len(data['metadata']['authors'])!=0:
+        for i in range(len(data['metadata']['authors'])):
+            l= data['metadata']['authors'][i]['affiliation']
+            if l!={}:
+                if l['institution'] != '':
+                    name = l['institution']
+                    type='institution'
+                else:
+                    name = l['laboratory']
+                    type='laboratory'
+                L = l['location']
+                c=L.values()
+                k=[j for j in c]
+                location=" ".join(str(K).upper() for K in k)
+            # Afficher les données extraites
+            print('name=',name,'\n','type=',type.upper(),'\n','location=',location.upper())
+
+elements = os.listdir(chemin2)
+
+for element in elements[:5000] :
+    with open(f'{chemin2}/{element}', 'r') as f:
+        data = json.load(f)
+    if len(data['metadata']['authors'])!=0:
+        for i in range(len(data['metadata']['authors'])):
+            l= data['metadata']['authors'][i]['affiliation']
+            if l!={}:
+                print(l)         #les auteurs dans le pmc_json semble ne pas avoir d'affiliation
 
 """
 
