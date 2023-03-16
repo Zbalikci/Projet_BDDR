@@ -52,15 +52,16 @@ try:
 	# Connect to an existing database
 	connection = psycopg2.connect("host=data dbname=zbalikci user=zbalikci password=zbalikci")
 	cursor = connection.cursor()
-	id_theme=0
+
 	for dossier in dossiers[1:-1]:
 		theme=(dossier[2:].replace("_"," ")).upper()
 		cursor.execute("""
 		INSERT INTO Theme(theme_name)
-		VALUES(%s);
+		VALUES(%s)
+		RETURNING id;
 		""",
 		(theme,)) # IMPORTANT LORSQU'IL Y A UN SEUL VALEUR !!! RAJOUTER VIRGULE , !!!!
-		id_theme+=1
+		id_theme=cursor.fetchone()[0]
 		
 		# Définir le chemin du dossier dont vous voulez récupérer les noms de fichiers
 		#chemin = f'D:/archive/Kaggle/target_tables/{dossier}'
