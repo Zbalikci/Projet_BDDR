@@ -4,11 +4,10 @@ import logging
 import psycopg2
 import os
 import json
-from django.db import models
-#from appli_covid19.models import Theme, Sous_Theme 
+from django.db import models 
 
 """
-Pour peupler les tables themes et sujets :
+Pour peupler les tables theme et sous_theme :
 """
 
 connection = psycopg2.connect("host=data dbname=zbalikci user=zbalikci password=zbalikci")
@@ -25,10 +24,11 @@ CREATE TABLE Theme
 cursor.execute(sql)
 
 cursor.execute("""
+DROP TABLE IF EXISTS Sous_Theme;
 CREATE TABLE Sous_Theme
   ( 
-    id_sous_theme    SERIAL PRIMARY KEY NOT NULL,
-    id_theme      INT NOT NULL, --fk--
+    id_sous_theme      SERIAL PRIMARY KEY NOT NULL,
+    id_theme           INT NOT NULL, --fk--
     sous_theme_name    TEXT NOT NULL,
     FOREIGN KEY(id_theme) REFERENCES Theme(id_theme)
   );
@@ -37,9 +37,6 @@ CREATE TABLE Sous_Theme
 connection.commit()
 connection.close()
 
-# Chemin du répertoire
-#chemin = "D:/archive/Kaggle/target_tables"
-# ou chemin = "D:\\archive\\Kaggle\\target_tables"
 chemin = "/users/2023/ds1/share/CORD-19/Kaggle/target_tables"
 
 # Utilisation de la fonction listdir() pour obtenir tous les éléments du répertoire
@@ -49,7 +46,6 @@ elements = os.listdir(chemin)
 dossiers = [element for element in elements if os.path.isdir(os.path.join(chemin, element))]
 
 try:
-	# Connect to an existing database
 	connection = psycopg2.connect("host=data dbname=zbalikci user=zbalikci password=zbalikci")
 	cursor = connection.cursor()
 
@@ -62,11 +58,7 @@ try:
 		""",
 		(theme,)) # IMPORTANT LORSQU'IL Y A UN SEUL VALEUR !!! RAJOUTER VIRGULE , !!!!
 		id_theme=cursor.fetchone()[0]
-		
-		# Définir le chemin du dossier dont vous voulez récupérer les noms de fichiers
-		#chemin = f'D:/archive/Kaggle/target_tables/{dossier}'
-		chemin = f'/users/2023/ds1/share/CORD-19/Kaggle/target_tables/{dossier}'
-		# Utiliser la fonction listdir() pour récupérer une liste des fichiers dans le dossier
+		chemin = f'{chemin}/{dossier}'
 		elements = os.listdir(chemin)
 		for element in elements :
 			cursor.execute("""
