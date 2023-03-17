@@ -4,28 +4,17 @@ import logging
 import psycopg2
 import os
 import json
-from django.db import models 
-
-"""
-Pour peupler les tables theme et sous_theme :
-"""
-
-#!/bin/env python3
-import pandas as pd
-import logging
-import psycopg2
-import os
-import json
 from django.db import models
 
 """
-Pour peupler les tables themes et sujets :
+Pour peupler les tables theme, sous_theme et journal:
 """
 
 chemin = "/users/2023/ds1/share/CORD-19/Kaggle/target_tables"
 elements = os.listdir(chemin)
 dossiers = [element for element in elements if os.path.isdir(os.path.join(chemin, element))]
 df=pd.read_csv("/users/2023/ds1/share/CORD-19/metadata.csv")
+l=df["journal"][:100].unique()
 
 try:
 	connection = psycopg2.connect("host=data dbname=zbalikci user=zbalikci password=zbalikci")
@@ -48,6 +37,12 @@ try:
 			""",
 			(f'{element[:-4]}',id_theme))
 			
+	for i in range(len(l)):
+		cursor.execute("""
+		INSERT INTO appli_covid19_journal(name)
+		VALUES(%s);
+		""",
+		(l[i],))
 	connection.commit()
 	connection.close()
 
