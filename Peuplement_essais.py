@@ -10,59 +10,40 @@ from django.db import models
 Pour peupler les tables theme et sous_theme :
 """
 
-connection = psycopg2.connect("host=data dbname=zbalikci user=zbalikci password=zbalikci")
-cursor = connection.cursor()
-sql="""
-DROP TABLE IF EXISTS Theme;
-CREATE TABLE Theme
-  ( 
-    id_theme     SERIAL PRIMARY KEY NOT NULL, 
-    theme_name   VARCHAR(50) NOT NULL
-     
-  ); 
+#!/bin/env python3
+import pandas as pd
+import logging
+import psycopg2
+import os
+import json
+from django.db import models
+
 """
-cursor.execute(sql)
-
-cursor.execute("""
-DROP TABLE IF EXISTS Sous_Theme;
-CREATE TABLE Sous_Theme
-  ( 
-    id_sous_theme      SERIAL PRIMARY KEY NOT NULL,
-    id_theme           INT NOT NULL, --fk--
-    sous_theme_name    TEXT NOT NULL,
-    FOREIGN KEY(id_theme) REFERENCES Theme(id_theme)
-  );
-""")
-
-connection.commit()
-connection.close()
+Pour peupler les tables themes et sujets :
+"""
 
 chemin = "/users/2023/ds1/share/CORD-19/Kaggle/target_tables"
-
-# Utilisation de la fonction listdir() pour obtenir tous les éléments du répertoire
 elements = os.listdir(chemin)
-
-# Filtrer les éléments pour récupérer seulement les dossiers
 dossiers = [element for element in elements if os.path.isdir(os.path.join(chemin, element))]
+df=pd.read_csv("/users/2023/ds1/share/CORD-19/metadata.csv")
 
 try:
 	connection = psycopg2.connect("host=data dbname=zbalikci user=zbalikci password=zbalikci")
 	cursor = connection.cursor()
-
 	for dossier in dossiers[1:-1]:
 		theme=(dossier[2:].replace("_"," ")).upper()
 		cursor.execute("""
-		INSERT INTO Theme(theme_name)
+		INSERT INTO appli_covid19_theme(name)
 		VALUES(%s)
 		RETURNING id;
 		""",
 		(theme,)) # IMPORTANT LORSQU'IL Y A UN SEUL VALEUR !!! RAJOUTER VIRGULE , !!!!
 		id_theme=cursor.fetchone()[0]
-		chemin = f'{chemin}/{dossier}'
+		chemin = f'/users/2023/ds1/share/CORD-19/Kaggle/target_tables/{dossier}'
 		elements = os.listdir(chemin)
 		for element in elements :
 			cursor.execute("""
-			INSERT INTO  Sous_Theme(sous_theme_name,id_theme)
+			INSERT INTO  appli_covid19_sous_theme(name,theme_id)
 			VALUES(%s,%s);
 			""",
 			(f'{element[:-4]}',id_theme))
