@@ -41,12 +41,15 @@ DATABASES = {
 ##### Etape 3 : commande shell 
 
 cd projet_bddr
+
 python manage.py migrate
+
 python manage.py startapp appli_covid19
 
 ##### Etape 4 : modifier le ./projet_bddr/projet_bddr/settings.py 
 
 Il faut ensuite référencer cette application dans le projet.
+
 Pour cela, on ajoute le nom de la classe 'appli_covid19.apps.AppliCovid19Config' dans la liste INSTALLED_APPS définie dans le fichier ./projet_bddr/projet_bddr/settings.py
 
 ##### Etape 5 : changer le ./projet_bddr/appli_covid19/models.py
@@ -56,6 +59,7 @@ Copier coller le fichier models.py disponible dans le git
 ##### Etape 6 : commande shell 
 
 python manage.py makemigrations appli_covid19
+
 python manage.py migrate
 
 
