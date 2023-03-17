@@ -68,10 +68,10 @@ for dossier in dossiers[1:-1]:
 			for t in types:
 				liste.append(t)
 		except:
-			print(df.columns)
+			pass
 
 liste=list(set(liste))
-print(liste)
+
 
 try:
 	connection = psycopg2.connect("host=data dbname=zbalikci user=zbalikci password=zbalikci")
@@ -88,10 +88,7 @@ try:
 except Exception as e:
     logging.error("database connection failed")
     logging.error(e)
-	
-	
-" Pour peupler la table Affiliation"
-
+    
 
 chemin1 = "/users/2023/ds1/share/CORD-19/document_parses/pdf_json"
 elements = os.listdir(chemin1)
@@ -106,7 +103,7 @@ try:
 	VALUES(%s,%s,%s);
 	""",
 	('NULL','NULL','NULL'))
-	for element in elements[:10]:
+	for element in elements[:50]:
 		with open(f'{chemin1}/{element}', 'r') as f:
 			data = json.load(f)
 		if len(data['metadata']['authors'])!=0:
@@ -133,6 +130,7 @@ try:
 						(name,type.upper(),location.upper())) 
 	connection.commit()
 	connection.close()
+	
 except Exception as e:
     logging.error("database connection failed")
     logging.error(e)
