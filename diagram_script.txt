@@ -1,12 +1,8 @@
 Table author {
   id_author int [pk]
-  first_name varchar
-  middle_name varchar
-  last_name varchar 
-  suffix varchar
-  id_affiliation int
+  name varchar
   email varchar
-  
+  id_affiliation int
   indexes{
     id_affiliation [pk]
   }
@@ -17,6 +13,7 @@ Table affiliation {
   id_affiliation int [pk]
   name varchar
   type varchar
+  location varchar
   
 }
 
