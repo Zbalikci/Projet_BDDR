@@ -50,7 +50,46 @@ except Exception as e:
     logging.error("database connection failed")
     logging.error(e)
 
+"""
+Pour peupler la tables studytype:
+"""
 
+chemin = "/users/2023/ds1/share/CORD-19/Kaggle/target_tables"
+elements = os.listdir(chemin)
+dossiers = [element for element in elements if os.path.isdir(os.path.join(chemin, element))]
+liste=[]
+for dossier in dossiers[1:-1]:
+	chemin = f'/users/2023/ds1/share/CORD-19/Kaggle/target_tables/{dossier}'
+	elements = os.listdir(chemin)
+	for element in elements :
+		df=pd.read_csv(f'{chemin}/{element}')
+		try :
+			types=df['Study Type'].unique()
+			for t in types:
+				liste.append(t)
+		except:
+			print(df.columns)
+
+liste=list(set(liste))
+print(liste)
+
+try:
+	connection = psycopg2.connect("host=data dbname=zbalikci user=zbalikci password=zbalikci")
+	cursor = connection.cursor()
+	for study in liste:
+		cursor.execute("""
+		INSERT INTO appli_covid19_studytype(name)
+		VALUES(%s);
+		""",
+		(study,)) # IMPORTANT LORSQU'IL Y A UN SEUL VALEUR !!! RAJOUTER VIRGULE , !!!!
+	connection.commit()
+	connection.close()
+
+except Exception as e:
+    logging.error("database connection failed")
+    logging.error(e)
+	
+	
 """
 #df=pd.read_csv("/users/2023/ds1/share/CORD-19/metadata.csv")
 
