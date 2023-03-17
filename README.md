@@ -22,19 +22,12 @@ django-admin startproject projet_bddr
 DATABASES = {
 
     'default': {
-    
         'ENGINE': 'django.db.backends.postgresql',
-        
         'NAME': 'covid19',
-        
         'USER': 'postgres',
-        
         'PASSWORD': 'Zor.bulursun1',
-        
         'HOST': 'localhost',
-        
         'PORT': '5432',
-        
         }
 }
 
