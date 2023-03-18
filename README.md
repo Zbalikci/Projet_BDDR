@@ -13,20 +13,22 @@ Le schéma (schema.pdf) a été crée sur le site : https://dbdiagram.io/d   gr�
 
 ### Etape pour commencer le projet:
 
+#### Etape 0 : créer une base de donnée sur pgAdmin ou utiliser une déjà existant. 
+
 #### Etape 1 : commande shell 
 
 django-admin startproject projet_bddr
 
-#### Etape 2 : modifier le ./projet_bddr/projet_bddr/settings.py 
+#### Etape 2 : modifier DATABASES du fichier ./projet_bddr/projet_bddr/settings.py  par :
 
 DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'covid19',
-        'USER': 'postgres',
-        'PASSWORD': 'Zor.bulursun1',
-        'HOST': 'localhost',
+        'NAME': 'zbalikci',
+        'USER': 'zbalikci',
+        'PASSWORD': 'zbalikci',
+        'HOST': 'data',
         'PORT': '5432',
         }
 }
@@ -55,5 +57,19 @@ python manage.py makemigrations appli_covid19
 
 python manage.py migrate
 
+#### Etape 7 : Commencer le peulement de la base de donnée 
+#### Etape 7.1 : Pour peupler les tables theme, sous_theme, studytype, journal et affiliation
 
+Premièrement lancer le fichier Peuple1.py sur le shell  
 
+Pas besoin de changer quoi que soit dans le script du fichier
+
+Entrer les informations nécessaires demandé au lancement : chemin_archive, host, etc...
+
+#### Etape 7.2 (en cours) : Pour peupler les tables authors, articles, articles_sous_themes, authors_articles et affiliation_authors
+
+Télécharger le fichier Peuple2.py dans le dossier projet_bddr
+
+Lancer le fichier Peuple2.py sur le shell de DJANGO avec : python manage.py shell
+
+puis : run Peuple2.py
