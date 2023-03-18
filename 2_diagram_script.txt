@@ -1,23 +1,26 @@
-Table author {
+Table authors {
   id_author int [pk]
   name varchar
   email varchar
-  id_affiliation int
-  indexes{
-    id_affiliation [pk]
-  }
-
 }
 
 Table affiliation {
   id_affiliation int [pk]
   name varchar
   type varchar
-  location varchar
+  country varchar
   
 }
 
-Table article {
+Table affiliation_authors {
+  id_affiliation int 
+  id_author int
+indexes{
+  (id_affiliation,id_author) [pk]
+}
+}
+
+Table articles {
   id_article int [pk]
   title varchar
   publication_date datetime
@@ -35,13 +38,13 @@ Table studytype {
   name varchar
 }
 
-Table sujet_article {
-  id_sujet int
+Table sous_theme_articles {
+  id_sous_theme int
   id_article int 
-  indexes { (id_article,id_sujet) [pk] }
+  indexes { (id_article,id_sous_theme) [pk] }
 }
 
-Table article_author {
+Table articles_authors {
   id_article int 
   id_author int
   indexes {
@@ -62,8 +65,8 @@ Table theme {
   
 }
 
-Table sujet {
-  id_sujet int [pk]
+Table sous_theme {
+  id_sous_theme int [pk]
   id_theme int
   name text
   indexes {
@@ -73,13 +76,14 @@ Table sujet {
 
 
 
-Ref : affiliation.id_affiliation < author.id_affiliation
-Ref : article.id_study > studytype.id_study
-Ref : article.id_journal > journal.id_journal
-Ref : author.id_author < article_author.id_author
-Ref : article.id_article < article_author.id_article
-Ref : article.id_article < sujet_article.id_article
-Ref : theme.id_theme < sujet.id_theme
-Ref : sujet.id_sujet < sujet_article.id_sujet
+Ref : affiliation.id_affiliation < affiliation_authors.id_affiliation
+Ref : authors.id_author < affiliation_authors.id_author
+Ref : articles.id_study > studytype.id_study
+Ref : articles.id_journal > journal.id_journal
+Ref : authors.id_author < articles_authors.id_author
+Ref : articles.id_article < articles_authors.id_article
+Ref : theme.id_theme < sous_theme.id_theme
+Ref : articles.id_article < sous_theme_articles.id_article
+Ref : sous_theme.id_sous_theme < sous_theme_articles.id_sous_theme
 
 
