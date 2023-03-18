@@ -1,5 +1,5 @@
 """
-Pour peupler les tables
+Pour peupler les tables authors, articles, articles_sous_themes, authors_articles et affiliation_authors
 """
 df=pd.read_csv("/users/2023/ds1/share/CORD-19/metadata.csv")
 
