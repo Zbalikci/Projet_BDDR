@@ -5,11 +5,7 @@
 
 Le sujet se trouve dans 1_Sujet.pdf
 
-Lien utile : 
-
-https://www.sqlalchemy.org/
-
-Le schéma (schema.pdf) a été crée sur le site : https://dbdiagram.io/d   grâce au script dans le fichier : diagram_script.txt
+Le schéma (3_schema.pdf) a été crée sur le site : https://dbdiagram.io/d   grâce au script dans le fichier : 2_diagram_script.txt
 
 ### Etape pour commencer le projet:
 
