@@ -62,6 +62,8 @@ Pas besoin de changer quoi que soit dans le script du fichier
 
 Entrer les informations nécessaires demandé au lancement : chemin_archive, host, etc...
 
+Le peuplement est terminée au bout d'une heure et 20 min environ.
+
 #### Etape 7.2 (en cours) : Pour peupler les tables authors, articles, articles_sous_themes, authors_articles et affiliation_authors
 
 Télécharger le fichier Peuple2.py dans le dossier projet_bddr
