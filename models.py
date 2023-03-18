@@ -32,9 +32,9 @@ class StudyType(models.Model):
 		return self.name
 
 class Affiliation(models.Model):
-	name=models.CharField(max_length=200, unique=True,null=True)
+	name=models.CharField(max_length=800, unique=True,null=True)
 	type=models.CharField(max_length=50)
-	location=models.CharField(max_length=200,null=True)
+	country=models.CharField(max_length=100,null=True)
 	def __str__(self):
 		return self.name
 	def __repr__(self):
