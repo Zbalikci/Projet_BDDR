@@ -47,7 +47,6 @@ print("\nESSAI PEUPLEMENT DEBUT\n")
 try:
     connection = psycopg2.connect(f'host={host} dbname={dbname} user={user} password={password}')
     cursor = connection.cursor()
-    print("Création d'individus NULL pour les tables theme, sous_theme, studytype et affiliation :")
     cursor.execute("""SELECT * FROM appli_covid19_theme WHERE name LIKE %s""", ('NULL',))
     records = cursor.fetchall()
     if records==[]:
@@ -69,7 +68,6 @@ try:
     records = cursor.fetchall()
     if records==[]:
         cursor.execute("""INSERT INTO appli_covid19_affiliation(name,type,country) VALUES(%s,%s,%s);""",('NULL','NULL','NULL'))
-    print("Individu NULL pour les tables theme, sous_theme, studytype et affiliation a été crée")
     print('peuplement des tables themes et sous_themes : début')
     for dossier in dossiers[1:-1]:
         theme=(dossier[2:].replace("_"," ")).upper()
