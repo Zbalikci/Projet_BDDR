@@ -10,8 +10,6 @@ from django.db import models
 Pour peupler les tables theme, sous_theme, studytype, affiliation et journal:
 """
 print("Où se trouve vos fichiers/dossiers Kaggle, documents_parses et metadata.csv ?")
-print("Par exemple : 'D:/archive/Kaggle'   ou  'D:/archive/metadata.csv'")
-print("Dans ce cas : chemin_archive = 'D:/archive' ")
 chemin_archive = input("Veuillez donner le chemin : chemin_archive=") or "D:/archive"
 host=input("HOST=") or "localhost"
 dbname=input("DB_NAME=") or "covid19"
