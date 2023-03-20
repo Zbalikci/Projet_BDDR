@@ -71,5 +71,5 @@ class Article_Theme(models.Model):
 	
 	
 class Author_Affiliation(models.Model):
-	author=author=models.ForeignKey(Authors, on_delete=models.CASCADE)
-	affliation=author=models.ForeignKey(Affiliation, on_delete=models.CASCADE)
+	author=models.ForeignKey(Authors, on_delete=models.CASCADE)
+	affliation=models.ForeignKey(Affiliation, on_delete=models.CASCADE)
