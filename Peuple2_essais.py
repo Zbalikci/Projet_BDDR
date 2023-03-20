@@ -20,15 +20,22 @@ for element in elements1[:100]:
     if len(a)!=0:
         for i in range(len(a)):
             first="".join(list(filter(str.isalpha,a[i]['first'] )))
-            m="".join(a[i]['middle'])
+            if len(a[i]['middle'])<=1:
+                m="".join(a[i]['middle'])
+            else :
+                m=" ".join(a[i]['middle'])
             middle="".join(list(filter(str.isalpha,m )))
             suffix="".join(list(filter(str.isalpha,a[i]['suffix'] )))
             last="".join(list(filter(str.isalpha,a[i]['last'] )))
             email= a[i]['email']
             if first=='':
-                name=last+', '+middle+suffix
+                if middle=='' and suffix=='':
+                    name = last
+                else:
+                    name=last+', '+middle+suffix
             if last=='':
                 name=first+' '+middle+suffix
             else:
                 name=last+', '+first+' '+middle+suffix
             print(name)
+
