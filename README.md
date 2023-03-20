@@ -21,10 +21,10 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'zbalikci',
-        'USER': 'zbalikci',
-        'PASSWORD': 'zbalikci',
-        'HOST': 'data',
+        'NAME': 'A_COMPLETER!',
+        'USER': 'A_COMPLETER!',
+        'PASSWORD': 'A_COMPLETER!',
+        'HOST': 'A_COMPLETER!',
         'PORT': '5432',
         }
 }
@@ -56,9 +56,9 @@ python manage.py migrate
 #### Etape 7 : Commencer le peulement de la base de donnée 
 #### Etape 7.1 : Pour peupler les tables theme, sous_theme, studytype, journal et affiliation
 
-Premièrement lancer le fichier Peuple1.py sur le shell  
+Premièrement télécharger et lancer le fichier Peuple1.py sur le shell.
 
-Pas besoin de changer quoi que soit dans le script du fichier
+Pas besoin de changer quoi que soit dans le script du fichier.
 
 Entrer les informations nécessaires demandé au lancement : chemin_archive, host, etc...
 
