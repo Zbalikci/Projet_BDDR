@@ -43,7 +43,7 @@ Il faut ensuite référencer cette application dans le projet.
 
 Pour cela, on ajoute le nom de la classe 'appli_covid19.apps.AppliCovid19Config' dans la liste INSTALLED_APPS définie dans le fichier ./projet_bddr/projet_bddr/settings.py
 
-#### Etape 5 : changer le ./projet_bddr/appli_covid19/models.py
+#### Etape 5 : changer le fichier ./projet_bddr/appli_covid19/models.py
 
 Copier coller le fichier models.py disponible dans le git
 
@@ -56,13 +56,21 @@ python manage.py migrate
 #### Etape 7 : Commencer le peulement de la base de donnée 
 #### Etape 7.1 : Pour peupler les tables theme, sous_theme, studytype, journal et affiliation
 
-Premièrement télécharger et lancer le fichier Peuple1.py sur le shell.
-
-Pas besoin de changer quoi que soit dans le script du fichier.
+Premièrement télécharger et lancer le fichier Peuple1.py sur le shell (pas besoin de changer quoi que soit dans le script du fichier).
 
 Entrer les informations nécessaires demandé au lancement : chemin_archive, host, etc...
 
-Le peuplement est terminée au bout d'une heure et 20 min environ.
+Exemples : chemin_archive = /users/2023/ds1/share/CORD-19
+
+HOST = data
+
+DB_NAME = zbalikci
+
+USER_NAME = zbalikci 
+
+PASSWORD = zbalikci
+
+Le peuplement est terminée au bout d'1 heure et 20 min environ.
 
 #### Etape 7.2 (en cours) : Pour peupler les tables authors, articles, articles_sous_themes, authors_articles et affiliation_authors
 
