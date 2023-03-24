@@ -10,12 +10,18 @@ for i in range(100):
 	
 	
 
+chemin_archive ="/users/2023/ds1/share/CORD-19"
+chemin1 = f'{chemin_archive}/document_parses/pmc_json'
+elements1 = os.listdir(chemin1)
+
+""" Construction de la liste des auteurs sous forme d'un dictionnaire dans les fichiers pmc_json """
 fichier=0
-for element in elements1[:100]:
+authors={}
+for element in elements1[:5000]:
     with open(f'{chemin1}/{element}', 'r') as f:
         data = json.load(f)
         fichier+=1
-        print("nombre de fichiers traités=",fichier)
+        print("nombre de fichiers dans pmc_json traités=",fichier)
         a=data['metadata']['authors']
     if len(a)!=0:
         for i in range(len(a)):
@@ -25,19 +31,20 @@ for element in elements1[:100]:
             else :
                 m=" ".join(a[i]['middle'])
             middle="".join(list(filter(str.isalpha,m )))
-            suffix="".join(list(filter(str.isalpha,a[i]['suffix'] )))
-            last="".join(list(filter(str.isalpha,a[i]['last'] )))
+            suffix="".join(list(filter(str.isalpha,a[i]['suffix'])))
+            last="".join(list(filter(str.isalpha,a[i]['last'])))
             email= a[i]['email']
             if first=='':
                 if middle=='' and suffix=='':
-                    name = last
+                    name_author = last
                 else:
-                    name=last+', '+middle+suffix
+                    name_author=last+', '+middle+suffix
             if last=='':
-                name=first+' '+middle+suffix
+                name_author=first+' '+middle+suffix
             else:
-                name=last+', '+first+' '+middle+suffix
-            print(name)
+                name_author=last+', '+first+' '+middle+suffix
+        authors[name_author]=email
+print(authors)
 
 	
 	
