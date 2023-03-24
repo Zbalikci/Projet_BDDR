@@ -16,8 +16,14 @@ elements1 = os.listdir(chemin1)
 
 """ Construction de la liste des auteurs sous forme d'un dictionnaire dans les fichiers pmc_json """
 fichier=0
-authors={}
-for element in elements1[:5000]:
+Authors={}
+print("En train de charger le fichier metadata.csv")
+df=pd.read_csv(f'{chemin_archive}/metadata.csv')
+for authors in df['authors'][:50]:
+    for auhtor in authors.split(';'):
+        Authors[author]=''
+
+for element in elements1[:100]:
     with open(f'{chemin1}/{element}', 'r') as f:
         data = json.load(f)
         fichier+=1
@@ -26,25 +32,18 @@ for element in elements1[:5000]:
     if len(a)!=0:
         for i in range(len(a)):
             first="".join(list(filter(str.isalpha,a[i]['first'] )))
-            if len(a[i]['middle'])<=1:
-                m="".join(a[i]['middle'])
-            else :
-                m=" ".join(a[i]['middle'])
-            middle="".join(list(filter(str.isalpha,m )))
-            suffix="".join(list(filter(str.isalpha,a[i]['suffix'])))
             last="".join(list(filter(str.isalpha,a[i]['last'])))
             email= a[i]['email']
-            if first=='':
-                if middle=='' and suffix=='':
-                    name_author = last
-                else:
-                    name_author=last+', '+middle+suffix
-            if last=='':
-                name_author=first+' '+middle+suffix
+            if first=='' or first==' ':
+                name_author = last
+            if last=='' or last==' ':
+                name_author=first
             else:
-                name_author=last+', '+first+' '+middle+suffix
-        authors[name_author]=email
-print(authors)
+                name_author=last+', '+first
+        Authors[name_author]=email
+for i in Authors.keys():
+    print(i,' = ',Authors[i])
+
 
 	
 	
