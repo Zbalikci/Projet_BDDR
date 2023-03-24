@@ -16,12 +16,19 @@ elements1 = os.listdir(chemin1)
 
 """ Construction de la liste des auteurs sous forme d'un dictionnaire dans les fichiers pmc_json """
 fichier=0
-Authors={}
 print("En train de charger le fichier metadata.csv")
 df=pd.read_csv(f'{chemin_archive}/metadata.csv')
+Authors={}
 for authors in df['authors'][:50]:
-    for auhtor in authors.split(';'):
-        Authors[author]=''
+    try :
+        for author in authors.split(';'):
+            if author.startswith(' '):
+                a=author[1:]
+                Authors[a]=''
+            else:
+                Authors[author]=''
+    except:
+        Authors[authors]=''
 
 for element in elements1[:100]:
     with open(f'{chemin1}/{element}', 'r') as f:
