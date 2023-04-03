@@ -79,7 +79,3 @@ Télécharger le fichier Peuple2.py dans le dossier projet_bddr
 Lancer le fichier Peuple2.py sur le shell de DJANGO avec : python manage.py shell
 
 puis : run Peuple2.py
-
-
-pdf_files_load=401268
-['document_parses/pdf_json/c6574ba0edcefbbf9b26914657f49969d2b0a8d6.json', 'document_parses/pdf_json/345c97e357144264e93dacb9f2b80005b26cb750.json']
