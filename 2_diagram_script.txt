@@ -26,10 +26,9 @@ Table articles {
   publication_date datetime
   abstract text
   studylink text
-  id_study int
   id_journal int
   indexes {
-    (id_study,id_journal) [pk]
+    (id_journal) [pk]
   }
 }
 
@@ -74,16 +73,22 @@ Table sous_theme {
   }
 }
 
+Table studytype_articles{
+  id_study int
+  id_article int
+  indexes{
+    (id_article,id_study) [pk]
+  }
+}
 
 
 Ref : affiliation.id_affiliation < affiliation_authors.id_affiliation
 Ref : authors.id_author < affiliation_authors.id_author
-Ref : articles.id_study > studytype.id_study
+Ref : studytype.id_study < studytype_articles.id_study
+Ref : articles.id_article < studytype_articles.id_article
 Ref : articles.id_journal > journal.id_journal
 Ref : authors.id_author < articles_authors.id_author
 Ref : articles.id_article < articles_authors.id_article
 Ref : theme.id_theme < sous_theme.id_theme
 Ref : articles.id_article < sous_theme_articles.id_article
 Ref : sous_theme.id_sous_theme < sous_theme_articles.id_sous_theme
-
-
