@@ -72,7 +72,7 @@ PASSWORD = zbalikci
 
 Le peuplement est terminée au bout d'1 heure et 20 min environ.
 
-#### Etape 7.2 (en cours) : Pour peupler les tables les tables articles, article_theme et studytype_articles. et affiliation_authors
+#### Etape 7.2 (en cours) : Pour peupler les tables les tables articles, article_theme, studytype_articles, authors, author_affiliation et author_article.
 
 Télécharger le fichier Peuple2.py dans le dossier projet_bddr
 
