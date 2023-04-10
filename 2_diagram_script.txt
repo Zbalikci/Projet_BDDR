@@ -12,7 +12,7 @@ Table affiliation {
   
 }
 
-Table affiliation_authors {
+Table author_affiliation {
   id_affiliation int 
   id_author int
 indexes{
@@ -37,13 +37,13 @@ Table studytype {
   name varchar
 }
 
-Table sous_theme_articles {
+Table article_theme {
   id_sous_theme int
   id_article int 
   indexes { (id_article,id_sous_theme) [pk] }
 }
 
-Table articles_authors {
+Table author_article {
   id_article int 
   id_author int
   indexes {
@@ -82,13 +82,13 @@ Table studytype_articles{
 }
 
 
-Ref : affiliation.id_affiliation < affiliation_authors.id_affiliation
-Ref : authors.id_author < affiliation_authors.id_author
+Ref : affiliation.id_affiliation < author_affiliation.id_affiliation
+Ref : authors.id_author < author_affiliation.id_author
 Ref : studytype.id_study < studytype_articles.id_study
 Ref : articles.id_article < studytype_articles.id_article
 Ref : articles.id_journal > journal.id_journal
-Ref : authors.id_author < articles_authors.id_author
-Ref : articles.id_article < articles_authors.id_article
+Ref : authors.id_author < author_article.id_author
+Ref : articles.id_article < author_article.id_article
 Ref : theme.id_theme < sous_theme.id_theme
-Ref : articles.id_article < sous_theme_articles.id_article
-Ref : sous_theme.id_sous_theme < sous_theme_articles.id_sous_theme
+Ref : articles.id_article < article_theme.id_article
+Ref : sous_theme.id_sous_theme < article_theme.id_sous_theme
