@@ -235,5 +235,3 @@ for k in range(len(Authors_pmc)):
                     Emails2[k][index]=Emails1[k][j]
         Authors_files.append(Authors_pdf[k])
         Emails_files.append(Emails2[k])
-print(len(Authors_files))
-print(len(Emails_files))
