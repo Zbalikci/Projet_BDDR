@@ -30,6 +30,7 @@ for i in range(len(data)):
     formats = ['%Y-%m-%d', '%Y']
     for forma in formats:
         un_article.publication_date = data['publish_time'].apply(lambda x: datetime.strptime(x, forma))
+    # fait un if si plusieurs format de date, mais si que 2 formats de dates fait un try/except
     #PROBLEME AU NIVEAU DE LA DATE : ValueError: time data '2008' does not match format '%Y-%m-%d'
     un_article.abstract = data['abstract']
     un_article.stulink = data['url']
