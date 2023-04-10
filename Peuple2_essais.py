@@ -92,3 +92,120 @@ DF2=pd.DataFrame({'title' : DF['title'], 'abstract' : DF['abstract'], 'publish_t
 """
 Création du metadata3 pour peupler les tables authors, author_affiliation et author_article.
 """
+import unidecode
+
+Authors_pmc=[] 
+Emails1=[]
+for k in range(100):
+    file_pmc=DF['pmc_json_files'][k]
+    auteurs=[]
+    emails=[]
+    if type(file_pmc) == str:
+        with open(f'{chemin_archive}/{file_pmc}','r') as f:
+            data=json.load(f)
+            L=data['metadata']['authors']
+            if len(L)!=0:
+                for i in range(len(L)):
+                    first="".join(list(filter(str.isalpha,L[i]['first'] )))
+                    last="".join(list(filter(str.isalpha,L[i]['last'])))
+                    name=last+', '+first
+                    name=L[i]['last']+', '+L[i]['first']
+                    email=L[i]['email']
+                    auteurs.append(name)
+                    emails.append(email)
+    Authors_pmc.append(auteurs)
+    Emails1.append(emails)
+	
+Authors_pdf=[]
+Emails2=[]
+Laboratory=[]
+Institution=[]
+for k in range(100):
+    auteurs_pdf=[]
+    emails2=[]
+    laboratory=[]
+    institution=[]
+    file_pdf=DF['pdf_json_files'][k]
+    if type(file_pdf)==str:
+############################### >2 PDF_JSON ###############################
+# on n'a pas les même auteurs dans les >2 pdf 
+        if ';' in file_pdf:
+            liste_file=file_pdf.split(';')
+            for fil in liste_file:
+                if fil.startswith(' '):
+                    try:
+                        with open(f'{chemin_archive}/{fil[1:]}','r') as f:
+                            data=json.load(f)
+                            L=data['metadata']['authors']
+                            if len(L)!=0:
+                                for i in range(len(L)):
+                                    first="".join(list(filter(str.isalpha,L[i]['first'] )))
+                                    last="".join(list(filter(str.isalpha,L[i]['last'])))
+                                    name=unidecode.unidecode(last)+', '+unidecode.unidecode(first)
+                                    email=L[i]['email']
+                                    if L[i]['affiliation']!={} :
+                                        name_labo = unidecode.unidecode(L[i]['affiliation']['laboratory'])
+                                        name_inst = unidecode.unidecode(L[i]['affiliation']['institution'])
+                                    else :
+                                        name_labo = 'NULL'
+                                        name_inst = 'NULL'
+                                    if name not in auteurs_pdf:
+                                        auteurs_pdf.append(name)
+                                        emails2.append(email)
+                                        laboratory.append(name_labo)
+                                        institution.append(name_inst)
+                    except:
+                        pass
+                else:
+                    try:
+                        with open(f'{chemin_archive}/{fil}','r') as f:
+                            data=json.load(f)
+                            L=data['metadata']['authors']
+                            if len(L)!=0:
+                                for i in range(len(L)):
+                                    first="".join(list(filter(str.isalpha,L[i]['first'] )))
+                                    last="".join(list(filter(str.isalpha,L[i]['last'])))
+                                    name=unidecode.unidecode(last)+', '+unidecode.unidecode(first)
+                                    email=L[i]['email']
+                                    if L[i]['affiliation']!={} :
+                                        name_labo = unidecode.unidecode(L[i]['affiliation']['laboratory'])
+                                        name_inst = unidecode.unidecode(L[i]['affiliation']['institution'])
+                                    else :
+                                        name_labo = 'NULL'
+                                        name_inst = 'NULL'
+                                    if name not in auteurs_pdf:
+                                        auteurs_pdf.append(name)
+                                        emails2.append(email)
+                                        laboratory.append(name_labo)
+                                        institution.append(name_inst)
+                    except:
+                        pass               
+############################### 1 PDF_JSON ###############################
+        else:
+            try:
+                with open(f'{chemin_archive}/{file_pdf}','r') as f:
+                    data=json.load(f)
+                    L=data['metadata']['authors']
+                    if len(L)!=0:
+                        for i in range(len(L)):
+                            first="".join(list(filter(str.isalpha,L[i]['first'] )))
+                            last="".join(list(filter(str.isalpha,L[i]['last'])))
+                            name=unidecode.unidecode(last)+', '+unidecode.unidecode(first)
+                            email=L[i]['email']
+                            if L[i]['affiliation']!={} :
+                                name_labo = unidecode.unidecode(L[i]['affiliation']['laboratory'])
+                                name_inst = unidecode.unidecode(L[i]['affiliation']['institution'])
+                            else :
+                                name_labo = 'NULL'
+                                name_inst = 'NULL'
+                            auteurs_pdf.append(name)
+                            emails2.append(email)
+                            laboratory.append(name_labo)
+                            institution.append(name_inst)
+            except:
+                pass
+    Authors_pdf.append(auteurs_pdf)
+    Emails2.append(emails2)
+    Laboratory.append(laboratory)
+    Institution.append(institution)
+####
