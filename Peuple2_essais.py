@@ -1,9 +1,10 @@
-"""
-Pour peupler les tables authors, articles, articles_sous_themes, authors_articles et affiliation_authors
-"""
 import pandas as pd
 import os
 import json
+
+"""
+Création du metadata2 pour peupler les tables articles, article_theme et studytype_articles.
+"""
 
 chemin_archive ="/users/2023/ds1/share/CORD-19"
 chemin_tables=f'{chemin_archive}/Kaggle/target_tables'
@@ -31,7 +32,7 @@ for dossier in dossiers[1:-1]:
                 Articles.append(df['Study'][i])
                 Study_Article.append(study_article)
         except:
-            print(f'{chemin}/{element}')
+            print(f"Le fichier {chemin}/{element} n'a pas de studytype !")
 	
 Study_Articles2={}
 for Article in set(Articles):
@@ -87,3 +88,7 @@ DF2=pd.DataFrame({'title' : DF['title'], 'abstract' : DF['abstract'], 'publish_t
                   'url' : DF['url'], 'studytype' : Study_types, 'sous_themes' : Sous_themes_articles2})
 #print(DF2[DF2['sous_themes']!='NULL'])
 #DF2.to_csv("metadata2.csv")
+
+"""
+Création du metadata3 pour peupler les tables authors, author_affiliation et author_article.
+"""
