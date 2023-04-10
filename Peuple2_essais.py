@@ -84,7 +84,7 @@ for article_title in DF['title']:
     else:
         Sous_themes_articles2.append('NULL')
 	
-DF2=pd.DataFrame({'title' : DF['title'], 'abstract' : DF['abstract'], 'publish_time' : DF['publish_time'], 'authors' : DF['authors'], 'journal' : DF['journal'], 
+DF2=pd.DataFrame({'title' : DF['title'], 'abstract' : DF['abstract'], 'publish_time' : DF['publish_time'], 'journal' : DF['journal'], 
                   'url' : DF['url'], 'studytype' : Study_types, 'sous_themes' : Sous_themes_articles2})
 #print(DF2[DF2['sous_themes']!='NULL'])
 #DF2.to_csv("metadata2.csv")
