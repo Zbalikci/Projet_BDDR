@@ -108,8 +108,7 @@ for k in range(100):
                 for i in range(len(L)):
                     first="".join(list(filter(str.isalpha,L[i]['first'] )))
                     last="".join(list(filter(str.isalpha,L[i]['last'])))
-                    name=last+', '+first
-                    name=L[i]['last']+', '+L[i]['first']
+                    name=unidecode.unidecode(last)+', '+unidecode.unidecode(first)
                     email=L[i]['email']
                     auteurs.append(name)
                     emails.append(email)
@@ -208,4 +207,33 @@ for k in range(100):
     Emails2.append(emails2)
     Laboratory.append(laboratory)
     Institution.append(institution)
-####
+	
+######################################## METTRE EN COMMUN LES AUTEURS DANS PMC ET PDF POUR LE MÊME ARTICLE ###############################
+
+Authors_files=[]
+Emails_files=[]
+for k in range(len(Authors_pmc)):
+    if Authors_pmc[k]==[] and Authors_pdf[k]!=[]:
+        Authors_files.append(Authors_pdf[k])
+        Emails_files.append(Emails2[k])
+    elif Authors_pmc[k]!=[] and Authors_pdf[k]==[]:
+        Authors_files.append(Authors_pmc[k])
+        Emails_files.append(Emails1[k])
+    elif Authors_pmc[k]==[] and Authors_pdf[k]==[]:
+        Authors_files.append(Authors_pmc[k])
+        Emails_files.append(Emails1[k])
+    else:
+        for j in range(len(Authors_pmc[k])):
+            if Authors_pmc[k][j] not in Authors_pdf[k]:
+                Authors_pdf[k].append(Authors_pmc[k][j])
+                Emails2[k].append(Emails1[k][j])
+                Institution[k].append('NULL')
+                Laboratory[k].append('NULL')
+            else:
+                if type(Emails1[k][j])==str and len(Emails1[k][j])>2:  #on privéligie les emails dans les fichiers pmc car ils semblent être en "meilleur état"
+                    index=Authors_pdf[k].index(Authors_pmc[k][j])
+                    Emails2[k][index]=Emails1[k][j]
+        Authors_files.append(Authors_pdf[k])
+        Emails_files.append(Emails2[k])
+print(len(Authors_files))
+print(len(Emails_files))
