@@ -54,7 +54,7 @@ python manage.py makemigrations appli_covid19
 python manage.py migrate
 
 #### Etape 7 : Commencer le peulement de la base de donnée 
-#### Etape 7.1 : Pour peupler les tables theme, sous_theme, studytype, journal et affiliation
+#### Etape 7.1 : Pour peupler les tables theme, sous_theme, studytype, affiliation et journal
 
 Premièrement télécharger et lancer le fichier Peuple1.py sur le shell (pas besoin de changer quoi que soit dans le script du fichier).
 
