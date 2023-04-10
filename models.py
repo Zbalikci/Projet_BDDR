@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 class Theme(models.Model):
 	name=models.CharField(max_length=50,unique=True)
 	def __str__(self):
@@ -32,16 +30,16 @@ class StudyType(models.Model):
 		return self.name
 
 class Affiliation(models.Model):
-	name=models.CharField(max_length=800, unique=True,null=True)
+	name=models.TextField(unique=True,null=True)
 	type=models.CharField(max_length=50)
-	country=models.CharField(max_length=100,null=True)
+	country=models.CharField(max_length=360,null=True)
 	def __str__(self):
 		return self.name
 	def __repr__(self):
 		return self.name
 
 class Authors(models.Model):
-	name=models.CharField(max_length=100, unique=True)
+	name=models.CharField(max_length=100,unique=True)
 	email=models.CharField(max_length=100,null=True)
 	def __str__(self):
 		return self.name
@@ -74,4 +72,3 @@ class Author_Affiliation(models.Model):
 class StudyType_Articles(models.Model):
 	studytype=models.ForeignKey(StudyType, on_delete=models.CASCADE)
 	article=models.ForeignKey(Articles, on_delete=models.CASCADE)
-
