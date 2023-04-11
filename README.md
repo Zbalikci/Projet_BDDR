@@ -12,9 +12,9 @@ Le schéma (3_schema.pdf) a été crée sur le site : https://dbdiagram.io/d   g
 #### Etape 0 : créer une base de donnée sur pgAdmin ou utiliser une déjà existant. 
 
 #### Etape 1 : commande shell 
-
+```bash
 django-admin startproject projet_bddr
-
+```
 #### Etape 2 : modifier DATABASES du fichier ./projet_bddr/projet_bddr/settings.py  par :
 
 DATABASES = {
