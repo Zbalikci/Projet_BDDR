@@ -18,7 +18,6 @@ django-admin startproject projet_bddr
 - Etape 2 : modifier DATABASES du fichier ./projet_bddr/projet_bddr/settings.py  par :
 ```bash
 DATABASES = {
-
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'A_COMPLETER!',
@@ -29,7 +28,7 @@ DATABASES = {
         }
 }
 ```
-- Etape 3 : commande shell 
+- Etape 3 : commandes shell 
 ```bash
 cd projet_bddr
 ```
