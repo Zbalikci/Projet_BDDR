@@ -11,32 +11,33 @@ from django.db import IntegrityError
 from datetime import datetime
 import pandas as pd
 
-data =pd.read_csv("/users/2023/ds1/121009626/Téléchargements/metadata2.csv",
+data =pd.read_csv("/Users/mariamadiabymbaye/Downloads/metadata2.csv",
                   usecols=['title','publish_time','abstract','url','journal'])
 
 # Remplissage table Arcticles
-for i in range(len(data)):
+for i in range(len(data['title'])):
     ##### Journal#####
     un_journal = Journal()
     try:
-       un_journal.name = data['journal']
+       un_journal.name = data['journal'][i]
        un_journal.save()
     except IntegrityError:
-        un_journal = Journal.objects.get(name = data['journal'])
+        un_journal = Journal.objects.get(name = data['journal'][i])
         
     ###### Articles #####
     un_article = Articles()
-    un_article.title = data['title']
-    formats = ['%Y-%m-%d', '%Y']
-    for forma in formats:
-        un_article.publication_date = data['publish_time'].apply(lambda x: datetime.strptime(x, forma))
-    # fait un if si plusieurs format de date, mais si que 2 formats de dates fait un try/except
-    #PROBLEME AU NIVEAU DE LA DATE : ValueError: time data '2008' does not match format '%Y-%m-%d'
-    un_article.abstract = data['abstract']
-    un_article.stulink = data['url']
+    un_article.title = data['title'][i]
+    #formats = ['%Y-%m-%d', '%Y']
+    #for forma in formats:
+    try :
+       un_article.publication_date = datetime.strptime(data['publish_time'][i], '%Y-%m-%d')
+    except:
+        pass
+   # la il met rien quand c'est le format '%Y'
+    un_article.abstract = data['abstract'][i]
+    un_article.stulink = data['url'][i]
     un_article.journal = un_journal
     un_article.save()
-    
 
     
     
