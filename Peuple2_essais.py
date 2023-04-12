@@ -1,9 +1,10 @@
-from appli_covid19.models import Articles,Journal,StudyType_Articles,StudyType, Sous_Theme, Article_Theme
+from appli_covid19.models import Articles, Journal, StudyType_Articles, StudyType, Sous_Theme, Article_Theme
 from django.db import IntegrityError
-from datetime import datetime
 import pandas as pd
 import os
 import json
+import unidecode
+# pip install unidecode
 
 """
 Création des listes pour peupler les tables articles, article_theme et studytype_articles.
@@ -20,16 +21,16 @@ elements1 = os.listdir(chemin1)
 chemin2 = f'{chemin_archive}/document_parses/pdf_json'
 elements2 = os.listdir(chemin2)
 
-print('chargement metadata')
+print('Chargement du fichier metadata.csv')
 DF=pd.read_csv(f'{chemin_archive}/metadata.csv')
-print('chargement metadata fini')
+print('Chargement du fichier metadata.csv fini')
 
 #######################################
 n=9000
 #######################################
 
 #############################################  LISTE DES STUDYTYPE POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
-print('Liste Articles création : début')
+print('Liste Study_types création : début')
 Articles0=[]
 Study_Article=[]
 for dossier in dossiers[1:-1]:
@@ -44,8 +45,7 @@ for dossier in dossiers[1:-1]:
                 Study_Article.append(study_article)
         except:
             print(f"Le fichier {chemin}/{element} n'a pas de studytype !")
-print('Liste Articles création : fin')
-print('Liste Study_Articles2 création : début')
+
 Study_Articles2={}
 for Article in set(Articles0):
     types=[]
@@ -53,8 +53,6 @@ for Article in set(Articles0):
         if Study_Article[i][1]==Article:
             types.append(Study_Article[i][0])
     Study_Articles2[Article]=list(set(types))
-print('Liste Study_Articles2 création : fin')
-print('Liste Study_types création : début')
 
 Study_types=[]
 for article_titre in DF['title'][:n]:
@@ -71,8 +69,6 @@ for article_titre in DF['title'][:n]:
             etat=True
     if etat:
         Study_types.append(Study_Articles2[cle])
-        print(article_titre)
-        print('OK')
     else:
         Study_types.append('NULL')
 
@@ -152,9 +148,9 @@ for i in range(n):
         print(Sous_themes_articles2[i])
 
 """
-Création du metadata3 pour peupler les tables authors, author_affiliation et author_article.
+Création des liste pour peupler les tables authors, author_affiliation et author_article.
 """
-import unidecode
+
 #############################################  LISTE DES AUTEURS_PMC POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
 Authors_pmc=[] 
 Emails1=[]
