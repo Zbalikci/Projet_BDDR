@@ -1,9 +1,12 @@
+from appli_covid19.models import Articles,Journal,StudyType_Articles,StudyType, Sous_Theme, Article_Theme
+from django.db import IntegrityError
+from datetime import datetime
 import pandas as pd
 import os
 import json
 
 """
-Création du metadata2 pour peupler les tables articles, article_theme et studytype_articles.
+Création des listes pour peupler les tables articles, article_theme et studytype_articles.
 """
 
 chemin_archive ="/users/2023/ds1/share/CORD-19"
@@ -17,9 +20,17 @@ elements1 = os.listdir(chemin1)
 chemin2 = f'{chemin_archive}/document_parses/pdf_json'
 elements2 = os.listdir(chemin2)
 
+print('chargement metadata')
 DF=pd.read_csv(f'{chemin_archive}/metadata.csv')
+print('chargement metadata fini')
+
+#######################################
+n=9000
+#######################################
+
 #############################################  LISTE DES STUDYTYPE POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
-Articles=[]
+print('Liste Articles création : début')
+Articles0=[]
 Study_Article=[]
 for dossier in dossiers[1:-1]:
     chemin = f'{chemin_tables}/{dossier}'
@@ -29,20 +40,24 @@ for dossier in dossiers[1:-1]:
         try :
             for i in range(len(df)):
                 study_article=(df['Study Type'][i],df['Study'][i])
-                Articles.append(df['Study'][i])
+                Articles0.append(df['Study'][i])
                 Study_Article.append(study_article)
         except:
             print(f"Le fichier {chemin}/{element} n'a pas de studytype !")
-	
+print('Liste Articles création : fin')
+print('Liste Study_Articles2 création : début')
 Study_Articles2={}
-for Article in set(Articles):
+for Article in set(Articles0):
     types=[]
     for i in range(len(Study_Article)):
         if Study_Article[i][1]==Article:
             types.append(Study_Article[i][0])
+    Study_Articles2[Article]=list(set(types))
+print('Liste Study_Articles2 création : fin')
+print('Liste Study_types création : début')
 
 Study_types=[]
-for article_titre in DF['title']:
+for article_titre in DF['title'][:n]:
     etat=False
     for key in Study_Articles2:
         try :
@@ -56,10 +71,14 @@ for article_titre in DF['title']:
             etat=True
     if etat:
         Study_types.append(Study_Articles2[cle])
+        print(article_titre)
+        print('OK')
     else:
         Study_types.append('NULL')
-    Study_Articles2[Article]=list(set(types))
+
+print('Liste Study_types création : fin')
 #############################################  LISTE DES SOUS_THEMES POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
+print('Liste Sous_themes création : début')
 Sous_themes_articles={}
 for dossier in dossiers[1:-1]:
         chemin = f'{chemin_tables}/{dossier}'
@@ -70,7 +89,7 @@ for dossier in dossiers[1:-1]:
             Sous_themes_articles[sous_theme]=da['Study'].str.upper().unique()
 
 Sous_themes_articles2=[]
-for article_title in DF['title']:
+for article_title in DF['title'][:n]:
     k=[]
     for key in Sous_themes_articles:
         try:
@@ -83,11 +102,57 @@ for article_title in DF['title']:
         Sous_themes_articles2.append(k)
     else:
         Sous_themes_articles2.append('NULL')
-	
-DF2=pd.DataFrame({'title' : DF['title'], 'abstract' : DF['abstract'], 'publish_time' : DF['publish_time'], 'journal' : DF['journal'], 
-                  'url' : DF['url'], 'studytype' : Study_types, 'sous_themes' : Sous_themes_articles2})
-#print(DF2[DF2['sous_themes']!='NULL'])
-#DF2.to_csv("metadata2.csv")
+print('Liste Sous_themes création : fin')
+# Remplissage table Arcticles
+print('Debut peuplement')
+for i in range(n):
+    if type(DF['journal'][i])==float:
+        id_journal=Journal.objects.get(name = 'NULL')
+    else:
+        id_journal = Journal.objects.get(name = DF['journal'][i])
+    un_article = Articles()
+    un_article.title = DF['title'][i]
+    un_article.publish_time=str(DF['publish_time'][i])
+    un_article.abstract = DF['abstract'][i]
+    un_article.stulink = DF['url'][i]
+    un_article.journal = id_journal
+    un_article.save()
+
+    STA=StudyType_Articles()
+    liste_studytype = Study_types[i]
+    try:
+        if type(liste_studytype)==list:
+            print(liste_studytype)
+            for k in range(len(liste_studytype)):
+                id_studytype=StudyType.objects.get(name = str(liste_studytype[k]))
+                STA.studytype=id_studytype
+                STA.article=un_article
+                STA.save()
+        else:
+            id_studytype=StudyType.objects.get(name = 'NULL')
+            STA.studytype=id_studytype
+            STA.article=un_article
+            STA.save()
+    except:
+        print(Study_types[i])
+
+    AT=Article_Theme()
+    liste_sousthemes = Sous_themes_articles2[i]
+    try:
+        if type(liste_sousthemes)==list:
+            print(liste_sousthemes)
+            for k in range(len(liste_sousthemes)):
+                id_sous_theme=Sous_Theme.objects.get(name = str(liste_sousthemes[k]))
+                AT.sous_theme=id_sous_theme
+                AT.article=un_article
+                AT.save()
+        else:
+            id_sous_theme=Sous_Theme.objects.get(name = 'NULL')
+            AT.sous_theme=id_sous_theme
+            AT.article=un_article
+            AT.save()
+    except:
+        print(Sous_themes_articles2[i])
 
 """
 Création du metadata3 pour peupler les tables authors, author_affiliation et author_article.
