@@ -77,8 +77,15 @@ Le peuplement est terminée au bout d'1 heure et 20 min environ.
 
 - Etape 7.2 (en cours) : Pour peupler les tables les tables articles, article_theme, studytype_articles, authors, author_affiliation et author_article.
 
+```bash
+pip install unidecode
+```
 Télécharger le fichier Peuple2.py dans le dossier projet_bddr
 
-Lancer le fichier Peuple2.py sur le shell de DJANGO avec : python manage.py shell
-
-puis : run Peuple2.py
+Lancer le fichier Peuple2.py sur le shell de DJANGO avec : 
+```bash
+python manage.py shell
+```
+```bash
+run Peuple2.py
+```
