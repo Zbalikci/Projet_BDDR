@@ -4,6 +4,8 @@ import logging
 import psycopg2
 import os
 import json
+import unidecode  
+#pip install unidecode 
 from django.db import models
 """
 Pour peupler les tables theme, sous_theme, studytype, affiliation et journal:
