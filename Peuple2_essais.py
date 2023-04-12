@@ -93,7 +93,7 @@ DF2=pd.DataFrame({'title' : DF['title'], 'abstract' : DF['abstract'], 'publish_t
 Création du metadata3 pour peupler les tables authors, author_affiliation et author_article.
 """
 import unidecode
-
+#############################################  LISTE DES AUTEURS_PMC POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
 Authors_pmc=[] 
 Emails1=[]
 for k in range(100):
@@ -114,7 +114,7 @@ for k in range(100):
                     emails.append(email)
     Authors_pmc.append(auteurs)
     Emails1.append(emails)
-	
+#############################################  LISTE DES AUTEURS_PDF POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
 Authors_pdf=[]
 Emails2=[]
 Laboratory=[]
@@ -235,3 +235,63 @@ for k in range(len(Authors_pmc)):
                     Emails2[k][index]=Emails1[k][j]
         Authors_files.append(Authors_pdf[k])
         Emails_files.append(Emails2[k])
+
+DF4=pd.DataFrame({'Title': DF['title'][:100],'Authors': DF['authors'][:100],'Authors_files': Authors_files , 'Emails_files' : Emails_files, 
+                  'Institution':Institution, 'Laboratory': Laboratory})
+
+############################################## CREATION DU DATAFRAME 1 LIGNE = 1 AUTEUR #############################################
+final_title=[]
+final_author=[]
+final_email=[]
+final_inst=[]
+final_labo=[]
+
+for i in range(15):
+    L=DF4['Authors_files'][i]
+    s=DF4['Authors'][i]
+    t=DF4['Title'][i]
+    E=DF4['Emails_files'][i]
+    INST=DF4['Institution'][i]
+    LABO=DF4['Laboratory'][i]
+    etat=False
+    for l in L:
+        index=L.index(l)
+        l2=unidecode.unidecode("".join(list(filter(str.isalpha,l )))).upper()
+        for k in s.split('; '): 
+            k2=unidecode.unidecode("".join(list(filter(str.isalpha,k )))).upper()
+            if (l2 in k2) or (k2 in l2):
+                etat=True 
+                K=k
+                
+        if etat:
+            if K not in final_author: #si l'auteur se trouce >2 fois dans L
+                final_author.append(K)
+                final_email.append(E[index])
+                final_title.append(t)
+                if INST!=[]:
+                    final_inst.append(INST[index])
+                else:
+                    final_inst.append('NULL')
+                if LABO!=[]:
+                    final_labo.append(LABO[index])
+                else:
+                    final_labo.append('NULL')
+            else:
+                index2=final_author.index(K)
+                if E[index]==str and E[index]>3:
+                    E[index2]=E[index]
+        else:
+            final_author.append(l)
+            final_email.append(E[index])
+            final_title.append(t)
+            if INST!=[]:
+                final_inst.append(INST[index])
+            else:
+                final_inst.append('NULL')
+            if LABO!=[]:
+                final_labo.append(LABO[index])
+            else :
+                final_labo.append('NULL')
+		
+DF5=pd.DataFrame({'Title': final_title,'Authors': final_author, 'Emails_files' : final_email, 
+                  'Institution':final_inst, 'Laboratory': final_labo})
