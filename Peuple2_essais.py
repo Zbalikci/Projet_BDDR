@@ -5,11 +5,9 @@ import os
 import json
 import unidecode
 # pip install unidecode
-
 """
 Création des listes pour peupler les tables articles, article_theme et studytype_articles.
 """
-
 chemin_archive ="/users/2023/ds1/share/CORD-19"
 chemin_tables=f'{chemin_archive}/Kaggle/target_tables'
 elements = os.listdir(chemin_tables)
@@ -25,12 +23,15 @@ print('Chargement du fichier metadata.csv')
 DF=pd.read_csv(f'{chemin_archive}/metadata.csv')
 print('Chargement du fichier metadata.csv fini')
 
-#######################################
+#######################################  Echantillon :
 n=9000
 #######################################
 
 #############################################  LISTE DES STUDYTYPE POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
 print('Liste Study_types création : début')
+'''
+Crétion d'une liste de tuples : [ (son_studytype, un_article) ,  (...,...)  ,  ... ]
+'''
 Articles0=[]
 Study_Article=[]
 for dossier in dossiers[1:-1]:
@@ -45,7 +46,9 @@ for dossier in dossiers[1:-1]:
                 Study_Article.append(study_article)
         except:
             print(f"Le fichier {chemin}/{element} n'a pas de studytype !")
-
+''' 
+Création d'un dictionnaire tel que : { un_artcile = [ liste de ses studytype] , ...}
+'''
 Study_Articles2={}
 for Article in set(Articles0):
     types=[]
@@ -53,7 +56,9 @@ for Article in set(Articles0):
         if Study_Article[i][1]==Article:
             types.append(Study_Article[i][0])
     Study_Articles2[Article]=list(set(types))
-
+'''
+Création d'une liste telle que : pour chaque article/ligne du metadata.csv, on a ses studytypes
+'''
 Study_types=[]
 for article_titre in DF['title'][:n]:
     etat=False
@@ -75,6 +80,9 @@ for article_titre in DF['title'][:n]:
 print('Liste Study_types création : fin')
 #############################################  LISTE DES SOUS_THEMES POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
 print('Liste Sous_themes création : début')
+''' 
+Création d'un dictionnaire tel que : { un_sous_theme = [ liste des artciles de ce sous_themes] , ...}
+'''
 Sous_themes_articles={}
 for dossier in dossiers[1:-1]:
         chemin = f'{chemin_tables}/{dossier}'
@@ -83,7 +91,9 @@ for dossier in dossiers[1:-1]:
             sous_theme = f'{element[:-4]}'
             da= pd.read_csv(f'{chemin}/{element}')
             Sous_themes_articles[sous_theme]=da['Study'].str.upper().unique()
-
+'''
+Création d'une liste telle que : pour chaque article/ligne du metadata.csv, on a ses sous_themes
+'''
 Sous_themes_articles2=[]
 for article_title in DF['title'][:n]:
     k=[]
@@ -99,7 +109,7 @@ for article_title in DF['title'][:n]:
     else:
         Sous_themes_articles2.append('NULL')
 print('Liste Sous_themes création : fin')
-# Remplissage table Arcticles
+#############################################  PEUPLEMENT DES 3 TABLES  #############################################
 print('Debut peuplement')
 for i in range(n):
     id_journal = Journal.objects.get(name = DF['journal'][i])
@@ -110,7 +120,7 @@ for i in range(n):
     un_article.stulink = DF['url'][i]
     un_article.journal = id_journal
     un_article.save()
-
+    ############################################
     STA=StudyType_Articles()
     liste_studytype = Study_types[i]
     try:
@@ -128,7 +138,7 @@ for i in range(n):
             STA.save()
     except:
         print(Study_types[i])
-
+    ############################################
     AT=Article_Theme()
     liste_sousthemes = Sous_themes_articles2[i]
     try:
@@ -151,7 +161,7 @@ for i in range(n):
 Création des liste pour peupler les tables authors, author_affiliation et author_article.
 """
 
-#############################################  LISTE DES AUTEURS_PMC POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
+#############################################  LISTE DES AUTEURS_PMC_FILES POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
 Authors_pmc=[] 
 Emails1=[]
 for k in range(100):
@@ -172,7 +182,7 @@ for k in range(100):
                     emails.append(email)
     Authors_pmc.append(auteurs)
     Emails1.append(emails)
-#############################################  LISTE DES AUTEURS_PDF POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
+#############################################  LISTE DES AUTEURS_PDF_FILES POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
 Authors_pdf=[]
 Emails2=[]
 Laboratory=[]
@@ -266,7 +276,7 @@ for k in range(100):
     Laboratory.append(laboratory)
     Institution.append(institution)
 	
-######################################## METTRE EN COMMUN LES AUTEURS DANS PMC ET PDF POUR LE MÊME ARTICLE ###############################
+######################################## MISE EN COMMUN DES AUTEURS DANS PMC_FILES ET PDF_FILES POUR LE MÊME ARTICLE ###############################
 
 Authors_files=[]
 Emails_files=[]
