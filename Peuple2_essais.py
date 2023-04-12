@@ -106,10 +106,7 @@ print('Liste Sous_themes création : fin')
 # Remplissage table Arcticles
 print('Debut peuplement')
 for i in range(n):
-    if type(DF['journal'][i])==float:
-        id_journal=Journal.objects.get(name = 'NULL')
-    else:
-        id_journal = Journal.objects.get(name = DF['journal'][i])
+    id_journal = Journal.objects.get(name = DF['journal'][i])
     un_article = Articles()
     un_article.title = DF['title'][i]
     un_article.publish_time=str(DF['publish_time'][i])
