@@ -129,3 +129,14 @@ run Peuple2.py
 {% endif %}
 </body>
 </html>
+
+
+
+
+def pages(request):
+    return render(request, 'pages.tmpl', 
+        {                                          
+            'pages': Page.objects.all(),
+            'nb': Page.objects.count(),
+            'rien': Page.objects.count()==0
+        })
