@@ -156,9 +156,10 @@ Création des liste pour peupler les tables authors, author_affiliation et autho
 """
 
 #############################################  LISTE DES AUTEURS_PMC_FILES POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
+N=100000
 Authors_pmc=[] 
 Emails_pmc=[]
-for k in range(len(DF)):
+for k in range(N):
     file_pmc=DF['pmc_json_files'][k]
     auteurs=[]
     emails=[]
@@ -181,7 +182,7 @@ Authors_pdf=[]
 Emails_pdf=[]
 Laboratory=[]
 Institution=[]
-for k in range(len(DF)):
+for k in range(N):
     auteurs_pdf=[]
     emails_pdf=[]
     laboratory=[]
@@ -271,10 +272,9 @@ for k in range(len(DF)):
     Institution.append(institution)
 	
 ######################################## MISE EN COMMUN DES AUTEURS DANS PMC_FILES ET PDF_FILES POUR LE MÊME ARTICLE ###############################
-
 Authors_files=[]
 Emails_files=[]
-for k in range(len(DF)):
+for k in range(N):
     if Authors_pmc[k]==[] and Authors_pdf[k]!=[]:
         Authors_files.append(Authors_pdf[k])
         Emails_files.append(Emails_pdf[k])
@@ -298,7 +298,7 @@ for k in range(len(DF)):
         Authors_files.append(Authors_pdf[k])
         Emails_files.append(Emails_pdf[k])
 
-DF4=pd.DataFrame({'Title': DF['title'],'Authors': DF['authors'],'Authors_files': Authors_files , 'Emails_files' : Emails_files, 
+DF4=pd.DataFrame({'Title': DF['title'][:N],'Authors': DF['authors'][:N],'Authors_files': Authors_files , 'Emails_files' : Emails_files, 
                   'Institution':Institution, 'Laboratory': Laboratory})
 
 ############################################## CREATION DU DATAFRAME 1 LIGNE = 1 AUTEUR #############################################
@@ -308,7 +308,7 @@ final_email=[]
 final_inst=[]
 final_labo=[]
 
-for i in range(len(DF)):
+for i in range(N):
     AUTHOR_F=DF4['Authors_files'][i]
     AUTHOR_META=DF4['Authors'][i]
     title=DF4['Title'][i]
@@ -357,6 +357,44 @@ for i in range(len(DF)):
                 final_labo.append(LABO[index])
             else :
                 final_labo.append('NULL')
-
+		
 DF5=pd.DataFrame({'Title': final_title,'Authors': final_author, 'Emails' : final_email, 
                   'Institution':final_inst, 'Laboratory': final_labo})
+
+############################################ A terminer ############################################
+print('Debut peuplement')
+for i in range(N):
+    un_author=Authors()
+    try:
+        un_author.name=DF5['Authors'][i]
+        un_author.email=DF5['Emails'][i]
+        un_author.save()
+    except:
+        un_author=Authors.objects.get(name=DF5['Authors'][i])
+        if type(DF5['Emails'][i])==str and len(DF5['Emails'][i])>3:
+            un_author.email=DF5['Emails'][i]
+            un_author.save()
+    AA=Author_Article()
+    id_article=Articles.objects.get(name=DF5['Title'][i])
+    AA.author=un_author
+    AA.article=id_article
+    AA.save()
+
+    if DF5['Institution']=='NULL' and DF5['Laboratory']=='NULL':
+        AAF=Author_Affiliation()
+        id_affiliation=Affiliation.objects.get(name='NULL')
+        AAF.author=un_author
+        AAF.affiliation=id_affiliation
+        AAF.save()
+    elif type(DF5['Institution'])==str and len(DF5['Institution'])>5:
+        AAF=Author_Affiliation()
+        id_affiliation=Affiliation.objects.get(name=DF5['Institution'][i])
+        AAF.author=un_author
+        AAF.affiliation=id_affiliation
+        AAF.save()
+    elif type(DF5['Laboratory'])==str and len(DF5['Laboratory'])>5:
+        AAF=Author_Affiliation()
+        id_affiliation=Affiliation.objects.get(name=DF5['Institution'][i])
+        AAF.author=un_author
+        AAF.affiliation=id_affiliation
+        AAF.save()
