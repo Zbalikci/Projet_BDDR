@@ -112,14 +112,17 @@ for i in range(n):
         jo=s
     if i%100==0:
     	print(f"Ligne {i}")
-    id_journal = Journal.objects.get(name = jo)
-    un_article = Articles()
-    un_article.title = DF['title'][i]
-    un_article.publish_time=str(DF['publish_time'][i])
-    un_article.abstract = DF['abstract'][i]
-    un_article.stulink = DF['url'][i]
-    un_article.journal = id_journal
-    un_article.save()
+    try:
+        id_journal = Journal.objects.get(name = jo)
+        un_article = Articles()
+        un_article.title = DF['title'][i]
+        un_article.publish_time=str(DF['publish_time'][i])
+        un_article.abstract = DF['abstract'][i]
+        un_article.stulink = DF['url'][i]
+        un_article.journal = id_journal
+        un_article.save()
+    except:
+        print("probleme à la ligne ", i)
     ############################################
     STA=StudyType_Articles()
     liste_studytype = Study_types[i]
