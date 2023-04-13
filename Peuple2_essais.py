@@ -8,7 +8,8 @@ import unidecode
 """
 Création des listes pour peupler les tables articles, article_theme et studytype_articles.
 """
-chemin_archive ="/users/2023/ds1/share/CORD-19"
+print("Où se trouve vos fichiers/dossiers Kaggle, documents_parses et metadata.csv ?")
+chemin_archive = input("Veuillez donner le chemin : chemin_archive (/users/2023/ds1/share/CORD-19)=") or "/users/2023/ds1/share/CORD-19"
 chemin_tables=f'{chemin_archive}/Kaggle/target_tables'
 elements = os.listdir(chemin_tables)
 dossiers = [element for element in elements if os.path.isdir(os.path.join(chemin_tables, element))]
