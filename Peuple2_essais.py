@@ -159,7 +159,7 @@ Création des liste pour peupler les tables authors, author_affiliation et autho
 #############################################  LISTE DES AUTEURS_PMC_FILES POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
 Authors_pmc=[] 
 Emails_pmc=[]
-for k in range(10):
+for k in range(len(DF)):
     file_pmc=DF['pmc_json_files'][k]
     auteurs=[]
     emails=[]
@@ -182,7 +182,7 @@ Authors_pdf=[]
 Emails_pdf=[]
 Laboratory=[]
 Institution=[]
-for k in range(10):
+for k in range(len(DF)):
     auteurs_pdf=[]
     emails_pdf=[]
     laboratory=[]
@@ -275,7 +275,7 @@ for k in range(10):
 
 Authors_files=[]
 Emails_files=[]
-for k in range(10):
+for k in range(len(DF)):
     if Authors_pmc[k]==[] and Authors_pdf[k]!=[]:
         Authors_files.append(Authors_pdf[k])
         Emails_files.append(Emails_pdf[k])
@@ -299,7 +299,7 @@ for k in range(10):
         Authors_files.append(Authors_pdf[k])
         Emails_files.append(Emails_pdf[k])
 
-DF4=pd.DataFrame({'Title': DF['title'][:10],'Authors': DF['authors'][:10],'Authors_files': Authors_files , 'Emails_files' : Emails_files, 
+DF4=pd.DataFrame({'Title': DF['title'],'Authors': DF['authors'],'Authors_files': Authors_files , 'Emails_files' : Emails_files, 
                   'Institution':Institution, 'Laboratory': Laboratory})
 
 ############################################## CREATION DU DATAFRAME 1 LIGNE = 1 AUTEUR #############################################
@@ -309,25 +309,28 @@ final_email=[]
 final_inst=[]
 final_labo=[]
 
-for i in range(10):
-    AF=DF4['Authors_files'][i]
-    AU=DF4['Authors'][i]
+for i in range(len(DF)):
+    AUTHOR_F=DF4['Authors_files'][i]
+    AUTHOR_META=DF4['Authors'][i]
     title=DF4['Title'][i]
     EMAIL=DF4['Emails_files'][i]
     INST=DF4['Institution'][i]
     LABO=DF4['Laboratory'][i]
     etat=False
-    for af in AF:
-        index=AF.index(af)
-        af2=unidecode.unidecode("".join(list(filter(str.isalpha,af )))).upper()
-        for k in AU.split('; '): # certain lignes de DF['authors'] sont vide
-            k2=unidecode.unidecode("".join(list(filter(str.isalpha,k )))).upper()
-            if (af2 in k2) or (k2 in af2):
-                etat=True 
-                K=k
+    for author_f in AUTHOR_F:
+        index=AUTHOR_F.index(author_f)
+        author_f_2=unidecode.unidecode("".join(list(filter(str.isalpha,author_f )))).upper()
+        try:
+            for author_meta in AUTHOR_META.split('; '): # certain lignes de DF['authors'] sont vide
+                author_meta_2=unidecode.unidecode("".join(list(filter(str.isalpha,author_meta )))).upper()
+                if (author_f_2 in author_meta_2) or (author_meta_2 in author_f_2):
+                    etat=True 
+                    K=author_meta
+        except:
+            etat=False
                 
-        if etat:
-            if K not in final_author: #si l'auteur se trouve >2 fois dans AF
+        if etat: #si on trouve l'auteur recupéré dans les fichiers .json dans la liste des auteurs de metadata
+            if K not in final_author: #au cas où l'auteur se trouve >2 fois dans AUTHOR_F
                 final_author.append(K)
                 final_email.append(EMAIL[index])
                 final_title.append(title)
@@ -340,11 +343,11 @@ for i in range(10):
                 else:
                     final_labo.append('NULL')
             else:
-                index2=final_author.index(K)
+                index2=final_author.index(K) # si l'auteur s'y trouve déjà on compare les emails
                 if EMAIL[index]==str and EMAIL[index]>3:
                     EMAIL[index2]=EMAIL[index]
-        else:
-            final_author.append(af)
+        else: #si on ne trouve pas l'auteur recupéré dans les fichiers .json dans la liste des auteurs de metadata
+            final_author.append(author_f)
             final_email.append(EMAIL[index])
             final_title.append(title)
             if INST!=[]:
@@ -355,6 +358,6 @@ for i in range(10):
                 final_labo.append(LABO[index])
             else :
                 final_labo.append('NULL')
-		
+
 DF5=pd.DataFrame({'Title': final_title,'Authors': final_author, 'Emails_files' : final_email, 
                   'Institution':final_inst, 'Laboratory': final_labo})
