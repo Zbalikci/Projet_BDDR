@@ -95,10 +95,11 @@ try:
     ############################################################# journal ##############################################################
     print('peuplement de la table journal : début')
     for i in range(len(l)):
-        cursor.execute("""SELECT * FROM appli_covid19_journal WHERE name LIKE %s""", (str(l[i]),))
+	jo=unidecode.unidecode("".join(list(filter(str.isalpha,f"{l[i]}"))))
+        cursor.execute("""SELECT * FROM appli_covid19_journal WHERE name LIKE %s""", (jo,))
         records = cursor.fetchall()
         if records==[]:
-            cursor.execute("""INSERT INTO appli_covid19_journal(name) VALUES(%s);""",(str(l[i]),))
+            cursor.execute("""INSERT INTO appli_covid19_journal(name) VALUES(%s);""",(jo,))
     print('peuplement de la table journal : fin')
     ########################################################### affiliation ############################################################
     print('peuplement de la table affiliation : début')
