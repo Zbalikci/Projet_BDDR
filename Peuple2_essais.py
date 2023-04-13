@@ -359,5 +359,5 @@ for i in range(len(DF)):
             else :
                 final_labo.append('NULL')
 
-DF5=pd.DataFrame({'Title': final_title,'Authors': final_author, 'Emails_files' : final_email, 
+DF5=pd.DataFrame({'Title': final_title,'Authors': final_author, 'Emails' : final_email, 
                   'Institution':final_inst, 'Laboratory': final_labo})
