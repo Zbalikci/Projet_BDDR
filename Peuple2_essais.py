@@ -10,6 +10,7 @@ Création des listes pour peupler les tables articles, article_theme et studytyp
 """
 print("Où se trouve vos fichiers/dossiers Kaggle, documents_parses et metadata.csv ?")
 chemin_archive = input("Veuillez donner le chemin : chemin_archive (/users/2023/ds1/share/CORD-19)=") or "/users/2023/ds1/share/CORD-19"
+n=input("Quelle est la taille de l'échantillon que vous voulez lancer ? (max=1056660)  =")
 chemin_tables=f'{chemin_archive}/Kaggle/target_tables'
 elements = os.listdir(chemin_tables)
 dossiers = [element for element in elements if os.path.isdir(os.path.join(chemin_tables, element))]
@@ -17,10 +18,6 @@ dossiers = [element for element in elements if os.path.isdir(os.path.join(chemin
 print('Chargement du fichier metadata.csv')
 DF=pd.read_csv(f'{chemin_archive}/metadata.csv')
 print('Chargement du fichier metadata.csv fini')
-
-#######################################  Echantillon :
-n=9000
-#######################################
 
 #############################################  LISTE DES STUDYTYPE POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
 print('Liste Study_types création : début')
@@ -107,7 +104,9 @@ print('Liste Sous_themes création : fin')
 #############################################  PEUPLEMENT DES 3 TABLES  #############################################
 print('Debut peuplement')
 for i in range(n):
-    id_journal = Journal.objects.get(name = DF['journal'][i])
+    jo=unidecode.unidecode("".join(list(filter(str.isalpha,f"{DF['journal'][i]}" ))))
+    #faire un try peut-
+    id_journal = Journal.objects.get(name = jo)
     un_article = Articles()
     un_article.title = DF['title'][i]
     un_article.publish_time=str(DF['publish_time'][i])
