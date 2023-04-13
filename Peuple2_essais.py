@@ -13,12 +13,6 @@ chemin_tables=f'{chemin_archive}/Kaggle/target_tables'
 elements = os.listdir(chemin_tables)
 dossiers = [element for element in elements if os.path.isdir(os.path.join(chemin_tables, element))]
 
-chemin1 = f'{chemin_archive}/document_parses/pmc_json'
-elements1 = os.listdir(chemin1)
-
-chemin2 = f'{chemin_archive}/document_parses/pdf_json'
-elements2 = os.listdir(chemin2)
-
 print('Chargement du fichier metadata.csv')
 DF=pd.read_csv(f'{chemin_archive}/metadata.csv')
 print('Chargement du fichier metadata.csv fini')
@@ -57,7 +51,7 @@ for Article in set(Articles0):
             types.append(Study_Article[i][0])
     Study_Articles2[Article]=list(set(types))
 '''
-Création d'une liste telle que : pour chaque article/ligne du metadata.csv, on a ses studytypes
+Création d'une liste telle que : pour chaque article/ligne du metadata.csv, on a la liste de ses studytypes
 '''
 Study_types=[]
 for article_titre in DF['title'][:n]:
@@ -163,8 +157,8 @@ Création des liste pour peupler les tables authors, author_affiliation et autho
 
 #############################################  LISTE DES AUTEURS_PMC_FILES POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
 Authors_pmc=[] 
-Emails1=[]
-for k in range(100):
+Emails_pmc=[]
+for k in range(10):
     file_pmc=DF['pmc_json_files'][k]
     auteurs=[]
     emails=[]
@@ -181,15 +175,15 @@ for k in range(100):
                     auteurs.append(name)
                     emails.append(email)
     Authors_pmc.append(auteurs)
-    Emails1.append(emails)
+    Emails_pmc.append(emails)
 #############################################  LISTE DES AUTEURS_PDF_FILES POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
 Authors_pdf=[]
-Emails2=[]
+Emails_pdf=[]
 Laboratory=[]
 Institution=[]
-for k in range(100):
+for k in range(10):
     auteurs_pdf=[]
-    emails2=[]
+    emails_pdf=[]
     laboratory=[]
     institution=[]
     file_pdf=DF['pdf_json_files'][k]
@@ -218,7 +212,7 @@ for k in range(100):
                                         name_inst = 'NULL'
                                     if name not in auteurs_pdf:
                                         auteurs_pdf.append(name)
-                                        emails2.append(email)
+                                        emails_pdf.append(email)
                                         laboratory.append(name_labo)
                                         institution.append(name_inst)
                     except:
@@ -242,7 +236,7 @@ for k in range(100):
                                         name_inst = 'NULL'
                                     if name not in auteurs_pdf:
                                         auteurs_pdf.append(name)
-                                        emails2.append(email)
+                                        emails_pdf.append(email)
                                         laboratory.append(name_labo)
                                         institution.append(name_inst)
                     except:
@@ -266,13 +260,13 @@ for k in range(100):
                                 name_labo = 'NULL'
                                 name_inst = 'NULL'
                             auteurs_pdf.append(name)
-                            emails2.append(email)
+                            emails_pdf.append(email)
                             laboratory.append(name_labo)
                             institution.append(name_inst)
             except:
                 pass
     Authors_pdf.append(auteurs_pdf)
-    Emails2.append(emails2)
+    Emails_pdf.append(emails_pdf)
     Laboratory.append(laboratory)
     Institution.append(institution)
 	
@@ -280,31 +274,31 @@ for k in range(100):
 
 Authors_files=[]
 Emails_files=[]
-for k in range(len(Authors_pmc)):
+for k in range(10):
     if Authors_pmc[k]==[] and Authors_pdf[k]!=[]:
         Authors_files.append(Authors_pdf[k])
-        Emails_files.append(Emails2[k])
+        Emails_files.append(Emails_pdf[k])
     elif Authors_pmc[k]!=[] and Authors_pdf[k]==[]:
         Authors_files.append(Authors_pmc[k])
-        Emails_files.append(Emails1[k])
+        Emails_files.append(Emails_pmc[k])
     elif Authors_pmc[k]==[] and Authors_pdf[k]==[]:
         Authors_files.append(Authors_pmc[k])
-        Emails_files.append(Emails1[k])
-    else:
+        Emails_files.append(Emails_pmc[k])
+    else:  #Authors_pmc et Authors_pdf non vide :
         for j in range(len(Authors_pmc[k])):
             if Authors_pmc[k][j] not in Authors_pdf[k]:
                 Authors_pdf[k].append(Authors_pmc[k][j])
-                Emails2[k].append(Emails1[k][j])
+                Emails_pdf[k].append(Emails_pmc[k][j])
                 Institution[k].append('NULL')
                 Laboratory[k].append('NULL')
-            else:
-                if type(Emails1[k][j])==str and len(Emails1[k][j])>2:  #on privéligie les emails dans les fichiers pmc car ils semblent être en "meilleur état"
+            else: #on change les emails des Authors_pdf 
+                if type(Emails_pmc[k][j])==str and len(Emails_pmc[k][j])>3:  #on privéligie les emails dans les fichiers pmc car ils semblent être en "meilleur état"
                     index=Authors_pdf[k].index(Authors_pmc[k][j])
-                    Emails2[k][index]=Emails1[k][j]
+                    Emails_pdf[k][index]=Emails_pmc[k][j]
         Authors_files.append(Authors_pdf[k])
-        Emails_files.append(Emails2[k])
+        Emails_files.append(Emails_pdf[k])
 
-DF4=pd.DataFrame({'Title': DF['title'][:100],'Authors': DF['authors'][:100],'Authors_files': Authors_files , 'Emails_files' : Emails_files, 
+DF4=pd.DataFrame({'Title': DF['title'][:10],'Authors': DF['authors'][:10],'Authors_files': Authors_files , 'Emails_files' : Emails_files, 
                   'Institution':Institution, 'Laboratory': Laboratory})
 
 ############################################## CREATION DU DATAFRAME 1 LIGNE = 1 AUTEUR #############################################
@@ -314,28 +308,28 @@ final_email=[]
 final_inst=[]
 final_labo=[]
 
-for i in range(15):
-    L=DF4['Authors_files'][i]
-    s=DF4['Authors'][i]
-    t=DF4['Title'][i]
-    E=DF4['Emails_files'][i]
+for i in range(10):
+    AF=DF4['Authors_files'][i]
+    AU=DF4['Authors'][i]
+    title=DF4['Title'][i]
+    EMAIL=DF4['Emails_files'][i]
     INST=DF4['Institution'][i]
     LABO=DF4['Laboratory'][i]
     etat=False
-    for l in L:
-        index=L.index(l)
-        l2=unidecode.unidecode("".join(list(filter(str.isalpha,l )))).upper()
-        for k in s.split('; '): 
+    for af in AF:
+        index=AF.index(af)
+        af2=unidecode.unidecode("".join(list(filter(str.isalpha,af )))).upper()
+        for k in AU.split('; '): # certain lignes de DF['authors'] sont vide
             k2=unidecode.unidecode("".join(list(filter(str.isalpha,k )))).upper()
-            if (l2 in k2) or (k2 in l2):
+            if (af2 in k2) or (k2 in af2):
                 etat=True 
                 K=k
                 
         if etat:
-            if K not in final_author: #si l'auteur se trouce >2 fois dans L
+            if K not in final_author: #si l'auteur se trouve >2 fois dans AF
                 final_author.append(K)
-                final_email.append(E[index])
-                final_title.append(t)
+                final_email.append(EMAIL[index])
+                final_title.append(title)
                 if INST!=[]:
                     final_inst.append(INST[index])
                 else:
@@ -346,12 +340,12 @@ for i in range(15):
                     final_labo.append('NULL')
             else:
                 index2=final_author.index(K)
-                if E[index]==str and E[index]>3:
-                    E[index2]=E[index]
+                if EMAIL[index]==str and EMAIL[index]>3:
+                    EMAIL[index2]=EMAIL[index]
         else:
-            final_author.append(l)
-            final_email.append(E[index])
-            final_title.append(t)
+            final_author.append(af)
+            final_email.append(EMAIL[index])
+            final_title.append(title)
             if INST!=[]:
                 final_inst.append(INST[index])
             else:
