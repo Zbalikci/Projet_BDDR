@@ -103,7 +103,13 @@ print('Liste Sous_themes création : fin')
 #############################################  PEUPLEMENT DES 3 TABLES  #############################################
 print('Debut peuplement')
 for i in range(n):
-    jo=unidecode.unidecode("".join(list(filter(str.isalpha,f"{DF['journal'][i]}" ))))
+    s=DF['journal'][i]
+    if ("\\" in r"%r" % f"{s}" ):
+        jo=unidecode.unidecode("".join(list(filter(str.isalpha,f"{s}"))))
+    elif type(s)==float:
+        jo='NULL'
+    else:
+        jo=s
     if i%100==0:
     	print(f"Ligne {i}")
     id_journal = Journal.objects.get(name = jo)
