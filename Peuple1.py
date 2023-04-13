@@ -5,7 +5,6 @@ import psycopg2
 import os
 import json
 import unidecode  
-#pip install unidecode 
 from django.db import models
 """
 Pour peupler les tables theme, sous_theme, studytype, affiliation et journal:
@@ -95,7 +94,13 @@ try:
     ############################################################# journal ##############################################################
     print('peuplement de la table journal : début')
     for i in range(len(l)):
-	jo=unidecode.unidecode("".join(list(filter(str.isalpha,f"{l[i]}"))))
+        s=l[i]
+        if ("\\" in r"%r" % f"{s}" ):
+            jo=unidecode.unidecode("".join(list(filter(str.isalpha,f"{s}"))))
+        elif type(s)==float:
+            jo='NULL'
+        else:
+            jo=s
         cursor.execute("""SELECT * FROM appli_covid19_journal WHERE name LIKE %s""", (jo,))
         records = cursor.fetchall()
         if records==[]:
