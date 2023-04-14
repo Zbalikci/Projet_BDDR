@@ -7,7 +7,8 @@ import unidecode
 
 print("Où se trouve vos fichiers/dossiers Kaggle, documents_parses et metadata.csv ?")
 chemin_archive = input("Veuillez donner le chemin : chemin_archive (/users/2023/ds1/share/CORD-19)=") or "/users/2023/ds1/share/CORD-19"
-n=input("Quelle est la taille de l'échantillon que vous voulez lancer ? (max=1056660)  =")
+echantillon=input("Quelle est la taille de l'échantillon que vous voulez lancer ? (max=1056660)  =")
+n=int(echantillon)
 chemin_tables=f'{chemin_archive}/Kaggle/target_tables'
 elements = os.listdir(chemin_tables)
 dossiers = [element for element in elements if os.path.isdir(os.path.join(chemin_tables, element))]
@@ -21,10 +22,9 @@ Création des liste pour peupler les tables authors, author_affiliation et autho
 """
 
 #############################################  LISTE DES AUTEURS_PMC_FILES POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
-N=100000
 Authors_pmc=[] 
 Emails_pmc=[]
-for k in range(N):
+for k in range(n):
     file_pmc=DF['pmc_json_files'][k]
     auteurs=[]
     emails=[]
@@ -47,7 +47,7 @@ Authors_pdf=[]
 Emails_pdf=[]
 Laboratory=[]
 Institution=[]
-for k in range(N):
+for k in range(n):
     auteurs_pdf=[]
     emails_pdf=[]
     laboratory=[]
@@ -139,7 +139,7 @@ for k in range(N):
 ######################################## MISE EN COMMUN DES AUTEURS DANS PMC_FILES ET PDF_FILES POUR LE MÊME ARTICLE ###############################
 Authors_files=[]
 Emails_files=[]
-for k in range(N):
+for k in range(n):
     if Authors_pmc[k]==[] and Authors_pdf[k]!=[]:
         Authors_files.append(Authors_pdf[k])
         Emails_files.append(Emails_pdf[k])
@@ -163,7 +163,7 @@ for k in range(N):
         Authors_files.append(Authors_pdf[k])
         Emails_files.append(Emails_pdf[k])
 
-DF4=pd.DataFrame({'Title': DF['title'][:N],'Authors': DF['authors'][:N],'Authors_files': Authors_files , 'Emails_files' : Emails_files, 
+DF4=pd.DataFrame({'Title': DF['title'][:n],'Authors': DF['authors'][:n],'Authors_files': Authors_files , 'Emails_files' : Emails_files, 
                   'Institution':Institution, 'Laboratory': Laboratory})
 
 ############################################## CREATION DU DATAFRAME 1 LIGNE = 1 AUTEUR #############################################
@@ -173,7 +173,7 @@ final_email=[]
 final_inst=[]
 final_labo=[]
 
-for i in range(N):
+for i in range(n):
     AUTHOR_F=DF4['Authors_files'][i]
     AUTHOR_META=DF4['Authors'][i]
     title=DF4['Title'][i]
