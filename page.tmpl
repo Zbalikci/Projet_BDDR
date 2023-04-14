@@ -1,0 +1,119 @@
+<div class="Base de données">
+<h1>Base de données covid19</h1>
+<p>Vous pouvez taper votre demande ici !</p>
+<form action="/page-traitement-donnees" method="post">
+<div>
+<label for="nom">Rechercher</label>
+<input id="new-todo" placeholder="Que recherchez-vous ?" autofocus>
+</div>
+<div class="centre">
+<button type="search">Rechercher</button>
+</div>
+<div class='centre'>
+ <button1 type="search">Liste des thématiques</button1>
+ <button class='button'>Histograme d'articles par date </button>
+ <button class='button'>Liste des articles pars thématique et sous-thématique</button>
+ <button class='button'>Nombre de publication par labo/insti </button>
+ <button class='button'>Liste de journaux par nombre et type de publications</button>
+</div>
+</form>
+<style>
+body {
+background: #FFD9D9;
+font-family: Montserrat, "sans-serif";
+display: flex;
+justify-content: center;
+color: #303030;
+}
+
+.Base de données {
+width: 700px;
+border: 1px solid;
+border-radius: 8px;
+padding: 0 50px 0 50px;
+background: white;
+}
+
+.Base de données > h1 {
+font-weight: 500;
+}
+
+.Base de données > p {
+font-weight: 300;
+}
+
+.centre{
+  text-align: center;
+}
+
+.container>.button:not(:last-child) {
+ margin-right: 10px;
+}
+
+form div {
+width: 100%;
+display: flex;
+flex-direction: column;
+min-height: 83px;
+margin-top: 25px;
+}
+
+form div > label {
+margin-bottom: 7px;
+font-weight: 600;
+}
+
+
+form div > textarea {
+height: 195px;
+padding: 15px 0px 0px 10px;
+}
+
+form div > input::placeholder, form div > textarea::placeholder {
+color: white;
+}
+
+form div > select:invalid {
+color: white;
+}
+
+form div > select option {
+background: white;
+color: #303030;
+}
+
+form div:last-child {
+align-items:center;
+margin-top: 20px;
+}
+
+form button {
+width: 200px;
+max-width: 400px;
+height: 25px;
+font-weight: 700;
+font-size: 15px;
+position: relative;
+top: -77px; left: 350px;
+background: white;
+border: rgba(48, 48, 48, 0.5) solid 1px;
+border-radius: 5px;
+box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+color: #303030;
+}
+
+form button1 {
+width: 300px;
+max-width: 2000px;
+height: 25px;
+font-weight: 700;
+font-size: 15px;
+position: auto;
+top: -77px; left: 350px;
+background: white;
+border: rgba(48, 48, 48, 0.5) solid 1px;
+border-radius: 5px;
+box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+color: #303030;
+}
+</style>
