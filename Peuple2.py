@@ -21,10 +21,10 @@ DF=pd.read_csv(f'{chemin_archive}/metadata.csv')
 print('Chargement du fichier metadata.csv fini')
 
 #############################################  LISTE DES STUDYTYPE POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
-print('Liste Study_types création : début')
 '''
 Crétion d'une liste de tuples : [ (son_studytype, un_article) ,  (...,...)  ,  ... ]
 '''
+print('Liste Study_types création : début')
 Articles0=[]
 Study_Article=[]
 for dossier in dossiers[1:-1]:
@@ -120,11 +120,11 @@ for i in range(n):
         un_article.title = DF['title'][i]
         un_article.publish_time=str(DF['publish_time'][i])
         un_article.abstract = DF['abstract'][i]
-        un_article.stulink = DF['url'][i]
+        un_article.studylink = DF['url'][i]
         un_article.journal = id_journal
         un_article.save()
     except:
-        print("probleme à la ligne ", i)
+        print("PROBLEME A LA LIGNE ", i)
     ############################################
     STA=StudyType_Articles()
     liste_studytype = Study_types[i]
