@@ -24,21 +24,18 @@ elements1 = os.listdir(chemin1)
 print("En train de charger le fichier metadata.csv")
 df=pd.read_csv(f'{chemin_archive}/metadata.csv')
 print("En train de récupérer la liste des journaux dans metadata.csv")
-l=df["journal"].unique()
+journaux=df[df['journal'].notnull()]['journal'].unique()
 print("En train de crée la liste pour peupler la table studytype")
-liste=[]
+liste=pd.Series([])
 for dossier in dossiers[1:-1]:
 	chemin = f'{chemin_tables}/{dossier}'
 	elements = os.listdir(chemin)
 	for element in elements :
 		df=pd.read_csv(f'{chemin}/{element}')
-		try :
-			types=df['Study Type'].unique()
-			for t in types:
-				liste.append(t)
-		except:
-			pass
-liste=list(set(liste))  
+		if 'Study Type' in df:
+			types=df[df['Study Type'].notnull()]['Study Type'].unique()
+			liste=pd.concat([liste , types])
+liste=liste.unique()
 #####################################################################################################################################
 print("\nESSAI PEUPLEMENT DEBUT\n")
 try:
@@ -93,8 +90,8 @@ try:
     print('peuplement de la table studytype : fin')
     ############################################################# journal ##############################################################
     print('peuplement de la table journal : début')
-    for i in range(len(l)):
-        s=l[i]
+    for journal in journaux:
+        s=journal
         if ("\\" in r"%r" % f"{s}" ):
             jo=unidecode.unidecode("".join(list(filter(str.isalpha,f"{s}"))))
         elif type(s)==float:
