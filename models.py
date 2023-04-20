@@ -47,10 +47,11 @@ class Authors(models.Model):
 		return self.name
 		
 class Articles(models.Model):
+	id = models.BigAutoField(primary_key=True)
 	title=models.TextField(null=True)
 	publish_time=models.CharField(max_length=15,null=True)
-	abstract=models.TextField()
-	stulink=models.URLField(max_length=400,null=True)
+	abstract=models.TextField(null=True)
+	studylink=models.URLField(max_length=400,null=True)
 	journal=models.ForeignKey(Journal, on_delete=models.CASCADE)
 	def __str__(self):
 		return self.title
