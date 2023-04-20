@@ -22,10 +22,10 @@ print('Chargement du fichier metadata.csv fini')
 
 #############################################  LISTE DES STUDYTYPE POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
 '''
-Crétion d'une liste de tuples : [ (son_studytype, un_article) ,  (...,...)  ,  ... ]
+Crétion d'une liste de tuples : Study_Article = [ (son_studytype, un_article) ,  (...,...)  ,  ... ]
 '''
 print('Liste Study_types création : début')
-Articles0=[]
+Articles0=[] #liste d'articles qui ont au moins un studytype
 Study_Article=[]
 for dossier in dossiers[1:-1]:
     chemin = f'{chemin_tables}/{dossier}'
