@@ -47,7 +47,7 @@ class Authors(models.Model):
 		return self.name
 		
 class Articles(models.Model):
-	id = models.BigAutoField(primary_key=True)
+	id = models.BigIntegerField(primary_key=True)
 	title=models.TextField(null=True)
 	publish_time=models.CharField(max_length=15,null=True)
 	abstract=models.TextField(null=True)
