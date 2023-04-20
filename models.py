@@ -21,6 +21,10 @@ class Journal(models.Model):
 		return self.name
 	def __repr__(self):
 		return self.name
+	@classmethod
+	def nb_articles(self):
+		return Articles.objects.filter(journal=self).count()
+	nb = property(nb_articles)
 
 class StudyType(models.Model):
 	name=models.CharField(max_length=100, unique=True)
