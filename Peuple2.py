@@ -117,6 +117,7 @@ for i in range(n):
     try:
         id_journal = Journal.objects.get(name = jo)
         un_article = Articles()
+        un_article.id=i
         un_article.title = DF['title'][i]
         un_article.publish_time=str(DF['publish_time'][i])
         un_article.abstract = DF['abstract'][i]
