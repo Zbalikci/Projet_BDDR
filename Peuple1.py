@@ -15,7 +15,7 @@ host=input("HOST (data)=") or "data"
 dbname=input("DB_NAME (zbalikci)=") or "zbalikci"
 user=input("USER_NAME (zbalikci)=") or "zbalikci"
 password=input("PASSWORD (zbalikci)=") or "zbalikci"
-############################################### Chargement des données nécessaires ###############################################
+############################################    Chargement des données nécessaires    ############################################
 chemin_tables=f'{chemin_archive}/Kaggle/target_tables'
 elements = os.listdir(chemin_tables)
 dossiers = [element for element in elements if os.path.isdir(os.path.join(chemin_tables, element))]
@@ -41,7 +41,7 @@ print("\nESSAI PEUPLEMENT DEBUT\n")
 try:
     connection = psycopg2.connect(f'host={host} dbname={dbname} user={user} password={password}')
     cursor = connection.cursor()
-    ########################################################## LES "NULL" ###########################################################
+    #######################################################    LES "NULL"    ########################################################
     cursor.execute("""SELECT * FROM appli_covid19_theme WHERE name LIKE %s""", ('NULL',))
     records = cursor.fetchall()
     if records==[]:
@@ -61,7 +61,7 @@ try:
     records = cursor.fetchall()
     if records==[]:
         cursor.execute("""INSERT INTO appli_covid19_affiliation(name,type,country) VALUES(%s,%s,%s);""",('NULL','NULL','NULL'))
-    ##################################################### sous_themes et themes #######################################################
+    ##################################################    SOUS_THEMES et THEMES    ####################################################
     print('peuplement des tables themes et sous_themes : début')
     for dossier in dossiers[1:-1]:
         theme=(dossier[2:].replace("_"," ")).upper()
@@ -80,7 +80,7 @@ try:
             if records==[]:
                 cursor.execute("""INSERT INTO  appli_covid19_sous_theme(name,theme_id) VALUES(%s,%s);""",(f'{element[:-4]}',id_theme))
     print('peuplement des tables themes et sous_themes : fin')
-    ############################################################ studytype #############################################################
+    #########################################################    STUDYTYPE    ##########################################################
     print('peuplement de la table studytype : début')
     for study in liste:
         cursor.execute("""SELECT * FROM appli_covid19_studytype WHERE name LIKE %s""", (str(study),))
@@ -88,7 +88,7 @@ try:
         if records==[]:
             cursor.execute("""INSERT INTO appli_covid19_studytype(name) VALUES(%s);""",(str(study),))
     print('peuplement de la table studytype : fin')
-    ############################################################# journal ##############################################################
+    ##########################################################    JOURNAL    ###########################################################
     print('peuplement de la table journal : début')
     for journal in journaux:
         s=journal
@@ -103,14 +103,14 @@ try:
         if records==[]:
             cursor.execute("""INSERT INTO appli_covid19_journal(name) VALUES(%s);""",(jo,))
     print('peuplement de la table journal : fin')
-    ########################################################### affiliation ############################################################
+    ########################################################    AFFILIATION    #########################################################
     print('peuplement de la table affiliation : début')
     fichier=0
     for element in elements1:
         with open(f'{chemin1}/{element}', 'r') as f:
             data = json.load(f)
             fichier+=1
-            print("nombre de fichiers traités=",fichier)
+            print("AFFILIATION : nombre de pdf_json_files traités=",fichier)
             L=data['metadata']['authors']
             if len(L)!=0:
                 for i in range(len(L)):
