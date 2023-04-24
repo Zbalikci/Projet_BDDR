@@ -70,6 +70,7 @@ try:
     print('peuplement de la table studytype : fin')
     ##########################################################    JOURNAL    ###########################################################
     print('peuplement de la table journal : début')
+    I=0
     for journal in journaux:
         s=journal
         if ("\\" in r"%r" % f"{s}" ):
@@ -81,7 +82,8 @@ try:
         cursor.execute("""SELECT * FROM appli_covid19_journal WHERE name LIKE %s""", (jo,))
         records = cursor.fetchall()
         if records==[]:
-            cursor.execute("""INSERT INTO appli_covid19_journal(name) VALUES(%s);""",(jo,))
+            I+=1
+            cursor.execute("""INSERT INTO appli_covid19_journal(id_journal ,name) VALUES(%s,%s);""",(I,jo))
     print('peuplement de la table journal : fin')
     ########################################################    AFFILIATION    #########################################################
     print('peuplement de la table affiliation : début')
