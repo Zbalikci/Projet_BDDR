@@ -77,9 +77,9 @@ USER_NAME = zbalikci
 
 PASSWORD = zbalikci
 
-Le peuplement est terminée au bout d'1 heure et 20 min environ.
+Le peuplement de ces tables est terminé au bout d'1 heure et 20 min environ.
 
-- Etape 7.2 (en cours) : Pour peupler les tables les tables articles, article_theme, studytype_articles, authors, author_affiliation et author_article.
+- Etape 7.2 : Pour peupler les tables les tables articles, article_theme et studytype_articles.
 
 Télécharger le fichier Peuple2.py dans le dossier projet_bddr
 
@@ -95,7 +95,26 @@ Windows Powershell:
 ```bash
 exec(open('Peuple2.py').read())
 ```
-début:21h22
+Le peuplement de ces tables est terminé au bout d'1 heure et 20 min environ.
+
+- Etape 7.3 (en cours) : Pour peupler les tables les tables authors, author_affiliation et author_article.
+
+Télécharger le fichier Peuple3.py dans le dossier projet_bddr
+
+Lancer le fichier Peuple3.py sur le shell de DJANGO avec : 
+```bash
+python manage.py shell
+```
+Linux :
+```bash
+run Peuple3.py
+```
+Windows Powershell:
+```bash
+exec(open('Peuple3.py').read())
+```
+Le peuplement de ces tables est terminée au bout ..... environ.
+
 DROP TABLE appli_covid19_affiliation, appli_covid19_article_theme, appli_covid19_articles, appli_covid19_author_affiliation, appli_covid19_author_article, appli_covid19_authors, appli_covid19_journal, appli_covid19_sous_theme;
 DROP TABLE appli_covid19_studytype, appli_covid19_theme, auth_group, auth_group_permissions, auth_permission, auth_user, auth_user_groups,auth_user_user_permissions, django_admin_log, django_content_type, django_migrations, django_session;
 
