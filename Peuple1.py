@@ -33,7 +33,7 @@ for dossier in dossiers[1:-1]:
 	for element in elements :
 		df=pd.read_csv(f'{chemin}/{element}')
 		if 'Study Type' in df:
-			types=df[df['Study Type'].notnull()]['Study Type'].unique()
+			types=df[df['Study Type'].notnull()]['Study Type']
 			liste=pd.concat([liste , types])
 liste=liste.unique()
 #####################################################################################################################################
@@ -41,26 +41,6 @@ print("\nESSAI PEUPLEMENT DEBUT\n")
 try:
     connection = psycopg2.connect(f'host={host} dbname={dbname} user={user} password={password}')
     cursor = connection.cursor()
-    #######################################################    LES "NULL"    ########################################################
-    cursor.execute("""SELECT * FROM appli_covid19_theme WHERE name LIKE %s""", ('NULL',))
-    records = cursor.fetchall()
-    if records==[]:
-        cursor.execute("""INSERT INTO appli_covid19_theme(name) VALUES(%s) RETURNING id;""",('NULL',)) 
-        id_theme=cursor.fetchone()[0]
-    else :
-        id_theme=records[0][1]
-    cursor.execute("""SELECT * FROM appli_covid19_sous_theme WHERE name LIKE %s""", ('NULL',))
-    records = cursor.fetchall()
-    if records==[]:
-        cursor.execute("""INSERT INTO appli_covid19_sous_theme(name,theme_id) VALUES(%s,%s);""",('NULL',id_theme))
-    cursor.execute("""SELECT * FROM appli_covid19_studytype WHERE name LIKE %s""", ('NULL',))
-    records = cursor.fetchall()
-    if records==[]:
-        cursor.execute("""INSERT INTO appli_covid19_studytype(name) VALUES(%s);""",('NULL',))
-    cursor.execute("""SELECT * FROM appli_covid19_affiliation WHERE name LIKE %s""", ('NULL',))
-    records = cursor.fetchall()
-    if records==[]:
-        cursor.execute("""INSERT INTO appli_covid19_affiliation(name,type,country) VALUES(%s,%s,%s);""",('NULL','NULL','NULL'))
     ##################################################    SOUS_THEMES et THEMES    ####################################################
     print('peuplement des tables themes et sous_themes : début')
     for dossier in dossiers[1:-1]:
