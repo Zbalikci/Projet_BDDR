@@ -115,6 +115,8 @@ exec(open('Peuple3.py').read())
 ```
 Le peuplement de ces tables est terminée au bout ..... environ.
 
+début 14h22
+
 DROP TABLE appli_covid19_affiliation, appli_covid19_article_theme, appli_covid19_articles, appli_covid19_author_affiliation, appli_covid19_author_article, appli_covid19_authors, appli_covid19_journal, appli_covid19_sous_theme;
 DROP TABLE appli_covid19_studytype, appli_covid19_theme, auth_group, auth_group_permissions, auth_permission, auth_user, auth_user_groups,auth_user_user_permissions, django_admin_log, django_content_type, django_migrations, django_session;
 
