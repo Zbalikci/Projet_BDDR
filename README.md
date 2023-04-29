@@ -5,7 +5,7 @@
 
 Le sujet se trouve dans 1_Sujet.pdf
 
-Le schéma (3_schema.pdf) a été crée sur le site : https://dbdiagram.io/d   grâce au script dans le fichier : 2_diagram_script.txt
+Le schéma (3_Schema.pdf) a été crée sur le site : https://dbdiagram.io/d   grâce au script dans le fichier : 2_diagram_script.txt
 
 ### Etapes pour le projet:
 
@@ -15,11 +15,9 @@ Le schéma (3_schema.pdf) a été crée sur le site : https://dbdiagram.io/d   g
 pip install unidecode
 ```
 
-- Etape 1 : commande shell 
-```bash
-django-admin startproject projet_bddr
-```
-- Etape 2 : modifier DATABASES du fichier ./projet_bddr/projet_bddr/settings.py  par :
+- Etape 1 : Télécharger tout le dossier disponible sur le git
+
+- Etape 2 : Modifier DATABASES du fichier ./projet_bddr/projet_bddr/settings.py:
 ```bash
 DATABASES = {
     'default': {
@@ -32,27 +30,12 @@ DATABASES = {
         }
 }
 ```
-- Etape 3 : commandes shell 
+NAME, USER, HOST et PASSWORD sont à compléter par vos données.
+
+- Etape 3 : Commandes shell 
 ```bash
 cd projet_bddr
 ```
-```bash
-python manage.py migrate
-```
-```bash
-python manage.py startapp appli_covid19
-```
-- Etape 4 : modifier le ./projet_bddr/projet_bddr/settings.py 
-
-Il faut ensuite référencer cette application dans le projet.
-
-Pour cela, on ajoute le nom de la classe 'appli_covid19.apps.AppliCovid19Config' dans la liste INSTALLED_APPS définie dans le fichier ./projet_bddr/projet_bddr/settings.py
-
-- Etape 5 : changer le fichier ./projet_bddr/appli_covid19/models.py
-
-Copier coller le fichier models.py disponible dans le git
-
-- Etape 6 : commande shell 
 ```bash
 python manage.py makemigrations appli_covid19
 ```
@@ -60,12 +43,12 @@ python manage.py makemigrations appli_covid19
 python manage.py migrate
 ```
 
-- Etape 7 : Commencer le peulement de la base de donnée 
-- Etape 7.1 : Pour peupler les tables theme, sous_theme, studytype, affiliation et journal
+- Etape 4 : Commencer le peulement de la base de donnée 
+- Etape 4.1 : Pour peupler les tables theme, sous_theme, studytype, affiliation et journal
 
-Premièrement télécharger et lancer le fichier Peuple1.py sur le shell (pas besoin de changer quoi que soit dans le script du fichier).
+Exécuter le fichier Peuple1.py sur le shell normal (pas besoin de changer quoi que soit dans le script du fichier).
 
-Entrer les informations nécessaires demandé au lancement : chemin_archive, host, etc...
+Entrer les informations nécessaires demandé après l'exécution : chemin_archive, host, etc...
 
 Exemples : chemin_archive = /users/2023/ds1/share/CORD-19
 
@@ -79,11 +62,10 @@ PASSWORD = zbalikci
 
 Le peuplement de ces tables est terminé au bout d'1 heure et 20 min environ.
 
-- Etape 7.2 : Pour peupler les tables les tables articles, article_theme et studytype_articles.
+- Etape 4.2 : Pour peupler les tables les tables articles, article_theme et studytype_articles.
 
-Télécharger le fichier Peuple2.py dans le dossier projet_bddr
+Exécuter le fichier Peuple2.py du dossier projet_bddr, pour cela vous devez utilisez le shell de DJANGO avec : 
 
-Lancer le fichier Peuple2.py sur le shell de DJANGO avec : 
 ```bash
 python manage.py shell
 ```
@@ -97,11 +79,9 @@ exec(open('Peuple2.py').read())
 ```
 Le peuplement de ces tables est terminé au bout d'1 heure et 20 min environ.
 
-- Etape 7.3 (en cours) : Pour peupler les tables les tables authors, author_affiliation et author_article.
+- Etape 4.3 : Pour peupler les tables les tables authors, author_affiliation et author_article.
 
-Télécharger le fichier Peuple3.py dans le dossier projet_bddr
-
-Lancer le fichier Peuple3.py sur le shell de DJANGO avec : 
+Exécuter le fichier Peuple3.py du dossier projet_bddr, pour cela vous devez utilisez le shell de DJANGO avec :  
 ```bash
 python manage.py shell
 ```
@@ -113,10 +93,4 @@ Windows Powershell:
 ```bash
 exec(open('Peuple3.py').read())
 ```
-Le peuplement de ces tables est terminée au bout ..... environ.
-
-début 14h22
-
-DROP TABLE appli_covid19_affiliation, appli_covid19_article_theme, appli_covid19_articles, appli_covid19_author_affiliation, appli_covid19_author_article, appli_covid19_authors, appli_covid19_journal, appli_covid19_sous_theme;
-DROP TABLE appli_covid19_studytype, appli_covid19_theme, auth_group, auth_group_permissions, auth_permission, auth_user, auth_user_groups,auth_user_user_permissions, django_admin_log, django_content_type, django_migrations, django_session;
-
+Le peuplement de ces tables est terminée au bout 5h environ.
