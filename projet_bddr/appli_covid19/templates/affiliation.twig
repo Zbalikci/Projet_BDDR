@@ -1,0 +1,33 @@
+{% load extras %}
+<!DOCTYPE html>
+<html>
+
+<head> 
+  <title>{{ name_affiliation }}</title>
+</head>
+
+<body>
+
+<h1>La liste des articles de l'établissement : {{ name_affiliation }}</h1>
+
+
+
+{% if le_type == 'INSTITUTION' %}
+C'est une institution
+{% if le_country != 'NULL' %} basée à {{ le_country }}. {% endif %}
+{% else %}
+C'est une laboratoire
+{% if le_country != 'NULL' %} basée à {{ le_country }}. {% endif %}
+{% endif %}
+Le nombre de publications de cet établissement est {{ nb_articles }}
+
+<p>Retourner à la liste des <a href="/appli_covid19/affiliations">affiliations</a></p>
+
+<ol type="1">
+  {% for x in liste_articles %}
+  <li>{{ x.article }}</li>
+  {% endfor %}
+</ol>
+
+</body>
+</html>

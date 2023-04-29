@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head> 
+    <title>La liste des affiliations</title>
+</head>
+
+<body>
+
+<h1>La liste des affiliations</h1>
+
+<p>Il y a en tout {{ nb_total_affiliations }} affiliations</p>
+
+<p>Retourner à la page d'<a href="/appli_covid19">acceuil</a></p>
+
+<ol type="1">
+  {% for x in liste_affiliations %}
+    {% if x.name != 'NULL' %}
+    <li><a href="{{ x.name }}">{{ x.name }}</a></li>
+    {% endif %}
+  {% endfor %}
+</ol>
+
+</body>
+</html>
+

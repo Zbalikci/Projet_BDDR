@@ -1,0 +1,36 @@
+{% load extras %}
+<!DOCTYPE html>
+<html>
+<head> 
+  <title>Les articles dans la base de donnée</title>
+  <style>   
+    table.mon_tableau  {
+        border-collapse: collapse;
+    }
+    table.mon_tableau td {
+       border: 1px solid #5555;
+       padding: 0.3em;
+       font-family: "Sans-serif";
+       font-size: 12px;
+    }
+    table.mon_tableau tr:nth-child(even)  {background: #EEE}
+    table.mon_tableau tr:nth-child(odd) {background: #FFF}
+  </style>
+</head>
+
+<body> 
+<h1>Les articles dans la base de donnée</h1>
+
+  <table class="mon_tableau">
+  <p>Il y a en tout {{ nb_articles }} d'articles dans la base de donnée</p>
+  <p>Retourner à la page d'<a href="/appli_covid19">acceuil</a></p>
+  {% for p in liste_articles %}
+    <tr>
+      <td>{{ p.title }} </td>
+      <td>{{ p.publish_time }} </td>
+    </tr>
+   {% endfor %}
+  </table>
+
+</body>
+</html>
