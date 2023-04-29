@@ -1,12 +1,12 @@
 Table authors {
   id_author int [pk]
-  name varchar
+  name text
   email varchar
 }
 
 Table affiliation {
   id_affiliation int [pk]
-  name varchar
+  name text
   type varchar
   country varchar
   
@@ -22,8 +22,8 @@ indexes{
 
 Table articles {
   id_article int [pk]
-  title varchar
-  publication_date datetime
+  title text
+  publication_date varchar
   abstract text
   studylink text
   id_journal int
