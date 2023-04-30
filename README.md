@@ -47,7 +47,7 @@ python manage.py migrate
 - Étape 4 : Peupler la base de données :
 - Étape 4.1 : Pour peupler les tables Theme, Sous_Theme, StudyType, Affiliation et Journal.
 
-Exécuter le fichier Peuple1.py sur le shell normal (pas besoin de changer quoi que soit dans le script du fichier).
+Exécuter le fichier Peuple1.py sur le terminal (pas besoin de changer quoi que soit dans le script du fichier).
 
 Entrer les informations nécessaires demandé après l'exécution : chemin_archive, host, etc...
 
