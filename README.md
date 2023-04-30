@@ -3,37 +3,37 @@
 ## Binôme Zeynep BALIKCI et Mariama MBAYE
 
 
-Le sujet se trouve dans 1_Sujet.pdf
+Le sujet se trouve dans "1_Sujet.pdf".
 
-Le schéma (3_Schema.pdf) a été crée sur le site : https://dbdiagram.io/d   grâce au script dans le fichier : 2_diagram_script.txt
+Le schéma (3_Schema.pdf) a été créé sur le site : https://dbdiagram.io/d grâce au script dans le fichier : "2_diagram_script.txt".
 
 ### Etapes pour le projet:
 
-- Etape 0 : créer une base de donnée sur pgAdmin ou utiliser une déjà existant et installer la librairie unidecode, psycopg2.
+- Étape 0 : Créer une base de données sur pgAdmin ou utiliser une base de données déjà existante et installer les bibliothèques "unidecode" et "psycopg2".
 
 ```bash
 pip install unidecode
 pip install psycopg2
 ```
 
-- Etape 1 : Télécharger tout le dossier disponible sur le git
+- Étape 1 : Télécharger l'ensemble du dossier disponible sur Git.
 
-- Etape 2 : Modifier DATABASES du fichier ./projet_bddr/projet_bddr/settings.py:
+- Étape 2 : Modifier la section "DATABASES" du fichier "./projet_bddr/projet_bddr/settings.py" :
 ```bash
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'A_COMPLETER!',
-        'USER': 'A_COMPLETER!',
-        'PASSWORD': 'A_COMPLETER!',
-        'HOST': 'A_COMPLETER!',
+        'NAME': 'nom_de_la_base_de_donnees',
+        'USER': 'nom_utilisateur',
+        'PASSWORD': 'mot_de_passe',
+        'HOST': 'hôte',
         'PORT': '5432',
-        }
+    }
 }
 ```
-NAME, USER, HOST et PASSWORD sont à compléter par vos données.
+Note : Remplacez "nom_de_la_base_de_donnees", "nom_utilisateur", "mot_de_passe" et "hôte" par vos propres informations de base de données.
 
-- Etape 3 : Commandes shell 
+- Etape 3 : Commandes shell.
 ```bash
 cd projet_bddr
 ```
@@ -44,8 +44,8 @@ python manage.py makemigrations appli_covid19
 python manage.py migrate
 ```
 
-- Etape 4 : Commencer le peulement de la base de donnée 
-- Etape 4.1 : Pour peupler les tables theme, sous_theme, studytype, affiliation et journal
+- Étape 4 : Peupler la base de données :
+- Étape 4.1 : Pour peupler les tables Theme, Sous_Theme, StudyType, Affiliation et Journal.
 
 Exécuter le fichier Peuple1.py sur le shell normal (pas besoin de changer quoi que soit dans le script du fichier).
 
@@ -61,9 +61,9 @@ USER_NAME = zbalikci
 
 PASSWORD = zbalikci
 
-Le peuplement de ces tables est terminé au bout d'1 heure et 10 min environ.
+Le peuplement de ces tables est terminé au bout d'1 heure et 10 minutes environ.
 
-- Etape 4.2 : Pour peupler les tables les tables articles, article_theme et studytype_articles.
+- Étape 4.2 : Pour peupler les tables les tables Articles, Article_Aheme et StudyType_Articles.
 
 Exécuter le fichier Peuple2.py du dossier projet_bddr, pour cela vous devez utilisez le shell de DJANGO avec : 
 
@@ -78,9 +78,9 @@ Windows Powershell:
 ```bash
 exec(open('Peuple2.py').read())
 ```
-Le peuplement de ces tables est terminé au bout d'1 heure et 30 min environ. Mais vous pouvez choisir un plus petit échantillon à l'exécution du fichier.
+Le peuplement de ces tables est terminé au bout d'1 heure et 30 minutes environ. Mais vous pouvez choisir un échantillon plus petit lors de l'exécution du fichier.
 
-- Etape 4.3 : Pour peupler les tables les tables authors, author_affiliation et author_article.
+- Étape 4.3 : Pour peupler les tables les tables Authors, Author_Affiliation et Author_Article.
 
 Exécuter le fichier Peuple3.py du dossier projet_bddr, pour cela vous devez utilisez le shell de DJANGO avec :  
 ```bash
@@ -94,4 +94,10 @@ Windows Powershell:
 ```bash
 exec(open('Peuple3.py').read())
 ```
-Le peuplement de ces tables est terminée au bout 5h environ. Mais vous pouvez choisir un plus petit échantillon à l'exécution du fichier. (Début 18h)
+Le peuplement de ces tables est terminé au bout de 5 heure. Mais vous pouvez choisir un échantillon plus petit lors de l'exécution du fichier. (Début 18h)
+
+- Étape 5 : Pour lancer l'application web, exécutez la commande suivante dans un terminal : 
+```bash
+python manage.py runserver
+```
+L'application sera alors disponible à l'adresse [http://localhost:8000/] dans votre navigateur web.
