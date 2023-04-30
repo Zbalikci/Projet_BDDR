@@ -60,7 +60,7 @@ USER_NAME = zbalikci
 
 PASSWORD = zbalikci
 
-Le peuplement de ces tables est terminé au bout d'1 heure et 20 min environ.
+Le peuplement de ces tables est terminé au bout d'1 heure et 10 min environ.
 
 - Etape 4.2 : Pour peupler les tables les tables articles, article_theme et studytype_articles.
 
@@ -77,7 +77,7 @@ Windows Powershell:
 ```bash
 exec(open('Peuple2.py').read())
 ```
-Le peuplement de ces tables est terminé au bout d'1 heure et 20 min environ.
+Le peuplement de ces tables est terminé au bout d'1 heure et 30 min environ.
 
 - Etape 4.3 : Pour peupler les tables les tables authors, author_affiliation et author_article.
 
@@ -93,4 +93,4 @@ Windows Powershell:
 ```bash
 exec(open('Peuple3.py').read())
 ```
-Le peuplement de ces tables est terminée au bout 5h environ.
+Le peuplement de ces tables est terminée au bout 5h environ. (Début 18h)
