@@ -100,4 +100,4 @@ Le peuplement de ces tables est terminé au bout de 5 heure. Mais vous pouvez ch
 ```bash
 python manage.py runserver
 ```
-L'application sera alors disponible à l'adresse [http://localhost:8000/] dans votre navigateur web.
+L'application sera alors disponible à l'adresse http://localhost:8000/appli_covid19/ dans votre navigateur web.
