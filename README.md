@@ -9,10 +9,11 @@ Le schéma (3_Schema.pdf) a été crée sur le site : https://dbdiagram.io/d   g
 
 ### Etapes pour le projet:
 
-- Etape 0 : créer une base de donnée sur pgAdmin ou utiliser une déjà existant et installer la librairie unidecode.
+- Etape 0 : créer une base de donnée sur pgAdmin ou utiliser une déjà existant et installer la librairie unidecode, psycopg2.
 
 ```bash
 pip install unidecode
+pip install psycopg2
 ```
 
 - Etape 1 : Télécharger tout le dossier disponible sur le git
