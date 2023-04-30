@@ -78,7 +78,7 @@ Windows Powershell:
 ```bash
 exec(open('Peuple2.py').read())
 ```
-Le peuplement de ces tables est terminé au bout d'1 heure et 30 min environ.
+Le peuplement de ces tables est terminé au bout d'1 heure et 30 min environ. Mais vous pouvez choisir un plus petit échantillon à l'exécution du fichier.
 
 - Etape 4.3 : Pour peupler les tables les tables authors, author_affiliation et author_article.
 
@@ -94,4 +94,4 @@ Windows Powershell:
 ```bash
 exec(open('Peuple3.py').read())
 ```
-Le peuplement de ces tables est terminée au bout 5h environ. (Début 18h)
+Le peuplement de ces tables est terminée au bout 5h environ. Mais vous pouvez choisir un plus petit échantillon à l'exécution du fichier. (Début 18h)
