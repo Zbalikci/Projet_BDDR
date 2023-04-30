@@ -94,7 +94,7 @@ Windows Powershell:
 ```bash
 exec(open('Peuple3.py').read())
 ```
-Le peuplement de ces tables est terminé au bout de 5 heure. Mais vous pouvez choisir un échantillon plus petit lors de l'exécution du fichier. (Début 18h à 22h29 puis 23h02)
+Le peuplement de ces tables est terminé au bout de 6 heure et 45 minutes environ. Mais vous pouvez choisir un échantillon plus petit lors de l'exécution du fichier.
 
 - Étape 5 : Pour lancer l'application web, exécutez la commande suivante dans un terminal : 
 ```bash
