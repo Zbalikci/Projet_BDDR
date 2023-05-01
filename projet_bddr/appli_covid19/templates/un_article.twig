@@ -1,0 +1,78 @@
+{% load extras %}
+<!DOCTYPE html>
+<html>
+
+<head> 
+<title>{{ le_article }}</title>
+</head>
+
+<body>
+
+<h1>{{ le_article }}</h1>
+
+<p>Retourner à la page d'<a href="/appli_covid19">acceuil</a></p>
+
+  <ul>
+  <li> 
+    {% if le_article.publish_time != NULL %}
+    Sa date de parution : {{ le_article.publish_time }}
+    {% else %}
+    Sa date de parution est inconnue
+    {% endif %}
+  </li>
+  <li> 
+      {% if le_article.journal == NULL or le_article.journal.name == 'NULL'  %}
+      Journal inconnue
+      {% else %}
+      Journal : {{ le_article.journal }}
+      {% endif %}
+  </li>
+    {% if le_article.studylink  != NULL  %}
+    <li>Lien :
+    {% with le_article.studylink|split:";" as links %}
+    {% for link in links  %}
+     <a href="{{  link  }}">{{  link  }}</a>
+    {% endfor %}
+    {% endwith %}
+    </li>
+    {% endif %}
+    
+  <li>
+    {% if le_article.abstract != NULL %}
+    Résumé : {{ le_article.abstract }}
+    {% else %}
+    Pas de résumé disponible
+    {% endif %}
+  </li>
+
+{% for k in study_types %}
+ {% if k.studytype.name != 'NULL' %}
+  <li>Type de publications{{k.studytype}}</li>
+  {% endif %}
+{% endfor %}
+
+{% for k in sous_theme %}
+{% if k.sous_theme.name != 'NULL' %}
+
+  <li> Sous_theme {{k.sous_theme}}</li>
+  {% endif %}
+{% endfor %}
+  <li> La liste des auteurs :
+  <ul>
+{% for k in liste_auteurs %}
+  <li>
+  {{k.author.name}}
+  {% if k.author.email != NULL %}
+  ; email : {{k.author.email}}
+  {% endif %}
+  </li>
+{% endfor %}
+</ul>
+</li>
+
+
+</ul>
+
+
+</body>
+</html>

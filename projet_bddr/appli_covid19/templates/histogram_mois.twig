@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head> 
+    <title>Histogramme d'articles publiés par mois</title>
+</head>
+
+<body>
+
+<h1>Histogramme d'articles publiés par mois</h1>
+
+<p>Retourner à la page des <a href="/appli_covid19/histogram">histogrammes</a></p>
+
+<table class="mon_tableau">
+    {% for key, value in liste_mois.items %}
+    
+    <tr> 
+      <th>
+        {{ key }} 
+      </th> 
+    </tr>
+    <tr> 
+      <td>      
+      <ul>
+      <li> 
+      Nombre d'articles publié par ce journal : {{ value }}
+      </li>
+      </ul>
+      </td> 
+</tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

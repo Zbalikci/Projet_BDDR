@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <title>La liste des affiliations</title>
+  <style>   
+    table.mon_tableau  {
+        border-collapse: collapse;
+    }
+    table.mon_tableau td {
+       border: 1px solid #5555;
+       padding: 0.3em;
+       font-family: "Sans-serif";
+       font-size: 12px;
+    }
+
+    table.mon_tableau th {
+       border: 1px solid #5555;
+       padding: 0.3em;
+       font-family: "Sans-serif";
+       font-size: 12px;
+    }
+    table.mon_tableau tr:nth-child(even)  {background: #EEE}
+    table.mon_tableau tr:nth-child(odd) {background: #FFF}
+  </style>
+</head>
+
+<body> 
+<h1>Nombre de publications par affiliation</h1>
+
+<table class="mon_tableau">
+
+<p>Retourner à la page d'<a href="/appli_covid19">acceuil</a></p>
+<tr><th>Etablisement</th> <th>   Nombre d'articles publiés par cet établissement   </th></tr>
+    {% for a in liste_affiliations %}
+    <tr>
+      <td>{{ a.name }} </td>
+      <td>{{ a.nb_articles }} </td>
+      
+    </tr>
+   {% endfor %}
+  </table>
+
+</body>
+</html>

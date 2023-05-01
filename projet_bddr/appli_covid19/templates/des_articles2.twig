@@ -1,0 +1,36 @@
+{% load extras %}
+<!DOCTYPE html>
+<html>
+<head> 
+  <title>La listes des articles</title>
+</head>
+
+<body>
+
+<h1>Recherche précise</h1>
+
+<form method="POST">
+{% csrf_token %}
+<p>
+<label for="username"> Titre d'un article</label>
+<input id="username" type="text" name="username">
+</p>
+<button type="submit">Rechercher</button>
+</form>
+
+
+<p>Retourner à la page d'<a href="/appli_covid19">acceuil</a></p>
+
+{% if username is not null %}
+<p>Voici les articles qui contiennent "{{ username }}" dans leur titre. </p>
+<ol type="1">
+  {% for p in liste_articles %}
+    {% if username in p.title %}
+    <li><a href="/appli_covid19/articles/{{ p.id_article }}">{{ p.title }}</a></li>
+    {% endif %}
+  {% endfor %}
+</ol>
+{% endif %}
+</body>
+</html>
+

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head> 
+    <title>La liste des journaux</title>
+</head>
+<body>
+
+<h1>Recherche précise</h1>
+
+
+<form method="POST">
+{% csrf_token %}
+<p>
+<label for="username"> Nom d'un journal</label>
+<input id="username" type="text" name="username">
+</p>
+<button type="submit">Rechercher</button>
+</form>
+
+<p>Retourner à la page d'<a href="/appli_covid19">acceuil</a></p>
+
+{% if username is not null %}
+<p>Voici les journaux qui contiennent "{{ username }}" dans leur nom. </p>
+<ol type="1">
+    {% for j in journaux %}
+      {% if j.name != 'NULL' %}
+      {% if username in j.name %}
+      <li><a href="/appli_covid19/journaux/{{ j.name }}">{{ j.name }}</a></li>
+      {% endif %}
+      {% endif %}
+    {% endfor %}
+</ol>
+
+{% endif %}
+</body>
+</html>
