@@ -17,13 +17,13 @@ from django.urls import include,path
 
 urlpatterns = [
     path('appli_covid19/', include('appli_covid19.urls')),
-    path('appli_covid19/theme/', include('appli_covid19.urls')),
     path('appli_covid19/journaux/', include('appli_covid19.urls')),
+    path('appli_covid19/studytypes/', include('appli_covid19.urls')),
     path('appli_covid19/journaux2/', include('appli_covid19.urls')),
     path('appli_covid19/journaux3/', include('appli_covid19.urls')),
     path('appli_covid19/articles/', include('appli_covid19.urls')),
     path('appli_covid19/articles2/', include('appli_covid19.urls')),
-    path('appli_covid19/histogram/', include('appli_covid19.urls')),
+    path('appli_covid19/auteurs/', include('appli_covid19.urls')),
     path('appli_covid19/histogram_annee/', include('appli_covid19.urls')),
     path('appli_covid19/histogram_mois/', include('appli_covid19.urls')),
     path('appli_covid19/histogram_semaine/', include('appli_covid19.urls')),
