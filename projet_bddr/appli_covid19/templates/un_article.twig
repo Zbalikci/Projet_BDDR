@@ -1,78 +1,57 @@
+{% extends 'base.twig' %}
 {% load extras %}
-<!DOCTYPE html>
-<html>
+{% block content %}
 
-<head> 
-<title>{{ le_article }}</title>
-</head>
+<h5>{{ le_article }}</h5>
 
-<body>
-
-<h1>{{ le_article }}</h1>
-
-<p>Retourner à la page d'<a href="/appli_covid19">acceuil</a></p>
-
-  <ul>
-  <li> 
+<ul id="ul2">
+  <li id="li2"> 
     {% if le_article.publish_time != NULL %}
     Sa date de parution : {{ le_article.publish_time }}
     {% else %}
     Sa date de parution est inconnue
-    {% endif %}
-  </li>
-  <li> 
+    {% endif %}</li>
+  <li id="li2"> 
       {% if le_article.journal == NULL or le_article.journal.name == 'NULL'  %}
       Journal inconnue
       {% else %}
       Journal : {{ le_article.journal }}
-      {% endif %}
-  </li>
+      {% endif %}</li>
     {% if le_article.studylink  != NULL  %}
-    <li>Lien :
+    <li id="li2">Lien :
     {% with le_article.studylink|split:";" as links %}
     {% for link in links  %}
-     <a href="{{  link  }}">{{  link  }}</a>
+    <a class='test external' href="{{  link  }}" target='_blank'>{{  link  }}</a>
     {% endfor %}
-    {% endwith %}
-    </li>
+    {% endwith %}</li>
     {% endif %}
     
-  <li>
+  <li id="li2">
     {% if le_article.abstract != NULL %}
     Résumé : {{ le_article.abstract }}
     {% else %}
     Pas de résumé disponible
-    {% endif %}
-  </li>
+    {% endif %}</li>
 
 {% for k in study_types %}
- {% if k.studytype.name != 'NULL' %}
-  <li>Type de publications{{k.studytype}}</li>
+  {% if k.studytype.name != 'NULL' %}
+    <li id="li2">Type de publications : {{k.studytype}}</li>
   {% endif %}
 {% endfor %}
 
 {% for k in sous_theme %}
-{% if k.sous_theme.name != 'NULL' %}
-
-  <li> Sous_theme {{k.sous_theme}}</li>
+  {% if k.sous_theme.name != 'NULL' %}
+    <li id="li2"> Sous_theme : {{k.sous_theme}}</li>
   {% endif %}
 {% endfor %}
-  <li> La liste des auteurs :
-  <ul>
+  <li id="li2"> La liste des auteurs :
+  <ul  id="ul2">
 {% for k in liste_auteurs %}
-  <li>
+  <li id="li2">
   {{k.author.name}}
   {% if k.author.email != NULL %}
   ; email : {{k.author.email}}
-  {% endif %}
-  </li>
+  {% endif %}</li>
 {% endfor %}
-</ul>
-</li>
-
-
-</ul>
-
-
-</body>
-</html>
+</ul></li></ul>
+{% endblock %}
