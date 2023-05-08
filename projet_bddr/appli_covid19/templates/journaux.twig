@@ -1,24 +1,33 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.twig' %}
 
-<head> 
-    <title>La liste des journaux</title>
-</head>
-<body>
-
+{% block content %}
 <h1>La liste des journaux</h1>
 
 <p> Il y a en tout {{ nb_total_journaux }} journaux </p>
-<p>Retourner à la page d'<a href="/appli_covid19">acceuil</a></p>
-<input type="button" onclick="window.location.href = '/appli_covid19/journaux3';" value="Recherche précise"/>
 
 <ol type="1">
     {% for j in journaux %}
       {% if j.name != 'NULL' %}
-      <li><a href="/appli_covid19/journaux/{{ j.name }}">{{ j.name }}</a></li>
+      <li id="li2"><a class='test external' href="/appli_covid19/journaux/{{ j.name }}">{{ j.name }}</a></li>
       {% endif %}
     {% endfor %}
 </ol>
 
-</body>
-</html>
+<div class="pagination">
+    <span class="step-links">
+        {% if journaux.has_previous %}
+            <input type="button" onclick="window.location.href = '?page=1';" value="<<"/>
+            <input type="button" onclick="window.location.href = '?page={{ journaux.previous_page_number }}';" value="précedent"/>
+        {% endif %}
+
+        <span class="current">
+            Page {{ journaux.number }}/{{ journaux.paginator.num_pages }}
+        </span>
+
+        {% if journaux.has_next %}
+            <input type="button" onclick="window.location.href = '?page={{ journaux.next_page_number }}';" value="suivant"/>
+            <input type="button" onclick="window.location.href = '?page={{ journaux.paginator.num_pages }}';" value=">>"/>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
