@@ -1,43 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head> 
-  <title>La liste des journaux</title>
-  <style>   
-    table.mon_tableau  {
-        border-collapse: collapse;
-    }
-    table.mon_tableau td {
-       border: 1px solid #5555;
-       padding: 0.3em;
-       font-family: "Sans-serif";
-       font-size: 12px;
-    }
+{% extends 'base.twig' %}
 
-    table.mon_tableau th {
-       border: 1px solid #5555;
-       padding: 0.3em;
-       font-family: "Sans-serif";
-       font-size: 12px;
-    }
-    table.mon_tableau tr:nth-child(even)  {background: #EEE}
-    table.mon_tableau tr:nth-child(odd) {background: #FFF}
-  </style>
-</head>
-
-<body> 
-<h1>La liste des journaux qui possèdent des types de publications</h1>
+{% block content %}
+<h3>La liste des journaux qui possèdent des types de publications</h3><br>
 
 <table class="mon_tableau">
 
-<p>Retourner à la page d'<a href="/appli_covid19">acceuil</a></p>
-<tr><th>Journal</th> <th>   Nombre d'articles publiés par ce journal   </th> <th>   La liste des types de publications de ce journal   </th></tr>
+<tr><th>Journal</th> <th>   Nombre d'articles publiés </th> <th>  Types de publications </th></tr>
     {% for key, value in dict_study_type.items %}
     <tr>
     {% if key != NULL %}
-      <td>{{ key }} </td>
+    
+      <td><a class='test external' href="/appli_covid19/journaux/{{ key }}">{{ key }}</a></td>
       <td>{{ value.nb_articles }} </td>
-      <td><ul>{% for s in value.liste_study_types %} 
-      <li>{{ s }}</li>
+      <td><ul id="ul2">{% for s in value.liste_study_types %} 
+      <li id="li2">{{ s }}</li>
       {% endfor %}
       </ul>
       </td>
@@ -45,6 +21,4 @@
     </tr>
    {% endfor %}
   </table>
-
-</body>
-</html>
+{% endblock %}
