@@ -1,23 +1,29 @@
-{% load extras %}
-<!DOCTYPE html>
-<html>
-<head> 
-  <title>Les articles dans la base de donnée</title>
+{% extends 'base.twig' %}
 
-</head>
-
-<body> 
+{% block content %}
 <h1>Les articles dans la base de donnée</h1>
-
-  <p>Il y a en tout {{ nb_articles }} d'articles dans la base de donnée</p>
-  <input type="button" onclick="window.location.href = '/appli_covid19/articles2';" value="Recherche précise"/>
-  <p>Retourner à la page d'<a href="/appli_covid19">acceuil</a></p>
-  
+<p>Il y a en tout {{ nb_articles }} d'articles dans la base de donnée</p>
 <ol type="1">
     {% for p in liste_articles %}
-      <li><a href="/appli_covid19/articles/{{ p.id_article }}">{{ p.title }}</a></li>
+      <li id="li2"><a class='test external' href="/appli_covid19/articles/{{ p.id_article }}" >{{ p.title }}</a></li>
     {% endfor %}
 </ol>
 
-</body>
-</html>
+<div class="pagination">
+    <span class="step-links">
+        {% if liste_articles.has_previous %}
+            <input type="button" onclick="window.location.href = '?page=1';" value="<<"/>
+            <input type="button" onclick="window.location.href = '?page={{  liste_articles.previous_page_number }}';" value="précedent"/>
+        {% endif %}
+
+        <span class="current">
+            Page {{ liste_articles.number }}/{{ liste_articles.paginator.num_pages }}
+        </span>
+
+        {% if liste_articles.has_next %}
+            <input type="button" onclick="window.location.href = '?page={{ liste_articles.next_page_number }}';" value="suivant"/>
+            <input type="button" onclick="window.location.href = '?page={{ liste_articles.paginator.num_pages }}';" value=">>"/>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
