@@ -4,13 +4,13 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('theme/',views.themes, name='theme'),
     path('journaux/',views.journaux, name='journaux'),
+    path('studytypes/',views.studytypes, name='studytypes'),
+    path('auteurs/',views.auteurs, name='auteurs'),
     path('journaux2/',views.journaux2, name='journaux2'),
     path('journaux3/',views.journaux3, name='journaux3'),
     path('articles/',views.des_articles, name='articles'),
     path('articles2/',views.des_articles2, name='articles2'),
-    path('histogram/',views.histogram, name='histogram'),
     path('histogram_annee/',views.histogram_annee, name='histogram_annee'),
     path('histogram_mois/',views.histogram_mois, name='histogram_mois'),
     path('histogram_semaine/',views.histogram_semaine, name='histogram_semaine'),
