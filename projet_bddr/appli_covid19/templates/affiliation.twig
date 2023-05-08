@@ -1,33 +1,39 @@
-{% load extras %}
-<!DOCTYPE html>
-<html>
+{% extends 'base.twig' %}
 
-<head> 
-  <title>{{ name_affiliation }}</title>
-</head>
-
-<body>
+{% block content %}
 
 <h1>La liste des articles de l'établissement : {{ name_affiliation }}</h1>
-
-
-
+<p>
 {% if le_type == 'INSTITUTION' %}
 C'est une institution
-{% if le_country != 'NULL' %} basée à {{ le_country }}. {% endif %}
+{% if le_country != 'NULL' %} basée à {{ le_country|lower }} {% endif %}
 {% else %}
 C'est une laboratoire
-{% if le_country != 'NULL' %} basée à {{ le_country }}. {% endif %}
+{% if le_country != 'NULL' %} basée à {{ le_country|lower }} {% endif %}
 {% endif %}
-Le nombre de publications de cet établissement est {{ nb_articles }}
-
-<p>Retourner à la liste des <a href="/appli_covid19/affiliations">affiliations</a></p>
+et le nombre de publications de cet établissement est de {{ nb_articles }}.</p>
 
 <ol type="1">
   {% for x in liste_articles %}
-  <li><a href="/appli_covid19/articles/{{ x.article.id_article }}">{{ x.article.title }}</a></li>
+  <li id="li2" ><a class='test external' href="/appli_covid19/articles/{{ x.article.id_article }}">{{ x.article.title }}</a></li>
   {% endfor %}
 </ol>
 
-</body>
-</html>
+<div class="pagination">
+    <span class="step-links">
+        {% if liste_articles.has_previous %}
+            <input type="button" onclick="window.location.href = '?page=1';" value="<<"/>
+            <input type="button" onclick="window.location.href = '?page={{  liste_articles.previous_page_number }}';" value="précedent"/>
+        {% endif %}
+
+        <span class="current">
+            Page {{ liste_articles.number }}/{{ liste_articles.paginator.num_pages }}
+        </span>
+
+        {% if liste_articles.has_next %}
+            <input type="button" onclick="window.location.href = '?page={{ liste_articles.next_page_number }}';" value="suivant"/>
+            <input type="button" onclick="window.location.href = '?page={{ liste_articles.paginator.num_pages }}';" value=">>"/>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
