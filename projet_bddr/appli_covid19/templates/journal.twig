@@ -1,80 +1,30 @@
-{% load extras %}
-<!DOCTYPE html>
-<html>
+{% extends 'base.twig' %}
 
-<head> 
-  <title>{{ name_journal }}</title>
-  <style>   
-    table.mon_tableau  {
-        border-collapse: collapse;
-    }
-    table.mon_tableau td {
-       border: 1px solid black;
-       padding: 0.3px;
-       font-family: "Sans-serif";
-       font-size: 16px;
-    }
-    table.mon_tableau th {
-       border: 1px solid black;
-       padding: 0.3px;
-       font-family: "Sans-serif";
-       font-size: normal;
-    }
-    table.mon_tableau tr:nth-child(even)  {background: beige}
-    table.mon_tableau tr:nth-child(odd) {background: ivory}
-  </style>
-</head>
-
-<body>
-
+{% block content %}
 <h1>La liste des articles du journal : {{ name_journal }}</h1>
 
-<p>Retourner à la liste des <a href="/appli_covid19/journaux">journaux</a></p>
-
-<p>Nombre d'articles publié par ce journal = {{ nb_articles }}</p>
-
-<table class="mon_tableau">
+<p>Le nombre d'articles publié par ce journal est de {{ nb_articles }}.</p>
+<ol type="1">
 {% for a in liste_articles %}
-<tr> 
-  <th>
-    {{ a }} 
-  </th> 
-</tr>
-
-<tr> 
-  <td>      
-  <ul>
-  <li> 
-    {% if a.publish_time != NULL %}
-    Sa date de parution : {{ a.publish_time }}
-    {% else %}
-    Sa date de parution est inconnue
-    {% endif %}
-  </li>
-    {% if a.studylink  != NULL  %}
-    <li>Lien :
-    {% with a.studylink|split:";" as links %}
-    {% for link in links  %}
-     <a href="{{  link  }}">{{  link  }}</a>
-    {% endfor %}
-    {% endwith %}
-    </li>
-    {% endif %}
-  <li>
-    {% if a.abstract != NULL %}
-    Résumé : {{ a.abstract }}
-    {% else %}
-    Pas de résumé disponible
-    {% endif %}
-  </li>
-</ul>
-</td> 
-</tr>
-
+  <li id="li2"><a class='test external' href="/appli_covid19/articles/{{ a.id_article }}" >{{ a.title }}</a></li>
 {% endfor %}
-</table>
+</ol>
 
-<p>Retourner à la liste des <a href="/appli_covid19/journaux">journaux</a></p>
+<div class="pagination">
+    <span class="step-links">
+        {% if liste_articles.has_previous %}
+            <input type="button" onclick="window.location.href = '?page=1';" value="<<"/>
+            <input type="button" onclick="window.location.href = '?page={{  liste_articles.previous_page_number }}';" value="précedent"/>
+        {% endif %}
 
-</body>
-</html>
+        <span class="current">
+            Page {{ liste_articles.number }}/{{ liste_articles.paginator.num_pages }}
+        </span>
+
+        {% if liste_articles.has_next %}
+            <input type="button" onclick="window.location.href = '?page={{ liste_articles.next_page_number }}';" value="suivant"/>
+            <input type="button" onclick="window.location.href = '?page={{ liste_articles.paginator.num_pages }}';" value=">>"/>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
