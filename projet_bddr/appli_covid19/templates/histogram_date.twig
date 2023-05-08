@@ -3,33 +3,35 @@
 
 <head> 
     <title>Histogramme d'articles publiés par date</title>
+  <style>   
+    table.mon_tableau  {
+        border-collapse: collapse;
+    }
+    table.mon_tableau td {
+       border: 1px solid #5555;
+       padding: 0.3em;
+       font-family: "Sans-serif";
+       font-size: 12px;
+    }
+    table.mon_tableau tr:nth-child(even)  {background: #EEE}
+    table.mon_tableau tr:nth-child(odd) {background: #FFF}
+  </style>
 </head>
 
 <body>
 
 <h1>Histogramme d'articles publiés par date</h1>
 
-<p>Retourner à la page des <a href="/appli_covid19/histogram">histogrammes</a></p>
-
 <table class="mon_tableau">
+<tr><th>Date</th> <th>   Nombre d'articles publiés </th> </tr>
     {% for key, value in liste_date.items %}
-    
     <tr> 
-      <th>
-        {{ key }} 
-      </th> 
+      <td>{{ key }}</td> <td>{{  value }}</td> 
     </tr>
-    <tr> 
-      <td>      
-      <ul>
-      <li> 
-      Nombre d'articles publié par ce journal : {{ value }}
-      </li>
-      </ul>
-      </td> 
-</tr>
     {% endfor %}
 </table>
+
+<table class="mon_tableau">
 
 </body>
 </html>
