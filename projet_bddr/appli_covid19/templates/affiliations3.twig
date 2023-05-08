@@ -1,36 +1,22 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.twig' %}
 
-<head> 
-    <title>La liste des affiliations</title>
-</head>
-<body>
-
-<h1>Recherche précise</h1>
-
-
+{% block content %}
+<h3>Recherche</h3>
 <form method="POST">
 {% csrf_token %}
 <p>
 <label for="username"> Nom d'une affiliation</label>
 <input id="username" type="text" name="username">
-</p>
-<button type="submit">Rechercher</button>
+<button type="submit">Rechercher</button></p>
 </form>
-
-<p>Retourner à la page d'<a href="/appli_covid19">acceuil</a></p>
-
-{% if username is not null %}
+{% if username is not null and username != "" %}
 <p>Voici les affiliations qui contiennent "{{ username }}" dans leur nom. </p>
 <ol type="1">
   {% for x in liste_affiliations %}
-    {% if username in x.name %}
     {% if x.name != 'NULL' %}
-    <li><a href="/appli_covid19/affiliations/{{ x.name }}">{{ x.name }}</a></li>
-    {% endif %}
+    <li id="li2"><a class='test external' href="/appli_covid19/affiliations/{{ x.name }}">{{ x.name }}</a></li>
     {% endif %}
   {% endfor %}
 </ol>
 {% endif %}
-</body>
-</html>
+{% endblock %}
