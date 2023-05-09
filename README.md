@@ -9,12 +9,13 @@ Le schéma (3_Schema.pdf) a été créé sur le site : https://dbdiagram.io/d gr
 
 ### Etapes pour le projet:
 
-- Étape 0 : Créer une base de données sur pgAdmin ou utiliser une base de données déjà existante et installer les bibliothèques "unidecode" et "psycopg2".
+- Étape 0 : Créer une base de données sur pgAdmin ou utiliser une base de données déjà existante et installer les bibliothèques suivants:
 
 ```bash
 pip install unidecode
 pip install psycopg2
 pip install plotly
+pip install pandas
 ```
 
 - Étape 1 : Télécharger l'ensemble du dossier disponible sur Git.
