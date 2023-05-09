@@ -14,6 +14,7 @@ Le schéma (3_Schema.pdf) a été créé sur le site : https://dbdiagram.io/d gr
 ```bash
 pip install unidecode
 pip install psycopg2
+pip install plotly
 ```
 
 - Étape 1 : Télécharger l'ensemble du dossier disponible sur Git.
