@@ -1,13 +1,11 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-    <h1>La liste des affiliations</h1>
-    <p>Il y a en tout {{ nb_total_affiliations }} affiliations</p>
+    <h3>La liste des affiliations</h3>
+    <p>Il y a en tout {{ nb_total_affiliations }} affiliations.</p>
 <ol type="1">
   {% for x in liste_affiliations %}
-    {% if x.name != 'NULL' %}
     <li id="li2"><a class='test external' href="{{  x.name }}" >{{  x.name }}</a></li>
-    {% endif %}
   {% endfor %}
 </ol>
 <div class="pagination">
