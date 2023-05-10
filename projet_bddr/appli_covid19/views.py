@@ -4,12 +4,15 @@ from django.template import loader
 from django.db import models
 from appli_covid19.models import Theme, Sous_Theme, Journal, Affiliation, Articles, Article_Theme, StudyType_Articles, StudyType, Author_Affiliation, Author_Article, Authors
 from datetime import datetime
-from collections import Counter
 from django.db.models.functions import Length
+from django.db.models import Count
 from django.core.paginator import Paginator
+import pandas as pd
+from plotly.offline import plot
+import plotly.express as px
 
 def index(request):
-    themes = Theme.objects.all()
+    themes = Theme.objects.all().order_by('name')
     template = loader.get_template('acceuil.twig')
     context = {'themes': themes,}
     return HttpResponse(template.render(context, request))
@@ -17,61 +20,61 @@ def index(request):
 ############################ REQUETE 1 Liste d'articles par thématiques et sous-thématique ############################
 
 def sous_themes(request, name_theme):
-	themes = Theme.objects.all()
+	themes = Theme.objects.all().order_by('name')
 	t = Theme.objects.get(name=str(name_theme))
-	sous_themes = Sous_Theme.objects.filter(theme=t).values()
+	sous_themes = Sous_Theme.objects.filter(theme=t).order_by('name')
 	template = loader.get_template('sous_themes.twig')
 	context = {'themes': themes, 'sous_themes': sous_themes, 'theme':name_theme,}
 	return HttpResponse(template.render(context, request))
 
 def articles(request, name_sous_theme):
-	if name_sous_theme!='NULL':
-		themes = Theme.objects.all()
-		st = Sous_Theme.objects.get(name=str(name_sous_theme))
-		t = st.theme
-		articles_sous_themes = Article_Theme.objects.filter(sous_theme=st).values()
-		n=len(articles_sous_themes)
-		liste_id_articles=[articles_sous_themes[k]['article_id'] for k in range(n)]
-		liste_articles=[Articles.objects.get(id_article=i) for i in liste_id_articles]
-		template = loader.get_template('articles.twig')
-		context = {'themes': themes,'sous_theme' : name_sous_theme, 'theme':t , 'articles_sous_themes': liste_articles,}
-		return HttpResponse(template.render(context, request))
+	themes = Theme.objects.all().order_by('name')
+	st = Sous_Theme.objects.get(name=str(name_sous_theme))
+	t = st.theme
+	articles_sous_themes = Article_Theme.objects.filter(sous_theme=st).all()
+	template = loader.get_template('articles.twig')
+	context = {'themes': themes,'sous_theme' : name_sous_theme, 'theme':t , 'articles_sous_themes': articles_sous_themes,}
+	return HttpResponse(template.render(context, request))
 	
 ############################ REQUETE 2 Histogramme d'articles publiés par date, semaine, et mois. ############################
 
 def histogram_annee(request):
-	liste_annee1=[A.publish_time for A in Articles.objects.annotate(text_len=Length('publish_time')).filter(text_len__lt=5)]
-	liste_annee2=[A.publish_time[0:4] for A in Articles.objects.annotate(text_len=Length('publish_time')).filter(text_len__gt=5)]
-	liste_annee=dict(Counter(liste_annee1+liste_annee2))
+	themes = Theme.objects.all().order_by('name')
+	liste_annee=Articles.objects.all().values('annee').exclude(annee__isnull=True).annotate(nb_articles_annee=Count('annee')).order_by('annee')
+	data=[{'Annee' : a['annee'],'Nb_articles' : a['nb_articles_annee']} for a in liste_annee]
+	df = pd.DataFrame(data)
+	fig=px.histogram(df,x= 'Annee', y="Nb_articles" )
+	gantt_plot=plot(fig,output_type='div')
 	template = loader.get_template('histogram_annee.twig')
-	context = {'liste_annee': liste_annee, }
+	context = {'themes': themes,'liste_annee': liste_annee, 'plot_div':gantt_plot}
 	return HttpResponse(template.render(context, request))
 
 def histogram_mois(request):
-	liste_mois1=[datetime.strptime(A.publish_time,'%Y-%m-%d').month for A in Articles.objects.annotate(text_len=Length('publish_time')).filter(text_len__gt=5)]
-	liste_mois=dict(Counter(liste_mois1))
+	themes = Theme.objects.all().order_by('name')
+	liste_mois=Articles.objects.all().exclude(publish_time__isnull=True).values('publish_time__month').annotate(nb_articles_mois=Count('publish_time__month')).order_by('publish_time__month')
+	data=[{'Mois' : a['publish_time__month'],'Nb_articles' : a['nb_articles_mois']} for a in liste_mois]
+	df = pd.DataFrame(data)
+	fig=px.histogram(df,x= 'Mois', y="Nb_articles" , nbins=len(liste_mois))
+	gantt_plot=plot(fig,output_type='div')
 	template = loader.get_template('histogram_mois.twig')
-	context = {'liste_mois': liste_mois, }
+	context = {'themes': themes,'liste_mois': liste_mois, 'plot_div':gantt_plot}
 	return HttpResponse(template.render(context, request))
 
 def histogram_semaine(request):
-	liste_semaine1=[datetime.strptime(A.publish_time,'%Y-%m-%d').isocalendar().week for A in Articles.objects.annotate(text_len=Length('publish_time')).filter(text_len__gt=5)]
-	liste_semaine=dict(Counter(liste_semaine1))
+	themes = Theme.objects.all().order_by('name')
+	liste_semaine=Articles.objects.all().exclude(publish_time__isnull=True).values('publish_time__week').annotate(nb_articles_semaine=Count('publish_time__week')).order_by('publish_time__week')
+	data=[{'Semaine' : a['publish_time__week'],'Nb_articles' : a['nb_articles_semaine']} for a in liste_semaine]
+	df = pd.DataFrame(data)
+	fig=px.histogram(df,x= 'Semaine', y="Nb_articles" , nbins=len(liste_semaine))
+	gantt_plot=plot(fig,output_type='div')
 	template = loader.get_template('histogram_semaine.twig')
-	context = {'liste_semaine': liste_semaine, }
-	return HttpResponse(template.render(context, request))
-
-def histogram_date(request):
-	liste_date1=[A.publish_time for A in Articles.objects.annotate(text_len=Length('publish_time')).filter(text_len__gt=5)]
-	liste_date=dict(Counter(liste_date1))
-	template = loader.get_template('histogram_date.twig')
-	context = {'liste_date': liste_date, }
+	context = {'themes': themes,'liste_semaine': liste_semaine, 'plot_div':gantt_plot}
 	return HttpResponse(template.render(context, request))
 
 ############################ REQUETE 4 Nombre de publications par labo/institution. ############################
 
 def affiliations2(request):
-	themes = Theme.objects.all()
+	themes = Theme.objects.all().order_by('name')
 	liste_affiliations= Affiliation.objects.raw('''
 	SELECT appli_covid19_affiliation.id, appli_covid19_affiliation.name, COUNT(DISTINCT appli_covid19_author_article.article_id) as nb_articles
 	FROM appli_covid19_affiliation
@@ -90,8 +93,8 @@ def affiliations2(request):
 ############################ REQUETE 5 Liste de journaux par nombre et type de publications ############################
 
 def journaux2(request):
-	themes = Theme.objects.all()
-	keys=StudyType.objects.exclude(name='NULL')
+	themes = Theme.objects.all().order_by('name')
+	keys=StudyType.objects.all()
 	dict_study_type={k : list(set([s.article.journal for s in StudyType_Articles.objects.filter(studytype=k)])) for k in keys }
 	inv_dict_study_type= {}
 	for k, v in dict_study_type.items():
@@ -107,7 +110,7 @@ def journaux2(request):
 #################################### REQUETE 6 Liste d'articles/jounaux/affiliations/types de publications ####################################
 
 def des_articles(request):
-	themes = Theme.objects.all()
+	themes = Theme.objects.all().order_by('name')
 	nb_articles=Articles.objects.count()
 	liste_articles = Articles.objects.all().order_by('id_article')
 	paginator = Paginator(liste_articles, 25)
@@ -118,7 +121,7 @@ def des_articles(request):
 	return HttpResponse(template.render(context, request))
 
 def affiliations(request):
-	themes = Theme.objects.all()
+	themes = Theme.objects.all().order_by('name')
 	liste_affiliations=Affiliation.objects.all().order_by('id')
 	paginator = Paginator(liste_affiliations, 25) 
 	page = request.GET.get('page')
@@ -129,7 +132,7 @@ def affiliations(request):
 	return HttpResponse(template.render(context, request))
 
 def journaux(request):
-	themes = Theme.objects.all()
+	themes = Theme.objects.all().order_by('name')
 	journaux = Journal.objects.all().order_by('id_journal')
 	paginator = Paginator(journaux, 25)
 	page = request.GET.get('page')
@@ -140,9 +143,9 @@ def journaux(request):
 	return HttpResponse(template.render(context, request))
 
 def studytypes(request):
-	themes = Theme.objects.all()
-	liste = StudyType.objects.exclude(name='NULL').order_by('id')
-	nb_articles=StudyType_Articles.objects.filter(studytype__in=liste).distinct('article').count()
+	themes = Theme.objects.all().order_by('name')
+	liste = StudyType.objects.all().order_by('name')
+	nb_articles=StudyType_Articles.objects.distinct('article').count()
 	paginator = Paginator(liste, 25)
 	page = request.GET.get('page')
 	liste2 = paginator.get_page(page)
@@ -151,7 +154,7 @@ def studytypes(request):
 	return HttpResponse(template.render(context, request))
 
 def auteurs(request):
-	themes = Theme.objects.all()
+	themes = Theme.objects.all().order_by('name')
 	liste = Authors.objects.all().order_by('id')
 	paginator = Paginator(liste, 25)
 	page = request.GET.get('page')
@@ -164,7 +167,7 @@ def auteurs(request):
 #################################### REQUETE 7 Recherche par nom article/jounal/affiliation ####################################
 
 def des_articles2(request):
-	themes = Theme.objects.all()
+	themes = Theme.objects.all().order_by('name')
 	if request.method=="POST":
 		username=request.POST.get("username")
 		u=username.upper()
@@ -177,7 +180,7 @@ def des_articles2(request):
 	return HttpResponse(template.render(context, request))
 
 def affiliations3(request):
-	themes = Theme.objects.all()
+	themes = Theme.objects.all().order_by('name')
 	if request.method=="POST":
 		username=request.POST.get("username")
 		u=username.upper()
@@ -190,7 +193,7 @@ def affiliations3(request):
 	return HttpResponse(template.render(context, request))
 
 def journaux3(request):
-	themes = Theme.objects.all()
+	themes = Theme.objects.all().order_by('name')
 	if request.method=="POST":
 		username=request.POST.get("username")
 		u=username.upper()
@@ -202,10 +205,10 @@ def journaux3(request):
 	context = {'themes': themes,'journaux': journaux, 'username':username,}
 	return HttpResponse(template.render(context, request))
 
-#################################### REQUETE 8 Données sur un article/jounal/affiliation ####################################
+#################################### REQUETE 8 Données sur un article/jounal/affiliation/type de publication ####################################
 
 def un_article(request, name_article):
-	themes = Theme.objects.all()
+	themes = Theme.objects.all().order_by('name')
 	le_article=Articles.objects.get(id_article=name_article)
 	l=Author_Article.objects.filter(article=le_article)
 	liste_auteurs=Author_Article.objects.filter(article=le_article).values('author')
@@ -217,7 +220,7 @@ def un_article(request, name_article):
 	return HttpResponse(template.render(context, request))
 
 def affiliation(request,name_affiliation):
-	themes = Theme.objects.all()
+	themes = Theme.objects.all().order_by('name')
 	un_affiliation=Affiliation.objects.get(name=name_affiliation)
 	le_type=un_affiliation.type
 	le_country=un_affiliation.country
@@ -235,7 +238,7 @@ def affiliation(request,name_affiliation):
 	return HttpResponse(template.render(context, request))
 
 def journal(request,name_journal):
-	themes = Theme.objects.all()
+	themes = Theme.objects.all().order_by('name')
 	un_journal=Journal.objects.get(name=name_journal)
 	nb_articles=Articles.objects.filter(journal_id=un_journal.id_journal).count()
 	liste_articles=Articles.objects.filter(journal_id=un_journal.id_journal).order_by('id_article')
@@ -246,11 +249,11 @@ def journal(request,name_journal):
 	context = {'themes': themes, 'nb_articles': nb_articles, 'liste_articles':liste_articles2, 'name_journal':name_journal, }
 	return HttpResponse(template.render(context, request))
 
-def studytype(request,name_study):
-	themes = Theme.objects.all()
-	un_study=StudyType.objects.get(name=name_study)
-	nb_articles=StudyType_Articles.objects.filter(study=un_study).count()
-	liste_articles=StudyType_Articles.objects.filter(study=un_study)
+def studytype(request,name_studytype):
+	themes = Theme.objects.all().order_by('name')
+	un_study=StudyType.objects.get(name=name_studytype)
+	nb_articles=StudyType_Articles.objects.filter(studytype=un_study).count()
+	liste_articles=StudyType_Articles.objects.filter(studytype=un_study)
 	template = loader.get_template('studytype.twig')
-	context = {'themes': themes, 'nb_articles': nb_articles, 'liste_articles':liste_articles, 'name_study':name_study, }
+	context = {'themes': themes, 'nb_articles': nb_articles, 'liste_articles':liste_articles, 'name_study':name_studytype, }
 	return HttpResponse(template.render(context, request))
