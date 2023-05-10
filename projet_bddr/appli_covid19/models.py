@@ -26,7 +26,8 @@ class Journal(models.Model):
 class Articles(models.Model):
 	id_article = models.BigIntegerField(primary_key=True, unique=True)
 	title = models.TextField(null=True)
-	publish_time = models.CharField(max_length=15,null=True,blank=True)
+	publish_time = models.DateTimeField(max_length=15,null=True,blank=True)
+	annee = models.CharField(max_length=5,null=True,blank=True)
 	abstract = models.TextField(null=True,blank=True)
 	studylink = models.URLField(max_length=400,null=True,blank=True)
 	journal = models.ForeignKey(Journal, on_delete=models.CASCADE, null=True, blank=True)
