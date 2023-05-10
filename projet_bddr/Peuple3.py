@@ -1,10 +1,8 @@
 #!/bin/env python3
 import pandas as pd
-import os
 import json
 import unidecode  
-from django.db import models
-from appli_covid19.models import Theme, Sous_Theme, Journal, StudyType, Affiliation, Authors, Articles, Author_Article, Article_Theme, Author_Affiliation, StudyType_Articles
+from appli_covid19.models import Affiliation, Authors, Articles, Author_Article, Author_Affiliation
 from django.db import IntegrityError
 
 """
@@ -61,34 +59,30 @@ for k in list_pdf:
                             email=L[i]['email']
                         else:
                             email=None
+                        liste_affiliations=[]
                         if L[i]['affiliation']!={} :
-                            if len(L[i]['affiliation']['laboratory'])>2:
+                            if len(L[i]['affiliation']['laboratory'])>2 and 'Complete List of Authors' not in L[i]['affiliation']['laboratory']:
                                 name_labo = unidecode.unidecode(L[i]['affiliation']['laboratory'])
-                            else:
-                                name_labo = None
-                            if len(L[i]['affiliation']['institution'])>2:
+                                liste_affiliations.append(name_labo)
+                            if len(L[i]['affiliation']['institution'])>2 and 'Complete List of Authors' not in L[i]['affiliation']['institution']:
                                 name_inst = unidecode.unidecode(L[i]['affiliation']['institution'])
-                            else:
-                                name_inst = None
-                        else :
-                            name_labo = None
-                            name_inst = None
+                                liste_affiliations.append(name_inst)
                         if name not in dict_authors:
-                            dict_authors[name]={'email':email,'articles_id':[k],'institution':name_inst ,'laboratory':name_labo}
+                            dict_authors[name]={'email':email,'articles_id':[k],'affiliations':liste_affiliations}
                         else:
                             dict_authors[name]['articles_id'].append(k)
                             dict_authors[name]['articles_id']=list(set(dict_authors[name]['articles_id']))
                             if type(email)==str and len(email)>5:
                                 dict_authors[name]['email']=email
-                            if name_labo!=None:
-                                dict_authors[name]['laboratory']=name_labo
-                            if name_inst!=None:
-                                dict_authors[name]['institution']=name_inst
+                            if name_labo:
+                                dict_authors[name]['affiliations'].append(name_labo)
+                            if name_inst:
+                                dict_authors[name]['affiliations'].append(name_inst)
         except:
             pass
     for auteur in auteurs_metadata:
         if auteur not in dict_authors:
-            dict_authors[auteur]={'email':None,'articles_id':[k], 'institution' : None , 'laboratory' : None}
+            dict_authors[auteur]={'email':None,'articles_id':[k], 'affiliations':[]}
         else:
             dict_authors[auteur]['articles_id'].append(k)
             dict_authors[auteur]['articles_id']=list(set(dict_authors[auteur]['articles_id']))
@@ -161,30 +155,26 @@ for k in range(len(df3)):
     if type(df3['email'][k])==str:
         un_auteur.email=df3['email'][k]
     un_auteur.save()
-    if type(df3['institution'][k])==str:
-        try:
-            aff=Affiliation.objects.get(name=df3['institution'][k])
-            AAff=Author_Affiliation()
-            AAff.affiliation=aff
-            AAff.author=un_auteur
-            AAff.save()
-        except:
-            pass
-    if type(df3['laboratory'][k])==str:
-        try:
-            aff=Affiliation.objects.get(name=df3['laboratory'][k])
-            AAff=Author_Affiliation()
-            AAff.affiliation=aff
-            AAff.author=un_auteur
-            AAff.save()
-        except:
-            pass
+    if type(df3['affiliations'][k])==list and len(df3['affiliations'][k])!=0:
+        liste_affiliations=list(set(df3['affiliations'][k]))
+        for un_affiliation in liste_affiliations:
+            try:
+                aff=Affiliation.objects.get(name=un_affiliation)
+                AAff=Author_Affiliation()
+                AAff.affiliation=aff
+                AAff.author=un_auteur
+                AAff.save()
+            except:
+                print('Affiliation non trouvé')
     for i in df3['articles_id'][k]:
-        un_article=Articles.objects.get(id_article=i)
-        AA=Author_Article()
-        AA.article=un_article
-        AA.author=un_auteur
-        AA.save()
+        try:
+            un_article=Articles.objects.get(id_article=i)
+            AA=Author_Article()
+            AA.article=un_article
+            AA.author=un_auteur
+            AA.save()
+        except:
+            print('Article non trouvé')
 ############################   Récupération des auteurs restants dans metadata.csv   ############################
 print("Recuperation des auteurs restants dans le fichier metadata.csv")
 total=len(DF[DF['pmc_json_files'].isnull() & DF['pdf_json_files'].isnull() & DF['authors'].notnull()])
@@ -208,9 +198,12 @@ for k in liste_auteurs_restants:
             un_auteur.name=f"probleme{p}"
             un_auteur.save()
             print(f"----  !!! Probleme à la ligne {k} du fichier metadata.csv !!! ----")
-        AA=Author_Article()
-        un_article=Articles.objects.get(id_article=k)
-        AA.article=un_article
-        AA.author=un_auteur
-        AA.save()
+        try:
+            AA=Author_Article()
+            un_article=Articles.objects.get(id_article=k)
+            AA.article=un_article
+            AA.author=un_auteur
+            AA.save()
+        except:
+            print('Article non trouvé')
 print("\n ------ PEUPLEMENT DEBUT ------ \n")
