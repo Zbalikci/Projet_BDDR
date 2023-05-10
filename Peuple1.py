@@ -4,8 +4,8 @@ import logging
 import psycopg2
 import os
 import json
-import unidecode  
-from django.db import models
+import unidecode
+import re
 """
 Pour peupler les tables theme, sous_theme, studytype, affiliation et journal:
 """
@@ -28,41 +28,26 @@ print("En train de récupérer la liste des journaux dans metadata.csv")
 journaux=df[df['journal'].notnull()]['journal'].unique()
 print("En train de crée la liste pour peupler la table studytype")
 ### Liste des types de publications
-liste=pd.Series([])
+liste=[]
 for dossier in dossiers[1:-1]:
-	chemin = f'{chemin_tables}/{dossier}'
-	elements = os.listdir(chemin)
-	for element in elements :
-		df=pd.read_csv(f'{chemin}/{element}')
-		if 'Study Type' in df:
-			types=df[df['Study Type'].notnull()]['Study Type']
-			liste=pd.concat([liste , types])
-liste=liste.unique()
+    chemin = f'{chemin_tables}/{dossier}'
+    elements = os.listdir(chemin)
+    for element in elements :
+        df=pd.read_csv(f'{chemin}/{element}')
+        try :
+            for i in range(len(df)):
+                s=df['Study Type'][i]
+                if type(s)==str and len(s)>2:
+                    s2=re.sub("\!|\'|\?|-"," ",s.title())
+                    liste.append(s2)
+        except:
+            print(f"Le fichier {chemin}/{element} n'a pas de studytype !")
+liste=list(set(liste))
 #####################################################################################################################################
 print("\n ------ PEUPLEMENT DEBUT ------ \n")
 try:
     connection = psycopg2.connect(f'host={host} dbname={dbname} user={user} password={password}')
     cursor = connection.cursor()
-    #######################################################    LES "NULL"    ########################################################
-    cursor.execute("""SELECT * FROM appli_covid19_theme WHERE name LIKE %s""", ('NULL',))
-    records = cursor.fetchall()
-    if records==[]:
-        cursor.execute("""INSERT INTO appli_covid19_theme(name) VALUES(%s) RETURNING id;""",('NULL',)) 
-        id_theme=cursor.fetchone()[0]
-    else :
-        id_theme=records[0][1]
-    cursor.execute("""SELECT * FROM appli_covid19_sous_theme WHERE name LIKE %s""", ('NULL',))
-    records = cursor.fetchall()
-    if records==[]:
-        cursor.execute("""INSERT INTO appli_covid19_sous_theme(name,theme_id) VALUES(%s,%s);""",('NULL',id_theme))
-    cursor.execute("""SELECT * FROM appli_covid19_studytype WHERE name LIKE %s""", ('NULL',))
-    records = cursor.fetchall()
-    if records==[]:
-        cursor.execute("""INSERT INTO appli_covid19_studytype(name) VALUES(%s);""",('NULL',))
-    cursor.execute("""SELECT * FROM appli_covid19_affiliation WHERE name LIKE %s""", ('NULL',))
-    records = cursor.fetchall()
-    if records==[]:
-        cursor.execute("""INSERT INTO appli_covid19_affiliation(name,type,country) VALUES(%s,%s,%s);""",('NULL','NULL','NULL'))
     ##################################################    SOUS_THEMES et THEMES    ####################################################
     print('peuplement des tables themes et sous_themes : début')
     for dossier in dossiers[1:-1]:
@@ -97,8 +82,6 @@ try:
         s=journal
         if ("\\" in r"%r" % f"{s}" ):
             jo=unidecode.unidecode("".join(list(filter(str.isalpha,f"{s}"))))
-        elif type(s)==float:
-            jo='NULL'
         else:
             jo=s
         cursor.execute("""SELECT * FROM appli_covid19_journal WHERE name LIKE %s""", (jo,))
@@ -131,26 +114,27 @@ try:
                             name.append(unidecode.unidecode(l['laboratory']))
                             name.append(unidecode.unidecode(l['institution']))
                         if l['location']!={} and ('country' in l['location']) :
-                            country = ', '.join(list(set(l['location']['country'].split(', '))))
+                            c = ', '.join(list(set(l['location']['country'].split(', '))))
+                            country=c.upper()
                         else:
-                            country='NULL'
+                            country=None
                         if type(name) == list:
                             if 'Complete List of Authors' not in name[0]:
                                 cursor.execute("""SELECT * FROM appli_covid19_affiliation WHERE name LIKE %s""", (str(name[0]),))
                                 records = cursor.fetchall()
                                 if records==[]:
-                                    cursor.execute("""INSERT INTO appli_covid19_affiliation(name,type,country) VALUES(%s,%s,%s);""",(str(name[0]),'laboratory'.upper(),country.upper()))
+                                    cursor.execute("""INSERT INTO appli_covid19_affiliation(name,type,country) VALUES(%s,%s,%s);""",(str(name[0]),'laboratory'.upper(),country))
                             if 'Complete List of Authors' not in name[1]:
                                 cursor.execute("""SELECT * FROM appli_covid19_affiliation WHERE name LIKE %s""", (str(name[1]),))
                                 records = cursor.fetchall()
                                 if records==[]:
-                                    cursor.execute("""INSERT INTO appli_covid19_affiliation(name,type,country) VALUES(%s,%s,%s);""",(str(name[1]),'institution'.upper(),country.upper()))
+                                    cursor.execute("""INSERT INTO appli_covid19_affiliation(name,type,country) VALUES(%s,%s,%s);""",(str(name[1]),'institution'.upper(),country))
                         else:
                             if 'Complete List of Authors' not in name:
                                 cursor.execute("""SELECT * FROM appli_covid19_affiliation WHERE name LIKE %s""", (str(name),))
                                 records = cursor.fetchall()
                                 if records==[]:
-                                    cursor.execute("""INSERT INTO appli_covid19_affiliation(name,type,country) VALUES(%s,%s,%s);""",(str(name),typ.upper(),country.upper()))
+                                    cursor.execute("""INSERT INTO appli_covid19_affiliation(name,type,country) VALUES(%s,%s,%s);""",(str(name),typ.upper(),country))
     print('peuplement de la table affiliation : fin')
     connection.commit()
     connection.close()
