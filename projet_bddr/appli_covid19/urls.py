@@ -14,7 +14,6 @@ urlpatterns = [
     path('histogram_annee/',views.histogram_annee, name='histogram_annee'),
     path('histogram_mois/',views.histogram_mois, name='histogram_mois'),
     path('histogram_semaine/',views.histogram_semaine, name='histogram_semaine'),
-    path('histogram_date/',views.histogram_date, name='histogram_date'),
     path('affiliations/',views.affiliations, name='affiliations'),
     path('affiliations2/',views.affiliations2, name='affiliations2'),
     path('affiliations3/',views.affiliations3, name='affiliations3'),
@@ -23,4 +22,5 @@ urlpatterns = [
     path('articles/<name_article>',views.un_article, name='<name_article>'),
     path('sous_theme/<name_sous_theme>', views.articles, name='<name_sous_theme>'),
     path('journaux/<name_journal>', views.journal, name='<name_journal>'),
+    path('studytypes/<name_studytype>',views.studytype, name='<name_studytype>'),
 ]
