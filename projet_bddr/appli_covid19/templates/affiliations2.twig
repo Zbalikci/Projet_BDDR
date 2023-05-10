@@ -1,62 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head> 
-  <title>La liste des affiliations</title>
-  <style>   
-    table.mon_tableau  {
-        border-collapse: collapse;
-    }
-    table.mon_tableau td {
-       border: 1px solid #5555;
-       padding: 0.3em;
-       font-family: "Sans-serif";
-       font-size: 12px;
-    }
+{% extends 'base.twig' %}
 
-    table.mon_tableau th {
-       border: 1px solid #5555;
-       padding: 0.3em;
-       font-family: "Sans-serif";
-       font-size: 12px;
-    }
-    table.mon_tableau tr:nth-child(even)  {background: #EEE}
-    table.mon_tableau tr:nth-child(odd) {background: #FFF}
-  </style>
-</head>
-
-<body> 
-<h1>Nombre de publications par affiliation</h1>
-
-<p><input type="button" onclick="window.location.href = '/appli_covid19';" value="Retourner à la page d'acceuil"/></p>
+{% block content %}
+<h3>Nombre de publications par affiliation</h3><br>
 
 <table class="mon_tableau">
 
 <tr><th>Etablisement</th> <th>   Nombre d'articles publiés par cet établissement   </th></tr>
     {% for a in liste_affiliations %}
     <tr>
-      <td>{{ a.name }} </td>
+      <td><a class='test external' href="{{  a.name }}" >{{  a.name }}</a></td>
       <td>{{ a.nb_articles }} </td>
     </tr>
    {% endfor %}
   </table>
-<p>
-<div class="pagination">
-    <span class="step-links">
-        {% if liste_affiliations.has_previous %}
-            <input type="button" onclick="window.location.href = '?page=1';" value="<<"/>
-            <input type="button" onclick="window.location.href = '?page={{  liste_affiliations.previous_page_number }}';" value="précedent"/>
-        {% endif %}
-
-        <span class="current">
-            Page {{ liste_affiliations.number }}/{{ liste_affiliations.paginator.num_pages }}
-        </span>
-
-        {% if liste_affiliations.has_next %}
-            <input type="button" onclick="window.location.href = '?page={{ liste_affiliations.next_page_number }}';" value="suivant"/>
-            <input type="button" onclick="window.location.href = '?page={{ liste_affiliations.paginator.num_pages }}';" value=">>"/>
-        {% endif %}
-    </span>
-</div>
-</p>
-</body>
-</html>
+{% endblock %}
