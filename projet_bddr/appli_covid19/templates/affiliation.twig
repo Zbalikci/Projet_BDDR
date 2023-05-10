@@ -2,14 +2,14 @@
 
 {% block content %}
 
-<h1>La liste des articles de l'établissement : {{ name_affiliation }}</h1>
+<h3>La liste des articles de l'établissement : {{ name_affiliation }}</h3>
 <p>
 {% if le_type == 'INSTITUTION' %}
 C'est une institution
-{% if le_country != 'NULL' %} basée à {{ le_country|lower }} {% endif %}
+{% if le_country != NULL %} basée à {{ le_country|lower|title }} {% endif %}
 {% else %}
 C'est une laboratoire
-{% if le_country != 'NULL' %} basée à {{ le_country|lower }} {% endif %}
+{% if le_country != NULL %} basée à {{ le_country|lower|title }} {% endif %}
 {% endif %}
 et le nombre de publications de cet établissement est de {{ nb_articles }}.</p>
 
