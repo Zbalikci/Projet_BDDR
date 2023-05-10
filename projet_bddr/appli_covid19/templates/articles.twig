@@ -5,7 +5,7 @@
 
 <ol type="1">
 {% for a in articles_sous_themes %}
-  <li id="li2"><a class='test external' href="/appli_covid19/articles/{{ a.id_article }}" >{{ a.title }}</a></li>
+  <li id="li2"><a class='test external' href="/appli_covid19/articles/{{ a.article.id_article }}" >{{ a.article.title }}</a></li>
 {% endfor %}
 </ol>
 {% endblock %}
