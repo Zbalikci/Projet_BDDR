@@ -9,11 +9,10 @@
     {% for key, value in dict_study_type.items %}
     <tr>
     {% if key != NULL %}
-    
       <td><a class='test external' href="/appli_covid19/journaux/{{ key }}">{{ key }}</a></td>
       <td>{{ value.nb_articles }} </td>
-      <td><ul id="ul2">{% for s in value.liste_study_types %} 
-      <li id="li2">{{ s }}</li>
+      <td><ul id="ul2">{% for s in value.liste_study_types %}
+      <li id="li2"><p class="cap"><a class='test external' href="/appli_covid19/studytypes/{{s }}">{{s}}</a></p></li>
       {% endfor %}
       </ul>
       </td>
