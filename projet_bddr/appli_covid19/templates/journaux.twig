@@ -1,15 +1,13 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-<h1>La liste des journaux</h1>
+<h3>La liste des journaux</h3>
 
-<p> Il y a en tout {{ nb_total_journaux }} journaux </p>
+<p> Il y a en tout {{ nb_total_journaux }} journaux. </p>
 
 <ol type="1">
     {% for j in journaux %}
-      {% if j.name != 'NULL' %}
       <li id="li2"><a class='test external' href="/appli_covid19/journaux/{{ j.name }}">{{ j.name }}</a></li>
-      {% endif %}
     {% endfor %}
 </ol>
 
