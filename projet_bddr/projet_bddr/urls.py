@@ -25,6 +25,7 @@ urlpatterns = [
     path('appli_covid19/articles2/', include('appli_covid19.urls')),
     path('appli_covid19/auteurs/', include('appli_covid19.urls')),
     path('appli_covid19/histogram_annee/', include('appli_covid19.urls')),
+    path('appli_covid19/histogram_date/', include('appli_covid19.urls')),
     path('appli_covid19/histogram_mois/', include('appli_covid19.urls')),
     path('appli_covid19/histogram_semaine/', include('appli_covid19.urls')),
     path('appli_covid19/affiliations/', include('appli_covid19.urls')),
