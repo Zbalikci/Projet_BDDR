@@ -12,6 +12,7 @@ urlpatterns = [
     path('articles/',views.des_articles, name='articles'),
     path('articles2/',views.des_articles2, name='articles2'),
     path('histogram_annee/',views.histogram_annee, name='histogram_annee'),
+    path('histogram_date/',views.histogram_date, name='histogram_date'),
     path('histogram_mois/',views.histogram_mois, name='histogram_mois'),
     path('histogram_semaine/',views.histogram_semaine, name='histogram_semaine'),
     path('affiliations/',views.affiliations, name='affiliations'),
