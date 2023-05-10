@@ -6,7 +6,7 @@
 <form method="POST">
 {% csrf_token %}
 <p>
-<label for="username"> Nom d'un journal</label>
+<label for="username"> Nom d'un journal </label>
 <input id="username" type="text" name="username">
 <button type="submit">Rechercher</button></p>
 </form>
@@ -15,9 +15,7 @@
 <p>Voici les journaux qui contiennent "{{ username }}" dans leur nom. </p>
 <ol type="1">
     {% for j in journaux %}
-      {% if j.name != 'NULL' %}
       <li id="li2"><a class='test external' href="/appli_covid19/journaux/{{ j.name }}">{{ j.name }}</a></li>
-      {% endif %}
     {% endfor %}
 </ol>
 
