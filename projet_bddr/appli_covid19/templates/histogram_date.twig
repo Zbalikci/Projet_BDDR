@@ -1,34 +1,30 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.twig' %}
 
-<head> 
-    <title>Histogramme d'articles publiés par date</title>
-  <style>   
-    table.mon_tableau  {
-        border-collapse: collapse;
-    }
-    table.mon_tableau td {
-       border: 1px solid #5555;
-       padding: 0.3em;
-       font-family: "Sans-serif";
-       font-size: 12px;
-    }
-    table.mon_tableau tr:nth-child(even)  {background: #EEE}
-    table.mon_tableau tr:nth-child(odd) {background: #FFF}
-  </style>
-</head>
+{% block content %}
+<h3>Histogramme d'articles publiés par date</h3>
+<p>Vous pouvez faire une recherche entre {{ min_date|date:"Y-m-d" }}  et {{ max_date|date:"Y-m-d" }} (sous cette format : Année-Mois-Jour).</p>
+<form method="POST">
+{% csrf_token %}
+<p>
+<label for="debut"> Entre la date </label>
+<input id="debut" type="text" name="debut">
+<label for="fin"> et la date </label>
+<input id="fin" type="text" name="fin">
+<button type="submit">Rechercher</button></p>
+</form>
 
-<body>
 
-<h1>Histogramme d'articles publiés par date</h1>
+{% if debut is not null and debut != "" and fin is not null and fin != ""  %}
 
-<table class="mon_tableau">
-<tr><th>Date</th> <th>   Nombre d'articles publiés </th> </tr>
-    {% for key, value in liste_date.items %}
-    <tr> 
-      <td>{{ key }}</td> <td>{{  value }}</td> 
-    </tr>
-    {% endfor %}
-</table>
-</body>
-</html>
+<p>Voici l'histogramme d'articles publiés entre {{ debut|date:"Y-m-d" }} et {{ fin|date:"Y-m-d" }}. </p>
+{% autoescape off %}
+{{ plot_div }}
+{% endautoescape %}
+{% else %}
+On prend en compte toutes les années.
+{% autoescape off %}
+{{ plot_div }}
+{% endautoescape %}
+{% endif %}
+
+{% endblock %}
