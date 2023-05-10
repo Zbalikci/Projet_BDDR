@@ -1,10 +1,11 @@
 #!/bin/env python3
-from appli_covid19.models import Theme, Sous_Theme, Journal, StudyType, Affiliation, Authors, Articles, Author_Article, Article_Theme, Author_Affiliation, StudyType_Articles
+from appli_covid19.models import Sous_Theme, Journal, StudyType, Articles, Article_Theme, StudyType_Articles
 from django.db import IntegrityError
+from datetime import datetime
 import pandas as pd
 import os
-import json
 import unidecode
+import re
 """
 Création des listes pour peupler les tables articles, article_theme et studytype_articles.
 """
@@ -23,8 +24,8 @@ print('Chargement termine')
 #############################################  LISTE DES STUDYTYPE POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
 print('Liste Study_types pour un article creation : debut')
 '''
-Crétion d'une liste de tuples : [ (son_studytype, un_article) ,  (...,...)  ,  ... ]
-'''
+Création d'une liste de tuples : [ (son_studytype, un_article) ,  (...,...)  ,  ... ]
+'''            
 Articles0=[]  #liste d'articles qui ont au moins un studytype
 Study_Article=[]
 for dossier in dossiers[1:-1]:
@@ -34,41 +35,38 @@ for dossier in dossiers[1:-1]:
         df=pd.read_csv(f'{chemin}/{element}')
         try :
             for i in range(len(df)):
-                study_article=(df['Study Type'][i],df['Study'][i])
-                Articles0.append(df['Study'][i])
-                Study_Article.append(study_article)
+                s=df['Study Type'][i]
+                if type(s)==str and len(s)>2:
+                    study_article=(re.sub("\!|\'|\?|-"," ",s.title()),df['Study'][i])
+                    Articles0.append(df['Study'][i])
+                    Study_Article.append(study_article)
         except:
             print(f"Le fichier {chemin}/{element} n'a pas de studytype !")
 ''' 
 Création d'un dictionnaire tel que : { un_article = [ liste de ses studytype] , ...}
 '''
 Study_Articles2={}
-for Article in set(Articles0):
+for article in set(Articles0):
     types=[]
     for i in range(len(Study_Article)):
-        if Study_Article[i][1]==Article:
+        if Study_Article[i][1]==article:
             types.append(Study_Article[i][0])
-    Study_Articles2[Article]=list(set(types))
+    Study_Articles2[article]=list(set(types))
 '''
 Création d'une liste telle que : pour chaque article/ligne du metadata.csv, on a la liste de ses studytypes
 '''
 Study_types=[]
 for article_titre in DF['title'][:n]:
     etat=False
-    for key in Study_Articles2:
-        try :
-            k=key.upper()
-            a=article_titre.upper()
-        except:
-            k=key
-            a=article_titre
-        if a==k:
-            cle=key
-            etat=True
+    if type(article_titre)==str:
+        for key in Study_Articles2:
+            if key.upper()==article_titre.upper():
+                cle=key
+                etat=True
     if etat:
         Study_types.append(Study_Articles2[cle])
     else:
-        Study_types.append('NULL')
+        Study_types.append(None)
 
 print('Liste Study_types pour un article creation : fin')
 #############################################  LISTE DES SOUS_THEMES POUR CHAQUE ARTICLE DE METADATA.CSV  #############################################
@@ -90,17 +88,14 @@ Création d'une liste telle que : pour chaque article/ligne du metadata.csv, on 
 Sous_themes_articles2=[]
 for article_title in DF['title'][:n]:
     k=[]
-    for key in Sous_themes_articles:
-        try:
-            a=article_title.upper()
-        except:
-            a=article_title
-        if a in Sous_themes_articles[key]:
-            k.append(key)
+    if type(article_title)==str:
+        for key in Sous_themes_articles:
+            if article_title.upper() in Sous_themes_articles[key]:
+                k.append(key)
     if len(k)!=0:
         Sous_themes_articles2.append(k)
     else:
-        Sous_themes_articles2.append('NULL')
+        Sous_themes_articles2.append(None)
 print('Liste Sous_themes pour un article creation : fin')
 #############################################  PEUPLEMENT DES 3 TABLES  #############################################
 print("\n ------ PEUPLEMENT DEBUT ------ \n")
@@ -117,7 +112,13 @@ for i in range(n):
         un_article.id_article=i
         un_article.title = DF['title'][i]
         if type(DF['publish_time'][i])!=float:
-            un_article.publish_time=str(DF['publish_time'][i])
+            d=DF['publish_time'][i]
+            try:
+                d2 = datetime.strptime(d, '%Y-%m-%d')
+                un_article.publish_time=d2.date()
+                un_article.annee=str(d2.year)
+            except:
+                un_article.annee=str(d)
         if type(DF['abstract'][i])!=float:
             un_article.abstract = DF['abstract'][i]
         if type(DF['url'][i])!=float:
@@ -141,11 +142,6 @@ for i in range(n):
                 STA.studytype=id_studytype
                 STA.article=un_article
                 STA.save()
-        else:
-            id_studytype=StudyType.objects.get(name = 'NULL')
-            STA.studytype=id_studytype
-            STA.article=un_article
-            STA.save()
     except:
         print("!!! probleme à la ligne = ", i," !!!")
     ############################################
@@ -159,11 +155,6 @@ for i in range(n):
                 AT.sous_theme=id_sous_theme
                 AT.article=un_article
                 AT.save()
-        else:
-            id_sous_theme=Sous_Theme.objects.get(name = 'NULL')
-            AT.sous_theme=id_sous_theme
-            AT.article=un_article
-            AT.save()
     except:
         print("!!! probleme à la ligne = ", i," !!!")
 print("\n ------ PEUPLEMENT FIN ------ \n")
