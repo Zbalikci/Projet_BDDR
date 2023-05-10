@@ -5,7 +5,7 @@
 <form method="POST">
 {% csrf_token %}
 <p>
-<label for="username"> Nom d'une affiliation</label>
+<label for="username"> Nom d'une affiliation </label>
 <input id="username" type="text" name="username">
 <button type="submit">Rechercher</button></p>
 </form>
@@ -13,9 +13,7 @@
 <p>Voici les affiliations qui contiennent "{{ username }}" dans leur nom. </p>
 <ol type="1">
   {% for x in liste_affiliations %}
-    {% if x.name != 'NULL' %}
     <li id="li2"><a class='test external' href="/appli_covid19/affiliations/{{ x.name }}">{{ x.name }}</a></li>
-    {% endif %}
   {% endfor %}
 </ol>
 {% endif %}
