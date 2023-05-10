@@ -43,32 +43,97 @@ def histogram_annee(request):
 	liste_annee=Articles.objects.all().values('annee').exclude(annee__isnull=True).annotate(nb_articles_annee=Count('annee')).order_by('annee')
 	data=[{'Annee' : a['annee'],'Nb_articles' : a['nb_articles_annee']} for a in liste_annee]
 	df = pd.DataFrame(data)
-	fig=px.histogram(df,x= 'Annee', y="Nb_articles" )
+	fig=px.histogram(df,x= 'Annee', y="Nb_articles", labels={'Annee': 'Année',"Nb_articles":"Nombre d'articles publiés"}, )
+	fig.for_each_trace(lambda t: t.update(hovertemplate=t.hovertemplate.replace("sum of", "")))
+	fig.for_each_yaxis(lambda a: a.update(title_text=a.title.text.replace("sum of", " ")))
 	gantt_plot=plot(fig,output_type='div')
 	template = loader.get_template('histogram_annee.twig')
 	context = {'themes': themes,'liste_annee': liste_annee, 'plot_div':gantt_plot}
 	return HttpResponse(template.render(context, request))
 
+def histogram_date(request):
+	themes = Theme.objects.all().order_by('name')
+	max_date=Articles.objects.all().exclude(publish_time__isnull=True).latest('publish_time').publish_time
+	min_date=Articles.objects.all().exclude(publish_time__isnull=True).earliest('publish_time').publish_time
+	if request.method=="POST":
+		debut=request.POST.get("debut")
+		fin=request.POST.get("fin")
+		if debut != None and debut != "" and fin != None and fin != "":
+			debut=datetime.strptime(debut, '%Y-%m-%d')
+			fin=datetime.strptime(fin, '%Y-%m-%d')
+			liste_date=Articles.objects.all().exclude(publish_time__isnull=True).values('publish_time').filter(publish_time__range=(debut, fin)).annotate(nb_articles_date=Count('publish_time')).order_by('publish_time')
+			data=[{'Date' : a['publish_time'],'Nb_articles' : a['nb_articles_date']} for a in liste_date]
+			df = pd.DataFrame(data)
+			fig=px.histogram(df,x= 'Date', y="Nb_articles",nbins=len(liste_date), labels={"Nb_articles":"Nombre d'articles publiés"}, )
+		else:
+			debut=None
+			fin=None
+			liste_date=Articles.objects.all().values('annee').exclude(annee__isnull=True).annotate(nb_articles_annee=Count('annee')).order_by('annee')
+			data=[{'Annee' : a['annee'],'Nb_articles' : a['nb_articles_annee']} for a in liste_date]
+			df = pd.DataFrame(data)
+			fig=px.histogram(df,x= 'Annee', y="Nb_articles", labels={'Annee': 'Année',"Nb_articles":"Nombre d'articles publiés"}, )
+	else:
+		debut=None
+		fin=None
+		liste_date=Articles.objects.all().values('annee').exclude(annee__isnull=True).annotate(nb_articles_annee=Count('annee')).order_by('annee')
+		data=[{'Annee' : a['annee'],'Nb_articles' : a['nb_articles_annee']} for a in liste_date]
+		df = pd.DataFrame(data)
+		fig=px.histogram(df,x= 'Annee', y="Nb_articles", labels={'Annee': 'Année',"Nb_articles":"Nombre d'articles publiés"}, )
+	fig.for_each_trace(lambda t: t.update(hovertemplate=t.hovertemplate.replace("sum of", "")))
+	fig.for_each_yaxis(lambda a: a.update(title_text=a.title.text.replace("sum of", " ")))
+	gantt_plot=plot(fig,output_type='div')
+	template = loader.get_template('histogram_date.twig')
+	context = {'themes': themes,'liste_annee': liste_date, 'plot_div':gantt_plot,'max_date':max_date,'min_date':min_date,'debut':debut,'fin':fin}
+	return HttpResponse(template.render(context, request))
+
 def histogram_mois(request):
 	themes = Theme.objects.all().order_by('name')
-	liste_mois=Articles.objects.all().exclude(publish_time__isnull=True).values('publish_time__month').annotate(nb_articles_mois=Count('publish_time__month')).order_by('publish_time__month')
+	max_year=Articles.objects.all().exclude(publish_time__isnull=True).latest('publish_time').publish_time.year
+	min_year=Articles.objects.all().exclude(publish_time__isnull=True).earliest('publish_time').publish_time.year
+	if request.method=="POST":
+		username=request.POST.get("username")
+		if username != None and username != "" and min_year<=int(username)<=max_year:
+			liste_mois=Articles.objects.all().exclude(publish_time__isnull=True).filter(publish_time__year=username).values('publish_time__month').annotate(nb_articles_mois=Count('publish_time__month')).order_by('publish_time__month')
+		else:
+			username=None
+			liste_mois=Articles.objects.all().exclude(publish_time__isnull=True).values('publish_time__month').annotate(nb_articles_mois=Count('publish_time__month')).order_by('publish_time__month')
+	else:
+		username=None
+		liste_mois=Articles.objects.all().exclude(publish_time__isnull=True).values('publish_time__month').annotate(nb_articles_mois=Count('publish_time__month')).order_by('publish_time__month')
 	data=[{'Mois' : a['publish_time__month'],'Nb_articles' : a['nb_articles_mois']} for a in liste_mois]
 	df = pd.DataFrame(data)
-	fig=px.histogram(df,x= 'Mois', y="Nb_articles" , nbins=len(liste_mois))
+	fig=px.histogram(df,x= 'Mois', y="Nb_articles" , nbins=len(liste_mois), labels={"Nb_articles":"Nombre d'articles publiés"},)
+	fig.for_each_trace(lambda t: t.update(hovertemplate=t.hovertemplate.replace("sum of", "")))
+	fig.for_each_yaxis(lambda a: a.update(title_text=a.title.text.replace("sum of", " ")))
+	fig.update_layout(bargap=0.1)
 	gantt_plot=plot(fig,output_type='div')
 	template = loader.get_template('histogram_mois.twig')
-	context = {'themes': themes,'liste_mois': liste_mois, 'plot_div':gantt_plot}
+	context = {'themes': themes,'liste_mois': liste_mois, 'plot_div':gantt_plot, 'username' : username,'max_year':max_year, 'min_year':min_year,}
 	return HttpResponse(template.render(context, request))
 
 def histogram_semaine(request):
 	themes = Theme.objects.all().order_by('name')
-	liste_semaine=Articles.objects.all().exclude(publish_time__isnull=True).values('publish_time__week').annotate(nb_articles_semaine=Count('publish_time__week')).order_by('publish_time__week')
+	max_year=Articles.objects.all().exclude(publish_time__isnull=True).latest('publish_time').publish_time.year
+	min_year=Articles.objects.all().exclude(publish_time__isnull=True).earliest('publish_time').publish_time.year
+	if request.method=="POST":
+		username=request.POST.get("username")
+		if username != None and username != "" and min_year<=int(username)<=max_year:
+			liste_semaine=Articles.objects.all().exclude(publish_time__isnull=True).filter(publish_time__year=username).values('publish_time__week').annotate(nb_articles_semaine=Count('publish_time__week')).order_by('publish_time__week')
+		else:
+			username=None
+			liste_semaine=Articles.objects.all().exclude(publish_time__isnull=True).values('publish_time__week').annotate(nb_articles_semaine=Count('publish_time__week')).order_by('publish_time__week')
+	else:
+		username=None
+		liste_semaine=Articles.objects.all().exclude(publish_time__isnull=True).values('publish_time__week').annotate(nb_articles_semaine=Count('publish_time__week')).order_by('publish_time__week')
 	data=[{'Semaine' : a['publish_time__week'],'Nb_articles' : a['nb_articles_semaine']} for a in liste_semaine]
 	df = pd.DataFrame(data)
-	fig=px.histogram(df,x= 'Semaine', y="Nb_articles" , nbins=len(liste_semaine))
+	fig=px.histogram(df,x= 'Semaine', y="Nb_articles" , nbins=len(liste_semaine), labels={"Nb_articles":"Nombre d'articles publiés"},)
+	fig.for_each_trace(lambda t: t.update(hovertemplate=t.hovertemplate.replace("sum of", "")))
+	fig.for_each_yaxis(lambda a: a.update(title_text=a.title.text.replace("sum of", " ")))
+	fig.update_layout(bargap=0.1)
 	gantt_plot=plot(fig,output_type='div')
 	template = loader.get_template('histogram_semaine.twig')
-	context = {'themes': themes,'liste_semaine': liste_semaine, 'plot_div':gantt_plot}
+	context = {'themes': themes,'liste_semaine': liste_semaine, 'plot_div':gantt_plot, 'username' : username,'max_year':max_year, 'min_year':min_year,}
 	return HttpResponse(template.render(context, request))
 
 ############################ REQUETE 4 Nombre de publications par labo/institution. ############################
@@ -83,11 +148,8 @@ def affiliations2(request):
 	GROUP BY appli_covid19_affiliation.id
 	ORDER BY nb_articles DESC
 	''')
-	paginator = Paginator(liste_affiliations, 25)
-	page = request.GET.get('page')
-	liste_affiliations2 = paginator.get_page(page)
 	template = loader.get_template('affiliations2.twig')
-	context = {'themes': themes,'liste_affiliations': liste_affiliations2,}
+	context = {'themes': themes,'liste_affiliations': liste_affiliations,}
 	return HttpResponse(template.render(context, request))
 
 ############################ REQUETE 5 Liste de journaux par nombre et type de publications ############################
