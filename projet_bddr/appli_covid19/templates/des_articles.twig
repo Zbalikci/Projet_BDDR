@@ -1,8 +1,8 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-<h1>Les articles dans la base de donnée</h1>
-<p>Il y a en tout {{ nb_articles }} d'articles dans la base de donnée</p>
+<h3>Les articles dans la base de donnée</h3>
+<p>Il y a en tout {{ nb_articles }} d'articles dans la base de donnée.</p>
 <ol type="1">
     {% for p in liste_articles %}
       <li id="li2"><a class='test external' href="/appli_covid19/articles/{{ p.id_article }}" >{{ p.title }}</a></li>
