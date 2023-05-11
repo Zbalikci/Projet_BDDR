@@ -23,9 +23,10 @@ indexes{
 Table articles {
   id_article int [pk]
   title text
-  publication_date varchar
+  publication_date date
+  annee varchar
   abstract text
-  studylink text
+  studylink url
   id_journal int
   indexes {
     (id_journal) [pk]
