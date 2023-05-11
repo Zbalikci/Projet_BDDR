@@ -169,7 +169,7 @@ def journaux2(request):
 	context = {'themes': themes, 'dict_study_type': inv_dict_study_type , }
 	return HttpResponse(template.render(context, request))
 
-#################################### REQUETE 6 Liste d'articles/jounaux/affiliations/types de publications ####################################
+#################################### REQUETE 6 Liste d'articles/de jounaux/d'affiliations/de types de publications/des auteurs ####################################
 
 def des_articles(request):
 	themes = Theme.objects.all().order_by('name')
@@ -226,7 +226,7 @@ def auteurs(request):
 	context = {'themes': themes, 'liste': liste2, 'nb_auteurs' : nb_auteurs,}
 	return HttpResponse(template.render(context, request))
 
-#################################### REQUETE 7 Recherche par nom article/jounal/affiliation ####################################
+#################################### REQUETE 7 Recherche par nom article/journal/affiliation/auteur ####################################
 
 def des_articles2(request):
 	themes = Theme.objects.all().order_by('name')
@@ -267,18 +267,29 @@ def journaux3(request):
 	context = {'themes': themes,'journaux': journaux, 'username':username,}
 	return HttpResponse(template.render(context, request))
 
-#################################### REQUETE 8 Données sur un article/jounal/affiliation/type de publication ####################################
+def auteurs2(request):
+	themes = Theme.objects.all().order_by('name')
+	if request.method=="POST":
+		username=request.POST.get("username")
+		u=username.upper()
+		liste_auteurs=Authors.objects.filter(name__icontains=u).values().order_by('id')
+	else:
+		username=None
+		liste_auteurs = Authors.objects.all()
+	template = loader.get_template('auteurs2.twig')
+	context = {'themes': themes,'liste_auteurs': liste_auteurs, 'username': username, }
+	return HttpResponse(template.render(context, request))
+
+#################################### REQUETE 8 Données sur un article/journal/affiliation/type de publication/auteur ####################################
 
 def un_article(request, name_article):
 	themes = Theme.objects.all().order_by('name')
 	le_article=Articles.objects.get(id_article=name_article)
 	l=Author_Article.objects.filter(article=le_article)
-	liste_auteurs=Author_Article.objects.filter(article=le_article).values('author')
-	liste_affiliation=Author_Affiliation.objects.filter(author__in=liste_auteurs).distinct('affiliation')
 	sous_theme=Article_Theme.objects.filter(article=le_article)
 	study_types=StudyType_Articles.objects.filter(article=le_article)
 	template = loader.get_template('un_article.twig')
-	context = {'themes': themes ,'sous_theme' : sous_theme, 'study_types':study_types , 'le_article': le_article, 'liste_auteurs':l, 'liste_affiliation':liste_affiliation,}
+	context = {'themes': themes ,'sous_theme' : sous_theme, 'study_types':study_types , 'le_article': le_article, 'liste_auteurs':l,}
 	return HttpResponse(template.render(context, request))
 
 def affiliation(request,name_affiliation):
@@ -318,4 +329,14 @@ def studytype(request,name_studytype):
 	liste_articles=StudyType_Articles.objects.filter(studytype=un_study)
 	template = loader.get_template('studytype.twig')
 	context = {'themes': themes, 'nb_articles': nb_articles, 'liste_articles':liste_articles, 'name_study':name_studytype, }
+	return HttpResponse(template.render(context, request))
+
+def un_auteur(request,name_auteur):
+	themes = Theme.objects.all().order_by('name')
+	a=Authors.objects.get(name=name_auteur)
+	liste_articles=Author_Article.objects.filter(author=a).distinct('article').order_by('article_id')
+	nb_articles=len(liste_articles)
+	aff=Author_Affiliation.objects.filter(author=a)
+	context = {'themes': themes, 'nb_articles': nb_articles, 'liste_articles':liste_articles, 'auteur':a, 'liste_affiliations':aff, }
+	template = loader.get_template('un_auteur.twig')
 	return HttpResponse(template.render(context, request))
