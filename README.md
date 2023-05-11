@@ -65,9 +65,9 @@ PASSWORD = zbalikci
 
 Le peuplement de ces tables est terminé au bout d'1 heure et 10 minutes environ.
 
-- Étape 4.2 : Pour peupler les tables les tables Articles, Article_Aheme et StudyType_Articles.
+- Étape 4.2 : Pour peupler les tables les tables Articles, Article_Theme et StudyType_Articles.
 
-Exécuter le fichier Peuple2.py du dossier projet_bddr, pour cela vous devez utilisez le shell de DJANGO avec : 
+Exécuter le fichier Peuple2.py du dossier projet_bddr, pour cela vous devez utilisez le shell de DJANGO avec : (dans ./projet_bddr)
 
 ```bash
 python manage.py shell
@@ -84,7 +84,7 @@ Le peuplement de ces tables est terminé au bout d'1 heure et 30 minutes environ
 
 - Étape 4.3 : Pour peupler les tables les tables Authors, Author_Affiliation et Author_Article.
 
-Exécuter le fichier Peuple3.py du dossier projet_bddr, pour cela vous devez utilisez le shell de DJANGO avec :  
+Exécuter le fichier Peuple3.py du dossier projet_bddr, pour cela vous devez utilisez le shell de DJANGO avec : (dans ./projet_bddr)
 ```bash
 python manage.py shell
 ```
