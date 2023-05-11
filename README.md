@@ -51,6 +51,8 @@ python manage.py migrate
 
 Exécuter le fichier Peuple1.py sur le terminal (pas besoin de changer quoi que soit dans le script du fichier).
 
+! Attention ! sur Unic il faut rendre exécutable ce fichier avec : chmod +x Peuple1.py
+
 Entrer les informations nécessaires demandé après l'exécution : chemin_archive, host, etc...
 
 Exemples : chemin_archive = /users/2023/ds1/share/CORD-19
