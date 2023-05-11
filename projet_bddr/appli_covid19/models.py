@@ -75,3 +75,4 @@ class Author_Affiliation(models.Model):
 class StudyType_Articles(models.Model):
 	studytype = models.ForeignKey(StudyType, on_delete=models.CASCADE)
 	article = models.ForeignKey(Articles, on_delete=models.CASCADE)
+
